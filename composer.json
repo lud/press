@@ -5,7 +5,10 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"laravel/framework": "~5.0"
+		"laravel/framework": "~5.0",
+		"symfony/yaml": "~2.5",
+		"amaury/wikirenderer": "dev-master",
+        "amaury/skrivmarkup": "dev-master"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0"

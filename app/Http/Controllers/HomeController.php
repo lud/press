@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers;
 
+use Config;
 use Illuminate\Routing\Controller;
+use Novel;
 
 class HomeController extends Controller {
 
@@ -19,7 +21,10 @@ class HomeController extends Controller {
 
 	public function index()
 	{
-		return view('hello');
+		$articles = Novel::query('tags:diffusion.page:2:2')->all();
+		pre($articles,"articles");
+		pre("count", Novel::query('tags:diffusion.count'));
+		return \View::make('home');
 	}
 
 }

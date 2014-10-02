@@ -50,19 +50,32 @@ class NovelFile {
 		if (null === $parserName) $parserName = self::DEFAULT_META_PARSER;
 		$this->readFileIfNotRead();
 		$parser = $this->getParser($parserName);
-		$headerMeta = $parser($this->rawMeta); // meta written in the file
+
+		// Meta present in the file
+
+		$headerMeta = $parser($this->rawMeta);
 		if (is_null($headerMeta)) $headerMeta = [];
 		if (isset($headerMeta['date'])) {
 			$headerMeta['year'] = date('Y',$headerMeta['date']);
 			$headerMeta['month'] = date('m',$headerMeta['date']);
 			$headerMeta['day'] = date('d',$headerMeta['date']);
 		}
+
+		// Default meta :
+		if (!isset($headerMeta['title'])) $headerMeta['title'] = ''; // just to be present
+		if (!isset($headerMeta['tags'])) $headerMeta['tags'] = []; // hope most people want tags
+		// if only one tag is set, or a comma list, we make it an array
+		if (!is_array($headerMeta['tags'])) $headerMeta['tags'] = array_map('trim',explode(',',$headerMeta['tags']));
+
+
 		// Additional metadata based on filename. Meta in header can override
+
 		$fileMeta = ['filename' => $this->filename];
 		// then we try to figure out a schema. We try all the defined schemas in
 		// the config
 		foreach(\Config::get('novel::config.filename_schemas') as $schema) {
 			if (($fnInfo = NovelService::filenameInfo($this->filename,$schema)) !== false) {
+				// Here we got some infos such as date from filename
 				$fileMeta = array_merge($fileMeta,$fnInfo);
 				break; // stop on first match. The list in config must be ordered by path complexion
 			}

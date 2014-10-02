@@ -6,6 +6,19 @@
  * @author   Taylor Otwell <taylorotwell@gmail.com>
  */
 
+
+function pre($v,$label='') { //@todo remove
+		echo "<pre>", $label ? "$label ":"";
+		// var_export($v);
+		(is_null($v) || is_bool($v)) ? var_dump($v) : print_r($v);
+		// var_dump($v);
+		echo "</pre>";
+		echo "<br/>";
+		return $v;
+}
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader

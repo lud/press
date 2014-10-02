@@ -40,11 +40,14 @@ class NovelService {
 	}
 
 	public function publish($conf) {
+		if (is_string($conf)) $conf = ['filename' => $conf];
 		$post = $this->findFile($conf);
 		$layout = $post->meta()->get('layout','default');
 		return View::make($layout)
 			->with('meta',$post->meta())
-			->with('content',$post->content());
+			->with('content',$post->content())
+			->with('index', $this->index())
+		;
 	}
 
 	static public function filenameJoin($parts) {
@@ -126,6 +129,10 @@ class NovelService {
 
 	public function index($minutes=0) {
 		return $this->app['novel.index'];
+	}
+
+	public function query($query) {
+		return $this->index()->query($query);
 	}
 
 }
