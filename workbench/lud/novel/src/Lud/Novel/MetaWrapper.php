@@ -1,6 +1,8 @@
 <?php namespace Lud\Novel;
 
-class MetaWrapper {
+use Novel; // is it bad to use the facade here ?
+
+class MetaWrapper implements \ArrayAccess {
 	protected $meta;
 
 	public function __construct($meta) {
@@ -16,5 +18,28 @@ class MetaWrapper {
 	}
 
 	public function all() { return $this->meta; }
+
+	public function url() {
+		$f = Novel::getConf()['url_fun'];
+		return $f($this->filename,$this);
+	}
+
+
+
+
+	// ArrayAccess implementation
+
+	public function offsetSet($offset, $value) {
+		throw new \Exception(get_class()." is immutable, tried to set '$offset'");
+	}
+	public function offsetExists($offset) {
+		return isset($this->meta[$offset]);
+	}
+	public function offsetUnset($offset) {
+		throw new \Exception(get_class()." is immutable, tried to unset '$offset'");
+	}
+	public function offsetGet($offset) {
+		return $this->get($offset);
+	}
 
 }

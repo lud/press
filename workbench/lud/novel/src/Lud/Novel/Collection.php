@@ -20,7 +20,6 @@ class Collection extends \Illuminate\Support\Collection {
 	}
 
 	public function drop($amount) {
-		pre($amount,"slice");
 		return $this->slice($amount, $length=null, $preserveKeys=true);
 	}
 

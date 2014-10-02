@@ -69,18 +69,11 @@ class NovelService {
 		// We have some classic schemas registered
 		switch($schema) {
 			// Skriv -------------------------------------------
-			case 'classic.sk':
-				$pattern = '@(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})-(?P<slug>.+).sk@';
+			case 'classic':
+				$pattern = '@(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})-(?P<slug>.+)\.(md|sk)@';
 				break;
-			case 'simple.sk':
-				$pattern = '@(?P<slug>.+).sk@';
-				break;
-			// Markdown -------------------------------------------
-			case 'classic.md':
-				$pattern = '@(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})-(?P<slug>.+).md@';
-				break;
-			case 'simple.md':
-				$pattern = '@(?P<slug>.+).md@';
+			case 'simple':
+				$pattern = '@(?P<slug>.+)\.(md|sk)@';
 				break;
 			default: // Custom schema
 				$schemaToRegex = [
@@ -133,6 +126,10 @@ class NovelService {
 
 	public function query($query) {
 		return $this->index()->query($query);
+	}
+
+	public function all() {
+		return $this->index()->all();
 	}
 
 }

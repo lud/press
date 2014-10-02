@@ -21,10 +21,8 @@ class HomeController extends Controller {
 
 	public function index()
 	{
-		$articles = Novel::query('tags:diffusion.page:2:2')->all();
-		pre($articles,"articles");
-		pre("count", Novel::query('tags:diffusion.count'));
-		return \View::make('home');
+		$articles = Novel::query('tags:dev,page:1:2');
+		return \View::make('home')->with('articles',$articles);
 	}
 
 }

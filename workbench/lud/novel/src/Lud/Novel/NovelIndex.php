@@ -56,13 +56,12 @@ class NovelIndex {
 		$metas = array_map(function($file){
 			return with(new NovelFile($this->app, $file->getPathname()))
 				->parseMeta()
-				->all()
 				;
 		}, iterator_to_array($finder));
 		// we want the keys to be relative to the base path
 		$result = [];
 		foreach ($metas as $key => $fileMeta) {
-			$result[$fileMeta['rel_path']] = $fileMeta;
+			$result[$fileMeta->rel_path] = $fileMeta;
 		}
 		return new Collection($result);
 	}

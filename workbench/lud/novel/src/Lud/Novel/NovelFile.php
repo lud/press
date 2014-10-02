@@ -122,8 +122,7 @@ class NovelFile {
 	}
 
 	public function url() {
-		$f = $this->app['novel']->getConf()['url_fun'];
-		return $f($this->filename,$this->meta());
+		return $this->meta()->url();
 	}
 
 	protected function getParser ($name) {

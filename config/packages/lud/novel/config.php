@@ -4,12 +4,9 @@ return [
 	'onFileMissing' => function() { return false; },
 	'meta_sep' => '****',
 	'url_fun' => function($fn,$meta) {
-
-		throw new Exception("Osef de l'extension, faire les regex classic et simple, sans l'extension", 1);
-
 		return URL::to(Novel::filenameTransform($fn,$meta,[
-			'classic.sk' => ":year/:month/:day/:slug",
-			'simple.sk' => ":slug",
+			'classic' => "article/:year/:month/:day/:slug",
+			'simple' => "page/:slug",
 		]));
 	},
 	'skriv' => [
@@ -25,5 +22,5 @@ return [
 		'softLinebreaks' => true,
 		// 'softLinebreaks' => false,
 	],
-	'index_cache_minutes' => 1,
+	'index_cache_minutes' => 0,
 ];
