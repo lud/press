@@ -16,15 +16,15 @@ class PressController extends Controller {
 		// First we need to read the URL path. Then we match it with the url_map
 		// in novel conf
 		$filename = \Novel::UrlToFilename($req->path());
-		$document = \Novel::findFile($filename);
-
-		$layout = $document->meta()->get('layout','default');
-		return \View::make($layout)
-			->with('meta',$document->meta())
-			->with('content',$document->content())
-		;
-
-
+		try {
+			$document = \Novel::findFile($filename);
+			$layout = $document->meta()->get('layout','default');
+			return \View::make($layout)
+				->with('meta',$document->meta())
+				->with('content',$document->content());
+		} catch (\Lud\Novel\FileNotFoundException $e) {
+			abort(404);
+		}
 	}
 
 	/**

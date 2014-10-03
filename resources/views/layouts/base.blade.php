@@ -14,9 +14,12 @@
 <link href="{{ URL::asset('lib/css/bootstrap.min.css') }}" rel="stylesheet">
 
 <style type="text/css">
+	/* todo move to file */
 	div.footnotes { font-size: 0.9em; }
 	div.footnotes-sep1 { width:30px; border-top:3px solid #222; margin:1em 0 0;}
 	div.footnotes-sep2 { width:170px; border-top:1px solid #222; margin:0 0 1em;}
+	p { text-align: justify; }
+	body { padding-bottom: 2em; }
 </style>
 
 

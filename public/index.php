@@ -1,10 +1,16 @@
 <?php
-/**
- * Laravel - A PHP Framework For Web Artisans
- *
- * @package  Laravel
- * @author   Taylor Otwell <taylorotwell@gmail.com>
- */
+
+// phpinfo();exit;
+
+function measureTime() {
+	static $t1 = null;
+	if (null !== $t1) {
+		$t2 = microtime(true);
+		$diff = $t2 - $t1;
+		pre($diff,"measure");
+	}
+	$t1 = microtime(true);
+}
 
 
 function pre($v,$label='') { //@todo remove
@@ -17,6 +23,12 @@ function pre($v,$label='') { //@todo remove
 		return $v;
 }
 
+/**
+ * Laravel - A PHP Framework For Web Artisans
+ *
+ * @package  Laravel
+ * @author   Taylor Otwell <taylorotwell@gmail.com>
+ */
 
 
 /*

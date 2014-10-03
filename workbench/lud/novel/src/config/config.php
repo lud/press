@@ -1,7 +1,6 @@
 <?php
 return [
 	'base_dir' => '/tmp',
-	'onFileMissing' => function() { return false; },
 	'meta_sep' => '****',
 	'url_map' => [
 		'classic' => "article/:year/:month/:day/:slug",

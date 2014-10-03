@@ -28,8 +28,7 @@ class NovelService {
 		$files = iterator_to_array($finder);
 
 		if (count($files) == 0) {
-			$onNotFound = $this->getConf('onFileMissing');
-			return $onNotFound($filename);
+			throw new FileNotFoundException("Cannot find file=$filename");
 		} else {
 			return new NovelFile(reset($files)->getPathName());
 		}

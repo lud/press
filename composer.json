@@ -8,7 +8,8 @@
 		"laravel/framework": "~5.0",
 		"symfony/yaml": "~2.5",
 		"amaury/wikirenderer": "dev-master",
-        "amaury/skrivmarkup": "dev-master"
+        "amaury/skrivmarkup": "dev-master",
+		"j0an/laravel-cache-filter": "dev-master"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0"

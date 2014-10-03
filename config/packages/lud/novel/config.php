@@ -4,10 +4,7 @@ return [
 	'skriv' => [
 		'urlProcessFunction' => function($url, $label, $targetBlank, $nofollow){
 			if (starts_with($url,"novel:")) {
-				$url = Novel::findFile([
-					'filename'=> substr($url, strlen('novel:')),
-					'onFileMissing' => function($fn) { throw new Exception("File $fn missing"); },
-				])->url();
+				$url = Novel::findFile(substr($url, strlen('novel:')))->url();
 			}
 			return [$url,$label,$targetBlank,$nofollow];
 		},
