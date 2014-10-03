@@ -12,12 +12,16 @@
 <title>@yield('title')</title>
 
 <link href="{{ URL::asset('lib/css/bootstrap.min.css') }}" rel="stylesheet">
+
 <style type="text/css">
-	body { padding-top: 70px; }
+	div.footnotes { font-size: 0.9em; }
+	div.footnotes-sep1 { width:30px; border-top:3px solid #222; margin:1em 0 0;}
+	div.footnotes-sep2 { width:170px; border-top:1px solid #222; margin:0 0 1em;}
 </style>
 
+
 <body>
-	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="navbar navbar-default navbar-static-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">

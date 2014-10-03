@@ -6,6 +6,9 @@ use Symfony\Component\Finder\Finder;
 
 class NovelService {
 
+	const FILE_PATH_TYPE = 1;
+	const URL_PATH_TYPE = 2;
+
 	protected $conf = [];
 	protected $app;
 
@@ -14,16 +17,21 @@ class NovelService {
 		$this->app = $app;
 	}
 
-	public function findFile($_conf=[]) {
-		$conf = $this->configure($_conf);
-		$filename = static::filenameJoin([
-			$conf['base_dir'],
-			ltrim($conf['filename'])
-		]);
-		if (! is_file($filename)) {
-			return $conf['onFileMissing']($filename);
+	public function findFile($filename) {
+		// the filename can be in a subdirectory.
+		$finder = new Finder();
+		$finder->files()
+			->in($this->getConf('base_dir'))
+			->name("@$filename@") // regex style
+		;
+
+		$files = iterator_to_array($finder);
+
+		if (count($files) == 0) {
+			$onNotFound = $this->getConf('onFileMissing');
+			return $onNotFound($filename);
 		} else {
-			return new NovelFile($this->app, $filename);
+			return new NovelFile(reset($files)->getPathName());
 		}
 	}
 
@@ -39,17 +47,6 @@ class NovelService {
 		else return $default;
 	}
 
-	public function publish($conf) {
-		if (is_string($conf)) $conf = ['filename' => $conf];
-		$post = $this->findFile($conf);
-		$layout = $post->meta()->get('layout','default');
-		return View::make($layout)
-			->with('meta',$post->meta())
-			->with('content',$post->content())
-			->with('index', $this->index())
-		;
-	}
-
 	static public function filenameJoin($parts) {
 		return implode(DIRECTORY_SEPARATOR,$parts);
 	}
@@ -63,45 +60,51 @@ class NovelService {
 		return [$l,implode($char,$t)];
 	}
 
-	static function filenameInfo($fn,$schema) {
-		// Work only on the basename
-		$fn = pathinfo($fn,PATHINFO_BASENAME);
-		// We have some classic schemas registered
-		switch($schema) {
-			// Skriv -------------------------------------------
-			case 'classic':
-				$pattern = '@(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})-(?P<slug>.+)\.(md|sk)@';
-				break;
-			case 'simple':
-				$pattern = '@(?P<slug>.+)\.(md|sk)@';
-				break;
-			default: // Custom schema
-				$schemaToRegex = [
-					':year' 	=> '(?P<year>[0-9]{4})',
-					':month'	=> '(?P<month>[0-9]{2})',
-					':day'  	=> '(?P<day>[0-9]{2})',
-					':slug' 	=> '(?P<slug>.+)',
-				];
-				$scParts = array_keys($schemaToRegex);
-				$reParts = array_values($schemaToRegex);
-				$pattern = '@' . str_replace($scParts,$reParts,$schema) . '@';
+	public function pathInfo($fn,$schema,$type=self::FILE_PATH_TYPE) {
+		// pre($fn,"path to match");
+		if (self::FILE_PATH_TYPE === $type) {
+			// Work only on the basename
+			$fn = pathinfo($fn,PATHINFO_BASENAME);
+			$extensions = array_map(function($ext){ return ltrim($ext,'.'); }, $this->getConf('extensions'));
+			$extensionsRe = '\\.(' . implode('|',$extensions) . ')';
 		}
+		elseif (self::URL_PATH_TYPE === $type) {
+			// this is an URL, evaluate the full path
+			$extensionsRe = '';
+		}
+		$pattern = static::filePathSchemaToRegex($schema,$extensionsRe);
+
 		$matches = [];
 		if (preg_match($pattern,$fn,$matches)) {
 			// we filter out the numeric keys of matches
 			$keys = array_keys($matches);
 			$numeric_keys = array_filter($keys,'is_numeric');
+			// pre("$pattern match $fn");
 			return array_except($matches, $numeric_keys);
+		} else {
+			// pre("$pattern NO match $fn");
 		}
 		return false;
 	}
 
-	static function filenameTransform($fn,$meta,$schemas) {
+	public function filenameToUrl($meta) {
+		$schemas = $this->getConf('url_map');
 		foreach ($schemas as $pathSchema => $urlSchema) {
-			if ($props = static::filenameInfo($fn,$pathSchema)) {
+			if ($props = $this->pathInfo($meta->filename,$pathSchema,self::FILE_PATH_TYPE)) {
 				return static::replaceStrParts($urlSchema,array_merge($props,$meta->all()));
 			}
 		}
+		throw new \Exception("Cannot transform filename '$filename'");
+	}
+
+	public function UrlToFilename($urlPath) {
+		$schemas = array_flip($this->getConf('url_map'));
+		foreach ($schemas as $pathSchema => $urlSchema) {
+			if ($props = $this->pathInfo($urlPath,$pathSchema,self::URL_PATH_TYPE)) {
+				return static::replaceStrParts(static::expandFilePathSchema($urlSchema),$props);
+			}
+		}
+		throw new \Exception("Cannot transform URL '$urlPath'");
 	}
 
 	static function replaceStrParts($schema,$values) {
@@ -118,6 +121,36 @@ class NovelService {
 			}
 		}
 		return $schema;
+	}
+
+	static function filePathSchemaToRegex($schema,$append) {
+		switch($schema) {
+			case 'classic':
+				$pattern = "@(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})-(?P<slug>.+)$append$@";
+				break;
+			case 'simple':
+				$pattern = "@(?P<slug>.+)$append$@";
+				break;
+			default: // Custom schema
+				$schemaToRegex = [
+					':year' 	=> '(?P<year>[0-9]{4})',
+					':month'	=> '(?P<month>[0-9]{2})',
+					':day'  	=> '(?P<day>[0-9]{2})',
+					':slug' 	=> '(?P<slug>.+)',
+				];
+				$scParts = array_keys($schemaToRegex);
+				$reParts = array_values($schemaToRegex);
+				$pattern = '@' . str_replace($scParts,$reParts,$schema) . "$append$@";
+		}
+		return $pattern;
+	}
+
+	static function expandFilePathSchema($schema) {
+		switch ($schema) {
+			case 'classic': return ':year-:month-:day-:slug';
+			case 'simple': return ':slug';
+			default: return $schema;
+		}
 	}
 
 	public function index($minutes=0) {

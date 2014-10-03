@@ -25,7 +25,7 @@ class NovelServiceProvider extends ServiceProvider {
 		});
 		$this->app->bindShared('novel.index', function($app)
 		{
-			return new NovelIndex($app,\Config::get('novel::config'));
+			return new NovelIndex(\Config::get('novel::config'));
 		});
 	}
 

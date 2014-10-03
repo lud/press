@@ -28,4 +28,6 @@ return [
 
 	'pagination' => 'pagination::slider-3',
 
+	'compiled' => storage_path().'/views',
+
 ];

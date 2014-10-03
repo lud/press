@@ -1,14 +1,6 @@
 <?php
 return [
 	'base_dir' => $_ENV['NOVEL_STORAGE_PATH'],
-	'onFileMissing' => function() { return false; },
-	'meta_sep' => '****',
-	'url_fun' => function($fn,$meta) {
-		return URL::to(Novel::filenameTransform($fn,$meta,[
-			'classic' => "article/:year/:month/:day/:slug",
-			'simple' => "page/:slug",
-		]));
-	},
 	'skriv' => [
 		'urlProcessFunction' => function($url, $label, $targetBlank, $nofollow){
 			if (starts_with($url,"novel:")) {

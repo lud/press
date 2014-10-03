@@ -1,7 +1,5 @@
 <?php namespace Lud\Novel;
 
-use Novel; // is it bad to use the facade here ?
-
 class MetaWrapper implements \ArrayAccess {
 	protected $meta;
 
@@ -20,10 +18,12 @@ class MetaWrapper implements \ArrayAccess {
 	public function all() { return $this->meta; }
 
 	public function url() {
-		$f = Novel::getConf()['url_fun'];
-		return $f($this->filename,$this);
+		return NovelFacade::filenameToUrl($this);
 	}
 
+	public function file() {
+
+	}
 
 
 

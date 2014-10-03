@@ -1,16 +1,10 @@
 <?php namespace Lud\Novel;
 
-use View;
 use Cache;
 use Symfony\Component\Finder\Finder;
+use View;
 
 class NovelIndex {
-
-	protected $app;
-
-	public function __construct($app,$conf=[]) {
-		$this->app = $app;
-	}
 
 	public function all() {
 		return $this->cache('all', function() {
@@ -54,7 +48,7 @@ class NovelIndex {
 			->name($extensionsRegex)
 		;
 		$metas = array_map(function($file){
-			return with(new NovelFile($this->app, $file->getPathname()))
+			return with(new NovelFile($file->getPathname()))
 				->parseMeta()
 				;
 		}, iterator_to_array($finder));
@@ -79,7 +73,7 @@ class NovelIndex {
 	}
 
 	protected function getConf($key=null,$default=null) {
-		return $this->app['novel']->getConf($key,$default);
+		return NovelFacade::getConf($key,$default);
 	}
 
 	static function extensionsToRegex(array $extensions) {

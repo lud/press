@@ -1,12 +1,9 @@
 <?php namespace Lud\Novel;
 
-use Symfony\Component\Yaml\Parser as YamlParser;
 use \Skriv\Markup\Renderer as SkrivRenderer;
+use Symfony\Component\Yaml\Parser as YamlParser;
 
 class NovelFile {
-
-	const DEFAULT_META_PARSER = 'yaml';
-	const DEFAULT_CONTENT_PARSER = 'skriv';
 
 	protected $filename;
 	protected $readOK = false;
@@ -14,11 +11,10 @@ class NovelFile {
 	protected $rawContent;
 	protected $meta;
 	protected $content;
-	protected $app;
 
-	public function __construct($app,$filename) {
-		$this->app = $app;
+	public function __construct($filename,$meta=null) {
 		$this->filename = $filename;
+		$this->meta = $meta;
 	}
 
 	public function content($parserName=null) {
@@ -28,32 +24,29 @@ class NovelFile {
 		return $this->content;
 	}
 
-	public function meta($parserName=null) {
+	public function meta() {
 		if ($this->meta === null) {
-			$this->parse(['meta'=>$parserName]);
+			$this->parseMeta();
 		}
 		return $this->meta;
 	}
 
-	public function parse($conf=[]) {
-		if (empty($conf['meta'])) $conf['meta'] = self::DEFAULT_META_PARSER;
-		if (empty($conf['content'])) $conf['content'] = self::DEFAULT_CONTENT_PARSER;
+	public function parse() {
 		$this->readFileIfNotRead();
 		list($this->meta,$this->content) = [
-			$this->parseMeta($conf['meta']),
-			$this->parseContent($conf['content'])
+			$this->parseMeta(),
+			$this->parseContent()
 		];
 		return  [$this->meta,$this->content];
 	}
 
-	public function parseMeta($parserName=null) {
-		if (null === $parserName) $parserName = self::DEFAULT_META_PARSER;
+	public function parseMeta() {
 		$this->readFileIfNotRead();
-		$parser = $this->getParser($parserName);
+		$parser = new YamlParser();
 
 		// Meta present in the file
 
-		$headerMeta = $parser($this->rawMeta);
+		$headerMeta = $parser->parse($this->rawMeta);
 		if (is_null($headerMeta)) $headerMeta = [];
 		if (isset($headerMeta['date'])) {
 			$headerMeta['year'] = date('Y',$headerMeta['date']);
@@ -74,7 +67,7 @@ class NovelFile {
 		// then we try to figure out a schema. We try all the defined schemas in
 		// the config
 		foreach(\Config::get('novel::config.filename_schemas') as $schema) {
-			if (($fnInfo = NovelService::filenameInfo($this->filename,$schema)) !== false) {
+			if (($fnInfo = NovelFacade::pathInfo($this->filename,$schema)) !== false) {
 				// Here we got some infos such as date from filename
 				$fileMeta = array_merge($fileMeta,$fnInfo);
 				break; // stop on first match. The list in config must be ordered by path complexion
@@ -84,7 +77,7 @@ class NovelFile {
 		// is empty. if the file is in a subdirectory (or more), we store this
 		// path as a string
 		$realDir = realpath(dirname($this->filename));
-		$baseReal = realpath($this->app['novel']->getConf()['base_dir']);
+		$baseReal = realpath(NovelFacade::getConf('base_dir'));
 		$dirDiff = trim(substr($realDir,strlen($baseReal)), DIRECTORY_SEPARATOR);
 		$fileMeta['dirs'] =
 			empty($dirDiff)
@@ -100,16 +93,16 @@ class NovelFile {
 		return $this->meta;
 	}
 
-	public function parseContent($parserName) {
+	public function parseContent() {
 		$this->readFileIfNotRead();
-		$parser = $this->getParser($parserName);
+		$parser = $this->getParser($this->filename);
 		$this->content = $parser($this->rawContent);
 		return $this->content;
 	}
 
 	protected function readFileIfNotRead() {
 		if ($this->readOK) return;
-		$sep = $this->app['novel']->getConf()['meta_sep'];
+		$sep = NovelFacade::getConf('meta_sep');
 		$raw = file_get_contents($this->filename);
 		$rawParts = explode($sep,$raw);
 		if (count($rawParts) > 1) {
@@ -125,14 +118,18 @@ class NovelFile {
 		return $this->meta()->url();
 	}
 
-	protected function getParser ($name) {
-		$parserConfig = $this->app['novel']->getConf($name,[]);
+	protected function getParser ($filename) {
+
+		$extension = pathinfo($filename,PATHINFO_EXTENSION);
+
+		switch ($extension) {
+			case 'sk': $name='skriv';break;
+			default: throw new \Exception("No parser defined for extension $extension");
+		}
+
+		$parserConfig = NovelFacade::getConf($name,[]);
+
 		switch ($name) {
-			case 'yaml':
-				return function($str) {
-					$parser = new YamlParser();
-					return $parser->parse($str);
-				};
 			case 'skriv':
 				return function($str) use ($parserConfig) {
 					$renderer = SkrivRenderer::factory('html',$parserConfig);
