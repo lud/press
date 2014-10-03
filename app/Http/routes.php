@@ -14,3 +14,4 @@
 $router->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 
 $router->get('article/{year}/{month}/{day}/{slug}', 'PressController@publish');
+$router->get('page/{slug}', 'PressController@publish');
