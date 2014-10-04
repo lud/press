@@ -1,0 +1,74 @@
+1472323869s:3714:"<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<title></title>
+
+<link href="http://localhost/lib/css/bootstrap.min.css" rel="stylesheet">
+
+<style type="text/css">
+	/* todo move to file */
+	div.footnotes { font-size: 0.9em; }
+	div.footnotes-sep1 { width:30px; border-top:3px solid #222; margin:1em 0 0;}
+	div.footnotes-sep2 { width:170px; border-top:1px solid #222; margin:0 0 1em;}
+	p { text-align: justify; }
+	body { padding-bottom: 2em; }
+</style>
+
+
+<body>
+	<div class="navbar navbar-default navbar-static-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="http://localhost">Project name</a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="http://localhost">Home</a></li>
+					<!-- <li><a href="#about">About</a></li> -->
+					<!-- <li><a href="#contact">Contact</a></li> -->
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		
+	
+
+<h1 id="Compilation-des-Fichiers-Skriv-avec-Erlang">Compilation des Fichiers Skriv avec Erlang</h1>
+
+<p>J'avais indiqué dans un <a href="précédent post">précédent post</a> que je compilerai Skriv avec les outils standard Erlang, à savoir Leex &amp; Yecc. Finalement, cela s'avère beaucoup plus compliqué que prévu. J'avais pourtant créé un compilateur qui fonctionne bien avec ces outils : <a href="https://github.com/niahoo/kraftc" target="_blank" rel="nofollow">kraftc</a>, un compilateur pour un langage de ma conception (Kraft, pour le nommer), destiné à décrire le <em>crafting</em> d'objets dans un jeu vidéo.</p>
+
+<p>Je vais donc faire un nouvel essai en utilisant <a href="https://github.com/seancribbs/neotoma" target="_blank" rel="nofollow">Neotoma</a>, un générateur de parseur de type <em>packrat</em>. Je l'ai déjà utilisé par le passé pour compiler un simple <abbr title="Domain Specific Language">DSL</abbr> mais j'ai choisi de l'abandonner pour sa syntaxe un peu lourde dans la gestion de l'espace blanc. De plus je tombais souvent sur des boucles infinies, car ce genre de parser gère mal la récursion<sup class="footnote-ref"><a href="#cite_note-skriv-notes-5i4--1" name="cite_ref-skriv-notes-5i4--1" id="cite_ref-skriv-notes-5i4--1">1</a></sup>.</p>
+
+
+		<div class="footnotes">
+		<div class="footnotes-sep1"></div>
+		<div class="footnotes-sep2"></div>
+		<div class="footnotes">
+<p class="footnote"><a href="#cite_ref-skriv-notes-5i4--1" name="cite_note-skriv-notes-5i4--1" id="cite_note-skriv-notes-5i4--1">1</a>. Et aussi parce que je maîtrise assez mal l'outil, il faut le dire</p>
+</div>
+
+	</div>
+		</div>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="http://localhost/lib/js/bootstrap.min.js"></script>
+</body>
+
+<!-- cached on 2014-10-04 17:30:09 -->";

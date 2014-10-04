@@ -131,7 +131,7 @@ return [
 		'Illuminate\View\ViewServiceProvider',
 
 		'Lud\Novel\NovelServiceProvider',
-		// 'Flatten\FlattenServiceProvider',
+		'Flatten\FlattenServiceProvider',
 	],
 
 	/*
@@ -191,7 +191,7 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
 
 		'Novel'     => 'Lud\Novel\NovelFacade',
-		// 'Flatten' => 'Flatten\Facades\Flatten',
+		'Flatten' => 'Flatten\Facades\Flatten',
 
 	],
 
