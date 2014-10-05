@@ -26,7 +26,7 @@ return [
 	|
 	*/
 
-	'url' => 'http://localhost',
+	'url' => 'http://localhost:8000',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -131,7 +131,7 @@ return [
 		'Illuminate\View\ViewServiceProvider',
 
 		'Lud\Novel\NovelServiceProvider',
-		'Flatten\FlattenServiceProvider',
+		'Ipunkt\LaravelRouteCache\LaravelRouteCacheServiceProvider',
 	],
 
 	/*
@@ -191,7 +191,6 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
 
 		'Novel'     => 'Lud\Novel\NovelFacade',
-		'Flatten' => 'Flatten\Facades\Flatten',
 
 	],
 

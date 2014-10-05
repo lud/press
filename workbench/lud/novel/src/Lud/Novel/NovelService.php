@@ -90,7 +90,7 @@ class NovelService {
 		$schemas = $this->getConf('url_map');
 		foreach ($schemas as $pathSchema => $urlSchema) {
 			if ($props = $this->pathInfo($meta->filename,$pathSchema,self::FILE_PATH_TYPE)) {
-				return static::replaceStrParts($urlSchema,array_merge($props,$meta->all()));
+				return \URL::to(static::replaceStrParts($urlSchema,array_merge($props,$meta->all())));
 			}
 		}
 		throw new \Exception("Cannot transform filename '$filename'");

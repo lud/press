@@ -7,7 +7,7 @@
 	"repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/lud/flatten"
+            "url": "https://github.com/lud/laravel-route-cache"
         }
     ],
 	"require": {
@@ -15,7 +15,7 @@
 		"symfony/yaml": "~2.5",
 		"amaury/wikirenderer": "dev-master",
         "amaury/skrivmarkup": "dev-master",
-		"anahkiasen/flatten": "dev-laravel5"
+	    "ipunkt/laravel-route-cache": "dev-laravel5"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0"
