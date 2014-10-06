@@ -1,10 +1,9 @@
 <?php namespace App\Http\Controllers;
 
 use Config;
-use Illuminate\Routing\Controller;
 use Novel;
 
-class HomeController extends Controller {
+class HomeController {
 
 	/*
 	|--------------------------------------------------------------------------
