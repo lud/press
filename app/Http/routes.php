@@ -12,7 +12,7 @@
 */
 
 
-$router->group(['before' => 'cache.before'],function() use($router) {
+$router->group(['before' => 'cache.before'], function() use($router) {
 
 	$router->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 	$router->get('article/{year}/{month}/{day}/{slug}', 'PressController@publish');
