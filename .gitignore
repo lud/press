@@ -4,3 +4,4 @@
 .DS_Store
 Thumbs.db
 storage/cache
+storage/laravel.log
