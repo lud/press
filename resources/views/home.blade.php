@@ -12,8 +12,7 @@
 	<h3>Todo</h3>
 	<ul>
 		<li>Bouger tout ce qui concerne Path/URL dans un package <code>Press</code></li>
-		<li>Fork <code>Flatten</code> pour supporter laravel 5</li>
-		<li>Voir si on peut utiliser <code>FlySystem</code> au lieu de <code>Finder</code></li>
+		<li>Utiliser un middleware de cache</li>
 	</ul>
 @stop
 

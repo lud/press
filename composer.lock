@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e30a8e684ba8b613c7ae6022d78be825",
+    "hash": "43f44c40f0b86cc51ed12a1560e48fb9",
     "packages": [
         {
             "name": "amaury/skrivmarkup",
@@ -353,45 +353,6 @@
             "time": "2014-07-11 05:56:54"
         },
         {
-            "name": "ipunkt/laravel-route-cache",
-            "version": "dev-laravel5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lud/laravel-route-cache.git",
-                "reference": "5db89c5ffdc52d63bd8020985d65a4ffa6671215"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lud/laravel-route-cache/zipball/5db89c5ffdc52d63bd8020985d65a4ffa6671215",
-                "reference": "5db89c5ffdc52d63bd8020985d65a4ffa6671215",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "~5",
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Ipunkt\\LaravelRouteCache": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bastian Rang (ipunkt Business Solutions)",
-                    "email": "br@ipunkt.biz"
-                }
-            ],
-            "description": "Simple Cache for Laravel Routes sending 304 and cached static content",
-            "support": {
-                "source": "https://github.com/lud/laravel-route-cache/tree/laravel5"
-            },
-            "time": "2014-10-05 17:53:59"
-        },
-        {
             "name": "ircmaxell/password-compat",
             "version": "1.0.x-dev",
             "source": {
@@ -484,12 +445,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "37b923a949ff342909b4b7457fbf80dde7162111"
+                "reference": "6582b7ec78b7b58fbb6b1a0872909d82e596f1a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/37b923a949ff342909b4b7457fbf80dde7162111",
-                "reference": "37b923a949ff342909b4b7457fbf80dde7162111",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/6582b7ec78b7b58fbb6b1a0872909d82e596f1a5",
+                "reference": "6582b7ec78b7b58fbb6b1a0872909d82e596f1a5",
                 "shasum": ""
             },
             "require": {
@@ -593,7 +554,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2014-10-06 20:45:48"
+            "time": "2014-10-07 04:52:02"
         },
         {
             "name": "league/flysystem",
@@ -601,12 +562,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "1a6402211ed11e2fbb8673e240d4098c53d6e0eb"
+                "reference": "0bc9f7ef20ed7c01400a9ba4cc5b84c36f8aaeec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/1a6402211ed11e2fbb8673e240d4098c53d6e0eb",
-                "reference": "1a6402211ed11e2fbb8673e240d4098c53d6e0eb",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/0bc9f7ef20ed7c01400a9ba4cc5b84c36f8aaeec",
+                "reference": "0bc9f7ef20ed7c01400a9ba4cc5b84c36f8aaeec",
                 "shasum": ""
             },
             "require": {
@@ -673,7 +634,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2014-09-29 07:35:35"
+            "time": "2014-10-04 07:01:23"
         },
         {
             "name": "monolog/monolog",
@@ -2232,12 +2193,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "4e1f101296dc4861b56f37a49d5d7f80f48edd8c"
+                "reference": "f75e6b2e0764bcf4faa5082f4b60d5e7cf0959bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4e1f101296dc4861b56f37a49d5d7f80f48edd8c",
-                "reference": "4e1f101296dc4861b56f37a49d5d7f80f48edd8c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f75e6b2e0764bcf4faa5082f4b60d5e7cf0959bb",
+                "reference": "f75e6b2e0764bcf4faa5082f4b60d5e7cf0959bb",
                 "shasum": ""
             },
             "require": {
@@ -2254,7 +2215,7 @@
                 "phpunit/phpunit-mock-objects": "2.4.*@dev",
                 "sebastian/comparator": "~1.0",
                 "sebastian/diff": "~1.1",
-                "sebastian/environment": "~1.0",
+                "sebastian/environment": "~1.1",
                 "sebastian/exporter": "~1.0",
                 "sebastian/global-state": "1.0.*@dev",
                 "sebastian/version": "~1.0",
@@ -2295,7 +2256,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-10-06 09:05:37"
+            "time": "2014-10-07 09:30:07"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2475,24 +2436,24 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "10c7467da0622f7848cc5cadc0828c3359254df4"
+                "reference": "6288ebbf6fa3ed2b2ff2d69c356fbaaf4f0971a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/10c7467da0622f7848cc5cadc0828c3359254df4",
-                "reference": "10c7467da0622f7848cc5cadc0828c3359254df4",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/6288ebbf6fa3ed2b2ff2d69c356fbaaf4f0971a7",
+                "reference": "6288ebbf6fa3ed2b2ff2d69c356fbaaf4f0971a7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0"
+                "phpunit/phpunit": "~4.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -2507,8 +2468,7 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
+                    "email": "sebastian@phpunit.de"
                 }
             ],
             "description": "Provides functionality to handle HHVM/PHP environments",
@@ -2518,7 +2478,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2014-05-04 17:56:05"
+            "time": "2014-10-07 09:23:16"
         },
         {
             "name": "sebastian/exporter",
@@ -2672,20 +2632,13 @@
             "time": "2014-03-07 15:35:33"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
         "amaury/wikirenderer": 20,
-        "amaury/skrivmarkup": 20,
-        "ipunkt/laravel-route-cache": 20
+        "amaury/skrivmarkup": 20
     },
     "prefer-stable": false,
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "platform": [],
+    "platform-dev": []
 }

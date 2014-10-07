@@ -130,7 +130,6 @@ return [
 		'Illuminate\View\ViewServiceProvider',
 
 		'Lud\Novel\NovelServiceProvider',
-		'Ipunkt\LaravelRouteCache\LaravelRouteCacheServiceProvider',
 	],
 
 	/*

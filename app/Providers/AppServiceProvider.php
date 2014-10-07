@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider {
 		'auth' => 'App\Http\Middleware\AuthMiddleware',
 		'auth.basic' => 'App\Http\Middleware\BasicAuthMiddleware',
 		'csrf' => 'App\Http\Middleware\CsrfMiddleware',
-		'guest' => 'App\Http\Middleware\GusetMiddleware',
+		'guest' => 'App\Http\Middleware\GuestMiddleware',
 	];
 
 	/**
@@ -25,8 +25,8 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	protected $stack = [
 		'App\Http\Middleware\MaintenanceMiddleware',
-		'Illuminate\Cookie\Guard',
-		'Illuminate\Cookie\Queue',
+		'Illuminate\Cookie\Middleware\Guard',
+		'Illuminate\Cookie\Middleware\Queue',
 		'Illuminate\Session\Middleware\Reader',
 		'Illuminate\Session\Middleware\Writer',
 	];
