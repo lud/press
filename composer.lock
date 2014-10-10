@@ -445,12 +445,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "6582b7ec78b7b58fbb6b1a0872909d82e596f1a5"
+                "reference": "60b184ef67ab878df450ba2c7f417b1b95075e6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/6582b7ec78b7b58fbb6b1a0872909d82e596f1a5",
-                "reference": "6582b7ec78b7b58fbb6b1a0872909d82e596f1a5",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/60b184ef67ab878df450ba2c7f417b1b95075e6a",
+                "reference": "60b184ef67ab878df450ba2c7f417b1b95075e6a",
                 "shasum": ""
             },
             "require": {
@@ -479,7 +479,8 @@
                 "symfony/process": "2.6.*",
                 "symfony/routing": "2.6.*",
                 "symfony/security-core": "2.6.*",
-                "symfony/translation": "2.6.*"
+                "symfony/translation": "2.6.*",
+                "vlucas/phpdotenv": "~1.0"
             },
             "replace": {
                 "illuminate/auth": "self.version",
@@ -554,7 +555,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2014-10-07 04:52:02"
+            "time": "2014-10-10 15:32:56"
         },
         {
             "name": "league/flysystem",
@@ -1173,12 +1174,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/CssSelector.git",
-                "reference": "0c11572e1420ae1e59309bb188f8daed5545717c"
+                "reference": "453e66dacf59674222d1b7f26054ae35296747c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/0c11572e1420ae1e59309bb188f8daed5545717c",
-                "reference": "0c11572e1420ae1e59309bb188f8daed5545717c",
+                "url": "https://api.github.com/repos/symfony/CssSelector/zipball/453e66dacf59674222d1b7f26054ae35296747c4",
+                "reference": "453e66dacf59674222d1b7f26054ae35296747c4",
                 "shasum": ""
             },
             "require": {
@@ -1215,7 +1216,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-01 05:53:11"
+            "time": "2014-10-09 16:00:19"
         },
         {
             "name": "symfony/debug",
@@ -1485,12 +1486,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "8f39f4c3a2903883898d1026f781f0f42672f9bc"
+                "reference": "c24942a7ec2d8409d1f60d02c4460ca8317e885a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/8f39f4c3a2903883898d1026f781f0f42672f9bc",
-                "reference": "8f39f4c3a2903883898d1026f781f0f42672f9bc",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/c24942a7ec2d8409d1f60d02c4460ca8317e885a",
+                "reference": "c24942a7ec2d8409d1f60d02c4460ca8317e885a",
                 "shasum": ""
             },
             "require": {
@@ -1529,7 +1530,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-03 05:26:43"
+            "time": "2014-10-07 14:06:18"
         },
         {
             "name": "symfony/http-kernel",
@@ -1538,12 +1539,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpKernel.git",
-                "reference": "1eef435193528ee1291287c2a8fc18294bd00520"
+                "reference": "26d82e307861f7d0612aa84a2a5fa07dbd0dd3bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/1eef435193528ee1291287c2a8fc18294bd00520",
-                "reference": "1eef435193528ee1291287c2a8fc18294bd00520",
+                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/26d82e307861f7d0612aa84a2a5fa07dbd0dd3bc",
+                "reference": "26d82e307861f7d0612aa84a2a5fa07dbd0dd3bc",
                 "shasum": ""
             },
             "require": {
@@ -1604,7 +1605,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-05 08:46:57"
+            "time": "2014-10-08 20:39:21"
         },
         {
             "name": "symfony/process",
@@ -1660,12 +1661,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing.git",
-                "reference": "1c7785e21edd87da5570fc0182742bf66f95b52d"
+                "reference": "6e43bd277f1f7e181a65b85813312f428e4926ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Routing/zipball/1c7785e21edd87da5570fc0182742bf66f95b52d",
-                "reference": "1c7785e21edd87da5570fc0182742bf66f95b52d",
+                "url": "https://api.github.com/repos/symfony/Routing/zipball/6e43bd277f1f7e181a65b85813312f428e4926ab",
+                "reference": "6e43bd277f1f7e181a65b85813312f428e4926ab",
                 "shasum": ""
             },
             "require": {
@@ -1718,7 +1719,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2014-10-01 05:53:11"
+            "time": "2014-10-09 16:12:58"
         },
         {
             "name": "symfony/security-core",
@@ -1886,6 +1887,53 @@
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
             "time": "2014-10-05 13:53:50"
+        },
+        {
+            "name": "vlucas/phpdotenv",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vlucas/phpdotenv.git",
+                "reference": "2821c024b4c14c7e6d1ff99e063ae9532620beb2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/2821c024b4c14c7e6d1ff99e063ae9532620beb2",
+                "reference": "2821c024b4c14c7e6d1ff99e063ae9532620beb2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Dotenv": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Vance Lucas",
+                    "email": "vance@vancelucas.com",
+                    "homepage": "http://www.vancelucas.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` automagically.",
+            "homepage": "http://github.com/vlucas/phpdotenv",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "time": "2014-01-31 16:18:39"
         }
     ],
     "packages-dev": [
@@ -2436,12 +2484,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "6288ebbf6fa3ed2b2ff2d69c356fbaaf4f0971a7"
+                "reference": "205fcef5998953ec69cb79bc1ea9fee1277c8714"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/6288ebbf6fa3ed2b2ff2d69c356fbaaf4f0971a7",
-                "reference": "6288ebbf6fa3ed2b2ff2d69c356fbaaf4f0971a7",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/205fcef5998953ec69cb79bc1ea9fee1277c8714",
+                "reference": "205fcef5998953ec69cb79bc1ea9fee1277c8714",
                 "shasum": ""
             },
             "require": {
@@ -2478,7 +2526,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2014-10-07 09:23:16"
+            "time": "2014-10-08 05:30:43"
         },
         {
             "name": "sebastian/exporter",
