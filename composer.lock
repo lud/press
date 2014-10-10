@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "43f44c40f0b86cc51ed12a1560e48fb9",
+    "hash": "038000a0f8968ead3b25c8c06a81a748",
     "packages": [
         {
             "name": "amaury/skrivmarkup",
@@ -90,6 +90,50 @@
                 "wiki"
             ],
             "time": "2013-02-10 12:11:38"
+        },
+        {
+            "name": "bkwld/freezer",
+            "version": "dev-laravel5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lud/freezer.git",
+                "reference": "b841173aa703b56a0df5d0eb07703bfe324daa71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lud/freezer/zipball/b841173aa703b56a0df5d0eb07703bfe324daa71",
+                "reference": "b841173aa703b56a0df5d0eb07703bfe324daa71",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": ">=0",
+                "illuminate/support": "~5",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.8",
+                "phpunit/phpunit": "~3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Bkwld\\Freezer": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Robert Reinhard",
+                    "email": "info@bkwld.com"
+                }
+            ],
+            "description": "Using Laravel, creates cached versions of full pages that can be served directly by Apache",
+            "support": {
+                "source": "https://github.com/lud/freezer/tree/laravel"
+            },
+            "time": "2014-10-10 16:02:27"
         },
         {
             "name": "classpreloader/classpreloader",
@@ -445,12 +489,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "60b184ef67ab878df450ba2c7f417b1b95075e6a"
+                "reference": "c091f3f39e3dae11c430e104767cc5bad3a32c57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/60b184ef67ab878df450ba2c7f417b1b95075e6a",
-                "reference": "60b184ef67ab878df450ba2c7f417b1b95075e6a",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/c091f3f39e3dae11c430e104767cc5bad3a32c57",
+                "reference": "c091f3f39e3dae11c430e104767cc5bad3a32c57",
                 "shasum": ""
             },
             "require": {
@@ -555,7 +599,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2014-10-10 15:32:56"
+            "time": "2014-10-10 15:39:37"
         },
         {
             "name": "league/flysystem",
@@ -2684,7 +2728,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "amaury/wikirenderer": 20,
-        "amaury/skrivmarkup": 20
+        "amaury/skrivmarkup": 20,
+        "bkwld/freezer": 20
     },
     "prefer-stable": false,
     "platform": [],
