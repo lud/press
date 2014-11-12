@@ -8,5 +8,6 @@ return [
 	],
 	'filename_schemas' => ['classic','simple'],
 	'extensions' => ['.sk','md'],
+	'default_page_size' => 10,
 ];
 
