@@ -7,14 +7,13 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/lud/freezer"
+            "url": "https://github.com/lud/SkrivMarkup"
         }
     ],
 	"require": {
 		"laravel/framework": "~5.0",
 		"symfony/yaml": "~2.5",
-		"amaury/wikirenderer": "dev-master",
-        "amaury/skrivmarkup": "dev-master",
+        "amaury/skrivmarkup": "dev-classic-linebreaks",
         "bkwld/freezer": "dev-laravel5"
 	},
 	"require-dev": {

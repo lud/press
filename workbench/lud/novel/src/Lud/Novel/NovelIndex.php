@@ -85,7 +85,7 @@ class NovelIndex {
 
 	static function parseQuery($query) {
 		$filters = [];
-		foreach (explode('.',$query) as $part) {
+		foreach (explode(',',$query) as $part) {
 			$args = explode(':',$part);
 			$fun = array_shift($args);
 			$filters[] = self::makeReduce($fun,$args);
