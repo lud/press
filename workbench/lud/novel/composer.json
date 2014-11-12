@@ -16,8 +16,8 @@
     },
     "autoload": {
         "psr-0": {
-            "Lud\\Novel\\": "src/"
+            "Lud\\Novel": "src/"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }

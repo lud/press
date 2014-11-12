@@ -1,35 +1,10 @@
 <?php
-
-// phpinfo();exit;
-
-function measureTime() {
-	static $t1 = null;
-	if (null !== $t1) {
-		$t2 = microtime(true);
-		$diff = $t2 - $t1;
-		pre($diff,"measure");
-	}
-	$t1 = microtime(true);
-}
-
-
-function pre($v,$label='') { //@todo remove
-		echo "<pre>", $label ? "$label ":"";
-		// var_export($v);
-		(is_null($v) || is_bool($v)) ? var_dump($v) : print_r($v);
-		// var_dump($v);
-		echo "</pre>";
-		echo "<br/>";
-		return $v;
-}
-
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
  * @package  Laravel
  * @author   Taylor Otwell <taylorotwell@gmail.com>
  */
-
 
 /*
 |--------------------------------------------------------------------------
@@ -57,7 +32,7 @@ require __DIR__.'/../bootstrap/autoload.php';
 |
 */
 
-$app = require_once __DIR__.'/../bootstrap/start.php';
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -71,4 +46,12 @@ $app = require_once __DIR__.'/../bootstrap/start.php';
 |
 */
 
-$app->run();
+$kernel = $app->make('Illuminate\Contracts\Http\Kernel');
+
+$response = $kernel->handle(
+	$request = Illuminate\Http\Request::capture()
+);
+
+$response->send();
+
+$kernel->terminate($request, $response);

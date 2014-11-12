@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 
-class PressController {
+class PressController extends Controller {
 
 	/**
 	 * Display the specified resource.

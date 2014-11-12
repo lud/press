@@ -1,26 +1,25 @@
 <?php namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Contracts\Auth\Authenticator;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Routing\Middleware;
 
-class GuestMiddleware implements Middleware {
+class Authenticate implements Middleware {
 
 	/**
-	 * The authenticator implementation.
+	 * The Guard implementation.
 	 *
-	 * @var Authenticator
+	 * @var Guard
 	 */
 	protected $auth;
 
 	/**
 	 * Create a new filter instance.
 	 *
-	 * @param  Authenticator  $auth
+	 * @param  Guard  $auth
 	 * @return void
 	 */
-	public function __construct(Authenticator $auth)
+	public function __construct(Guard $auth)
 	{
 		$this->auth = $auth;
 	}
@@ -34,9 +33,16 @@ class GuestMiddleware implements Middleware {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if ($this->auth->check())
+		if ($this->auth->guest())
 		{
-			return new RedirectResponse(url('/'));
+			if ($request->ajax())
+			{
+				return response('Unauthorized.', 401);
+			}
+			else
+			{
+				return redirect()->guest('auth/login');
+			}
 		}
 
 		return $next($request);

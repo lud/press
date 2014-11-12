@@ -50,15 +50,6 @@ class NovelService {
 		return implode(DIRECTORY_SEPARATOR,$parts);
 	}
 
-	static function take($string,$amount,$char='-') {
-		$t = explode($char,$string);
-		$l = [];
-		while ($amount--) {
-			$l[] = array_shift($t);
-		}
-		return [$l,implode($char,$t)];
-	}
-
 	public function pathInfo($fn,$schema,$type=self::FILE_PATH_TYPE) {
 		// pre($fn,"path to match");
 		if (self::FILE_PATH_TYPE === $type) {
