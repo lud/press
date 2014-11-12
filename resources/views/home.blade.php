@@ -6,7 +6,11 @@
 
 @section('content')
 	@foreach ($articles as $article)
-		<a href="{{ $article->url() }}">{{ $article->url() }}</a><br/>
+		<a href="{{ $article->url() }}">
+			{{ $article->title }}
+			<small>{{ $article->id }}</small>
+		</a>
+		<br/>
 	@endforeach
 
 	<h3>Todo</h3>
@@ -14,5 +18,7 @@
 		<li>Bouger tout ce qui concerne Path/URL dans un package <code>Press</code></li>
 		<li>Utiliser un middleware de cache</li>
 	</ul>
+
+	{!! $paginator->render() !!}
 @stop
 

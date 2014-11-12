@@ -2,6 +2,7 @@
 
 use Config;
 use Novel;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class HomeController extends Controller {
 
@@ -20,8 +21,15 @@ class HomeController extends Controller {
 
 	public function index()
 	{
-		$articles = Novel::query('tags:dev,page:1:2');
-		return \View::make('home')->with('articles',$articles);
+		$page = \Input::get('page',1);
+		$page_size = Novel::getConf('default_page_size');
+		$articles = Novel::all();
+		$pageArticles = $articles->forPage($page,$page_size);
+		// dd(with(new \Paginator)->resolveFacadeInstance());
+		$paginator = new LengthAwarePaginator($articles,$articles->count(),2);
+		return \View::make('home')
+			->with('articles',$pageArticles)
+			->with('paginator',$paginator);
 	}
 
 }

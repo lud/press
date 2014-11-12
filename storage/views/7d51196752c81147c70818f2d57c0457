@@ -1,0 +1,18 @@
+<?php $__env->startSection('title'); ?>
+
+<?php $__env->startSection('content'); ?>
+
+	<?php echo $content['html']; ?>
+
+
+	<?php if($content['footnotes_html']): ?>
+	<div class="footnotes">
+		<div class="footnotes-sep1"></div>
+		<div class="footnotes-sep2"></div>
+		<?php echo $content['footnotes_html']; ?>
+
+	</div>
+	<?php endif; ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.base', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -60,10 +60,15 @@ class NovelFile {
 		// if only one tag is set, or a comma list, we make it an array
 		if (!is_array($headerMeta['tags'])) $headerMeta['tags'] = array_map('trim',explode(',',$headerMeta['tags']));
 
+		// We figure out the ID of the file, i.e. a unique string that match
+		// only the significant parts of the file name. So we cannot have two
+		// files called aaa-bbb-ccc.MD & aaa-bbb-ccc.sk, event in different
+		// directories, because both will have aaa-bbb-ccc as an ID, whatever
+		// the directory is.
 
-		// Additional metadata based on filename. Meta in header can override
+		$fileID = pathinfo($this->filename,PATHINFO_FILENAME);
+		$fileMeta = ['filename' => $this->filename, 'id' => $fileID];
 
-		$fileMeta = ['filename' => $this->filename];
 		// then we try to figure out a schema. We try all the defined schemas in
 		// the config
 		foreach(\Config::get('novel::config.filename_schemas') as $schema) {

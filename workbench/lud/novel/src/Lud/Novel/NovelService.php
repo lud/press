@@ -1,7 +1,6 @@
 <?php namespace Lud\Novel;
 
 use View;
-use Cache;
 use Symfony\Component\Finder\Finder;
 
 class NovelService {
@@ -18,20 +17,7 @@ class NovelService {
 	}
 
 	public function findFile($filename) {
-		// the filename can be in a subdirectory.
-		$finder = new Finder();
-		$finder->files()
-			->in($this->getConf('base_dir'))
-			->name("@$filename@") // regex style
-		;
-
-		$files = iterator_to_array($finder);
-
-		if (count($files) == 0) {
-			throw new FileNotFoundException("Cannot find file=$filename");
-		} else {
-			return new NovelFile(reset($files)->getPathName());
-		}
+		return $this->index()->getFile($filename);
 	}
 
 	public function configure($values) {
@@ -71,8 +57,8 @@ class NovelService {
 			$numeric_keys = array_filter($keys,'is_numeric');
 			// pre("$pattern match $fn");
 			return array_except($matches, $numeric_keys);
-		} else {
-			// pre("$pattern NO match $fn");
+		// } else {
+		//	pre("$pattern NO match $fn");
 		}
 		return false;
 	}
@@ -84,10 +70,12 @@ class NovelService {
 				return \URL::to(static::replaceStrParts($urlSchema,array_merge($props,$meta->all())));
 			}
 		}
-		throw new \Exception("Cannot transform filename '$filename'");
+		throw new \Exception('Cannot transform filename \''.$meta->filename);
 	}
 
-	public function UrlToFilename($urlPath) {
+	// the schemas must return an ID, i.e. a file's name without the directory
+	// and without an extension
+	public function UrlToID($urlPath) {
 		$schemas = array_flip($this->getConf('url_map'));
 		foreach ($schemas as $pathSchema => $urlSchema) {
 			if ($props = $this->pathInfo($urlPath,$pathSchema,self::URL_PATH_TYPE)) {
@@ -143,7 +131,7 @@ class NovelService {
 		}
 	}
 
-	public function index($minutes=0) {
+	public function index() {
 		return $this->app['novel.index'];
 	}
 

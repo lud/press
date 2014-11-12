@@ -12,4 +12,5 @@ return [
 		// 'softLinebreaks' => false,
 	],
 	'index_cache_minutes' => 0,
+	'default_page_size' => 2,
 ];

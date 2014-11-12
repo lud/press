@@ -8,7 +8,5 @@ return [
 	],
 	'filename_schemas' => ['classic','simple'],
 	'extensions' => ['.sk','md'],
-	'index_cache_minutes' => 10,
-	'default_page_size' => 10,
 ];
 

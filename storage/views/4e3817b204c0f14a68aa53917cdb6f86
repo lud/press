@@ -1,0 +1,17 @@
+<?php $__env->startSection('title'); ?>Home Page Title <?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+	<?php foreach($articles as $article): ?>
+		<a href="<?php echo e($article->url()); ?>"><?php echo e($article->url()); ?></a><br/>
+	<?php endforeach; ?>
+
+	<h3>Todo</h3>
+	<ul>
+		<li>Bouger tout ce qui concerne Path/URL dans un package <code>Press</code></li>
+		<li>Fork <code>Flatten</code> pour supporter laravel 5</li>
+		<li>Voir si on peut utiliser <code>FlySystem</code> au lieu de <code>Finder</code></li>
+	</ul>
+<?php $__env->stopSection(); ?>
+
+
+<?php echo $__env->make('layouts.base', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
