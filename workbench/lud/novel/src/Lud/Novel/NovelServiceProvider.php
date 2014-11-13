@@ -27,6 +27,10 @@ class NovelServiceProvider extends ServiceProvider {
 		{
 			return new NovelIndex();
 		});
+		$this->app->bindShared('novel.cache', function($app)
+		{
+			return new NovelCache($app->request);
+		});
 	}
 
 	/**

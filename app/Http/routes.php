@@ -13,9 +13,15 @@
 
 $router->group(['pressCache' => true], function($router){
 	$router->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
-	$router->get('qzd', ['uses' => 'HomeController@index', 'as' => 'home']);
 	$router->get('article/{year}/{month}/{day}/{slug}', 'PressController@publish');
 	$router->get('page/{slug}', 'PressController@publish');
+});
+
+$router->group(['__middleware' => 'auth'], function($router){
+	$router->get('editing', ['uses' => 'PressController@startEditing', 'as' => 'press.editing']);
+	$router->get('stop-editing', ['uses' => 'PressController@stopEditing', 'as' => 'press.stop_editing']);
+	$router->get('refresh/{key}', ['uses' => 'PressController@refresh', 'as' => 'press.refresh_page_cache']);
+	$router->get('purge', ['uses' => 'PressController@purge', 'as' => 'press.purge_cache']);
 });
 
 

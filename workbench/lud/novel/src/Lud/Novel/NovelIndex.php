@@ -13,6 +13,7 @@ use View;
 class NovelIndex {
 
 	private $indexCache = null;
+	private $maxMTime = 0;
 
 	public function all() {
 		return new Collection($this->build()->all());
@@ -35,6 +36,7 @@ class NovelIndex {
 		if (null !== $this->indexCache) {
 			return $this->indexCache;
 		}
+		$maxMTime = 0;
 		$finder = new Finder();
 		$extensionsRegex = static::extensionsToRegex($this->getConf('extensions'));
 		$sorWithoutPath = function(\SplFileInfo $a, \SplFileInfo $b) {
@@ -54,8 +56,10 @@ class NovelIndex {
 		$result = [];
 		foreach ($metas as $key => $fileMeta) {
 			$result[$fileMeta->id] = $fileMeta;
+			$maxMTime = max($maxMTime, $fileMeta->mtime);
 		}
 		$this->indexCache = new Collection($result);
+		$this->maxMTime = $maxMTime;
 		return $this->indexCache;
 	}
 
@@ -67,6 +71,10 @@ class NovelIndex {
 			return new NovelFile($filename,$meta);
 		}
 		throw new FileNotFoundException("Cannot find file id=$id");
+	}
+
+	public function getModTime() {
+		return $this->maxMTime;
 	}
 
 	protected function getConf($key=null,$default=null) {

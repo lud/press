@@ -10,6 +10,8 @@ class NovelService {
 
 	protected $conf = [];
 	protected $app;
+	protected $editing = false;
+	protected $currentEditingCacheInfo;
 
 	public function __construct($app,$conf=[]) {
 		$this->configure($conf);
@@ -131,6 +133,10 @@ class NovelService {
 		}
 	}
 
+	public function cache() {
+		return $this->app['novel.cache'];
+	}
+
 	public function index() {
 		return $this->app['novel.index'];
 	}
@@ -142,6 +148,17 @@ class NovelService {
 	public function all() {
 		return $this->index()->all();
 	}
+
+	// Cache & Editing ------------------------------------------------------
+
+	public function isEditing() {
+		return $this->editing;
+	}
+
+	public function setEditing() {
+		$this->editing = true;
+	}
+
 
 }
 

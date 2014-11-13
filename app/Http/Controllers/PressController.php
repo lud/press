@@ -1,6 +1,9 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Cookie;
+use Novel;
+use Redirect;
 
 class PressController extends Controller {
 
@@ -26,37 +29,27 @@ class PressController extends Controller {
 		}
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
+	public function startEditing()
 	{
-		//
+		return Redirect::back()->withCookie(Cookie::forever('pressEditing',true));
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
+	public function stopEditing()
 	{
-		//
+		return Redirect::back()->withCookie(Cookie::forever('pressEditing',false));
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
+	public function refresh($key)
 	{
-		//
+		Novel::cache()->forget($key);
+		return Redirect::back();
 	}
+
+	public function purge()
+	{
+		Novel::cache()->flush();
+		return Redirect::back();
+	}
+
 
 }

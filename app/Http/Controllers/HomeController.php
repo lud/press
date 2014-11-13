@@ -22,10 +22,20 @@ class HomeController extends Controller {
 	public function index()
 	{
 		$this->middleware('pressHttpCache');
-		$page = \Input::get('page',1);
+
+		$page = \Input::get('page');
+		if (null !== $page && $page < 2) {
+			// if page IS set to 1 or 0 or inferior, redirect to the home
+			return \Redirect::route('home',[],301);
+		}
+		$page = max($page,1); //set the page to minimum 1
+
 		$page_size = Novel::getConf('default_page_size');
 		$articles = Novel::all();
 		$pageArticles = $articles->forPage($page,$page_size);
+		if (0 === $pageArticles->count() && $page !== 1) {
+			return \Redirect::route('home');
+		}
 		// dd(with(new \Paginator)->resolveFacadeInstance());
 		$paginator = new LengthAwarePaginator($articles,$articles->count(),2);
 		return \View::make('home')

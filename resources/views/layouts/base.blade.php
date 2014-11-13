@@ -48,9 +48,8 @@
 	<div class="container">
 		@yield('content')
 	</div>
-	<div class="container">
-		En cache depuis le {{ date('d/m/Y \à H:i',time()) }}
-	</div>
+
+	@include('pressAdmin.edit_switch')
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
