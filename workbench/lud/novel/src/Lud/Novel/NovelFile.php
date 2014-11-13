@@ -132,7 +132,11 @@ class NovelFile {
 		$extension = pathinfo($filename,PATHINFO_EXTENSION);
 
 		switch ($extension) {
-			case 'sk': $name='skriv';break;
+			case 'sk':
+				$name='skriv';break;
+			case 'html':
+			case 'htm':
+				$name='html';break;
 			default: throw new \Exception("No parser defined for extension $extension");
 		}
 
@@ -145,7 +149,11 @@ class NovelFile {
 					$html = $renderer->render($str);
 					$footnotes_html = $renderer->getFootnotes();
 					$footnotes = $renderer->getFootnotes(true);
-					return ['html' => $html, 'footnotes_html' => $footnotes_html, 'footnotes' => $footnotes];
+					return ['html' => $html, 'footnotes_html' => $footnotes_html];
+				};
+			case 'html':
+				return function($str) use ($parserConfig) {
+					return ['html' => $str, 'footnotes_html' => ''];
 				};
 			default: throw new \Exception("Unknown parser $name");
 		}

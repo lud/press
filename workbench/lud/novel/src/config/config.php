@@ -7,7 +7,7 @@ return [
 		'simple'  => "page/:slug",
 	],
 	'filename_schemas' => ['classic','simple'],
-	'extensions' => ['.sk','md'],
+	'extensions' => ['.sk','md','htm','.html'],
 	'default_page_size' => 10,
 ];
 
