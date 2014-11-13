@@ -11,10 +11,12 @@
 |
 */
 
-
-$router->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
-$router->get('article/{year}/{month}/{day}/{slug}', 'PressController@publish');
-$router->get('page/{slug}', 'PressController@publish');
+$router->group(['pressCache' => true], function($router){
+	$router->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
+	$router->get('qzd', ['uses' => 'HomeController@index', 'as' => 'home']);
+	$router->get('article/{year}/{month}/{day}/{slug}', 'PressController@publish');
+	$router->get('page/{slug}', 'PressController@publish');
+});
 
 
 /*

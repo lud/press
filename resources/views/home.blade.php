@@ -7,8 +7,8 @@
 @section('content')
 	@foreach ($articles as $article)
 		<a href="{{ $article->url() }}">
-			{{ $article->title }}
-			<small>{{ $article->id }}</small>
+			{{ $article->get('title','Sans titre') }}
+			<small>{{ $article->mtime }}</small>
 		</a>
 		<br/>
 	@endforeach

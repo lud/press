@@ -21,6 +21,7 @@ class HomeController extends Controller {
 
 	public function index()
 	{
+		$this->middleware('pressHttpCache');
 		$page = \Input::get('page',1);
 		$page_size = Novel::getConf('default_page_size');
 		$articles = Novel::all();

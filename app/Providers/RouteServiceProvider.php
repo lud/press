@@ -15,6 +15,7 @@ class RouteServiceProvider extends ServiceProvider {
 		'auth' => 'App\Http\Middleware\Authenticate',
 		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
 		'guest' => 'App\Http\Middleware\RedirectIfAuthenticated',
+		'pressHttpCache' => 'App\Http\Middleware\PressHttpCache',
 	];
 
 	/**

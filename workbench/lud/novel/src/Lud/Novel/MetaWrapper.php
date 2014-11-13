@@ -12,7 +12,7 @@ class MetaWrapper implements \ArrayAccess {
 	}
 
 	public function get($key,$default=null) {
-		return isset($this->meta[$key]) ? $this->meta[$key] : $default;
+		return @$this->meta[$key] ?: $default;
 	}
 
 	public function all() { return $this->meta; }

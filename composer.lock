@@ -504,12 +504,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "9798895e42bae490e58d027cd7c1b4e731721a04"
+                "reference": "6c5cdca78bf633363b00bfad9e1cacd7c1626f1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/9798895e42bae490e58d027cd7c1b4e731721a04",
-                "reference": "9798895e42bae490e58d027cd7c1b4e731721a04",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/6c5cdca78bf633363b00bfad9e1cacd7c1626f1a",
+                "reference": "6c5cdca78bf633363b00bfad9e1cacd7c1626f1a",
                 "shasum": ""
             },
             "require": {
@@ -583,7 +583,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2014-11-11 20:12:28"
+            "time": "2014-11-13 00:38:34"
         },
         {
             "name": "monolog/monolog",

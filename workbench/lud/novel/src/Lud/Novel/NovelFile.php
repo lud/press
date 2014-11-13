@@ -67,7 +67,11 @@ class NovelFile {
 		// the directory is.
 
 		$fileID = pathinfo($this->filename,PATHINFO_FILENAME);
-		$fileMeta = ['filename' => $this->filename, 'id' => $fileID];
+		$fileMeta = [
+			'filename' => $this->filename,
+			'id' => $fileID,
+			'mtime' => filemtime($this->filename),
+		];
 
 		// then we try to figure out a schema. We try all the defined schemas in
 		// the config
