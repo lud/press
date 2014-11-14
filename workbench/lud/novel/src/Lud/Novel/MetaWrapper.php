@@ -1,45 +1,31 @@
 <?php namespace Lud\Novel;
 
-class MetaWrapper implements \ArrayAccess {
-	protected $meta;
+use Illuminate\Support\Fluent;
 
-	public function __construct($meta) {
-		$this->meta = $meta;
-	}
+class MetaWrapper extends Fluent implements \ArrayAccess {
 
-	public function __get($key) {
-		return isset($this->meta[$key]) ? $this->meta[$key] : null;
-	}
-
-	public function get($key,$default=null) {
-		return @$this->meta[$key] ?: $default;
-	}
-
-	public function all() { return $this->meta; }
 
 	public function url() {
 		return NovelFacade::filenameToUrl($this);
 	}
 
-	public function file() {
+	public function all() { return $this->getAttributes(); }
 
+
+	// getter override : we check the meta for thrueness instead of checking
+	// only if the key exists
+
+	public function get($key,$default=null) {
+		return @$this->attributes[$key] ?: value($default);
 	}
 
-
-
-	// ArrayAccess implementation
+	// ArrayAccess overrides
 
 	public function offsetSet($offset, $value) {
 		throw new \Exception(get_class()." is immutable, tried to set '$offset'");
 	}
-	public function offsetExists($offset) {
-		return isset($this->meta[$offset]);
-	}
 	public function offsetUnset($offset) {
 		throw new \Exception(get_class()." is immutable, tried to unset '$offset'");
-	}
-	public function offsetGet($offset) {
-		return $this->get($offset);
 	}
 
 }

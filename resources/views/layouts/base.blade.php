@@ -9,7 +9,17 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-<title>@yield('title')</title>
+@if (isset($meta))
+	@if($meta->title)
+		<title>{{ $meta->title }}</title>
+	@endif
+	@if($meta->description)
+		<meta name="description" content="{{ $meta->description }}" />
+	@endif
+	@if($meta->keywords)
+		<meta name="keywords" content="{{ $meta->keywords }}" />
+	@endif
+@endif
 
 <link href="{{ URL::asset('lib/css/bootstrap.min.css') }}" rel="stylesheet">
 <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet"/> -->
@@ -35,7 +45,9 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="{{ URL::route('home') }}">Project name</a>
+				<a class="navbar-brand" href="{{ URL::route('home') }}">
+					{{ Config::get("app.project_name","app.project_name") }}
+				</a>
 			</div>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">

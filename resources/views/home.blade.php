@@ -1,13 +1,10 @@
 
 @extends('layouts.base')
 
-
-@section('title')Home Page Title @stop
-
 @section('content')
 	@foreach ($articles as $article)
 		<a href="{{ $article->url() }}">
-			{{ $article->get('title',$article->id) }}
+			{{ $article->get('title', $article->id) }}
 		</a>
 		<br/>
 	@endforeach

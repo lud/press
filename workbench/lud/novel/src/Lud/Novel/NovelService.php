@@ -72,7 +72,7 @@ class NovelService {
 				return \URL::to(static::replaceStrParts($urlSchema,array_merge($props,$meta->all())));
 			}
 		}
-		throw new \Exception('Cannot transform filename \''.$meta->filename);
+		throw new \Exception('Cannot transform filename "'.$meta->filename.'"');
 	}
 
 	// the schemas must return an ID, i.e. a file's name without the directory

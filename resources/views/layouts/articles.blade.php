@@ -1,9 +1,5 @@
 @extends('layouts.base')
 
-@section('title')
-{{ $meta->title }}
-@stop
-
 @section('content')
 
 	{!! $content['html'] !!}

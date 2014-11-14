@@ -12,7 +12,7 @@ class NovelFile {
 	protected $meta;
 	protected $content;
 
-	public function __construct($filename,$meta=null) {
+	public function __construct($filename,MetaWrapper $meta=null) {
 		$this->filename = $filename;
 		$this->meta = $meta;
 	}
