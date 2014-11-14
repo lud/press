@@ -159,6 +159,15 @@ class NovelService {
 		$this->editing = true;
 	}
 
+	public function editingCacheInfo() {
+		if (!$this->isEditing()) return null;
+		$info = $this->cache()->current();
+		unset($info->content);
+		$info->indexMTime = $this->index()->getModTime();
+		$info->isCacheStale = $info->indexMTime > $info->cacheTime;
+		return $info;
+	}
+
 
 }
 

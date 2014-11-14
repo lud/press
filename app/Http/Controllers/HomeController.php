@@ -40,6 +40,7 @@ class HomeController extends Controller {
 		$paginator = new LengthAwarePaginator($articles,$articles->count(),2);
 		return \View::make('home')
 			->with('articles',$pageArticles)
+			->with('cacheInfo',Novel::editingCacheInfo())
 			->with('paginator',$paginator);
 	}
 

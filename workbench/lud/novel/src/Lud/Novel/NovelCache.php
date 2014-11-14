@@ -50,7 +50,7 @@ class NovelCache {
 	public function getFakeCache($key) {
 		return (object) [
 			'content' => null,
-			'cache_at' => time(),
+			'cacheTime' => time(),
 			'key' => $key,
 		];
 	}
@@ -75,7 +75,7 @@ class NovelCache {
 	private function forever($key,$content) {
 		$cache = (object) [
 			'content' => $content,
-			'cache_at' => time(),
+			'cacheTime' => time(),
 			'key' => $key,
 		];
 		$this->ramCache[$key] = $cache;

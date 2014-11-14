@@ -12,6 +12,8 @@
 <title>@yield('title')</title>
 
 <link href="{{ URL::asset('lib/css/bootstrap.min.css') }}" rel="stylesheet">
+<!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet"/> -->
+
 
 <style type="text/css">
 	/* todo move to file */
@@ -45,13 +47,32 @@
 		</div>
 	</div>
 
+
+
 	<div class="container">
+		@if(Novel::isEditing())
+			<div class="btn-group-sm" style="float:right">
+				@include('pressParts.edit_actions')
+			</div>
+		@endif
 		@yield('content')
 	</div>
-
-	@include('pressAdmin.edit_switch')
+	<div class="container">
+		@if(Novel::isEditing())
+			@include('pressParts.edit_infos')
+		@else
+			@include('pressParts.user_infos')
+		@endif
+	</div>
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="{{ URL::asset('lib/js/bootstrap.min.js') }}"></script>
+	@if(Novel::isEditing())
+		<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment-with-locales.min.js"></script>
+		<script>
+			moment.locale('{{ App::getLocale() }}');
+		</script>
+
+		<script src="{{ URL::asset('lib/js/press-admin.js') }}"></script>
+	@endif
 </body>

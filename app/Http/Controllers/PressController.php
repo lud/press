@@ -23,6 +23,7 @@ class PressController extends Controller {
 			$layout = $document->meta()->get('layout','default');
 			return \View::make($layout)
 				->with('meta',$document->meta())
+				->with('cacheInfo',Novel::editingCacheInfo())
 				->with('content',$document->content());
 		} catch (\Lud\Novel\FileNotFoundException $e) {
 			abort(404);
