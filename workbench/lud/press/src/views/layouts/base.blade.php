@@ -64,16 +64,16 @@
 	<div class="container">
 		@if(Press::isEditing())
 			<div class="btn-group-sm" style="float:right">
-				@include('pressParts.edit_actions')
+				@include('press::pressParts.edit_actions')
 			</div>
 		@endif
 		@yield('content')
 	</div>
 	<div class="container">
 		@if(Press::isEditing())
-			@include('pressParts.edit_infos')
+			@include('press::pressParts.edit_infos')
 		@else
-			@include('pressParts.user_infos')
+			@include('press::pressParts.user_infos')
 		@endif
 	</div>
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -11,13 +11,15 @@
 |
 */
 
-$router->group(['pressCache' => true], function($router){
+
+
+$router->group(['pressCache' => true, 'namespace' => 'Lud\Press'], function($router){
 	$router->get('/', ['uses' => 'PressController@index', 'as' => 'home']);
 	$router->get('article/{year}/{month}/{day}/{slug}', 'PressController@publish');
 	$router->get('page/{slug}', 'PressController@publish');
 });
 
-$router->group(['__middleware' => 'auth'], function($router){
+$router->group(['__middleware' => 'auth', 'namespace' => 'Lud\Press'], function($router){
 	$router->get('editing', ['uses' => 'PressController@startEditing', 'as' => 'press.editing']);
 	$router->get('stop-editing', ['uses' => 'PressController@stopEditing', 'as' => 'press.stop_editing']);
 	$router->get('refresh/{key}', ['uses' => 'PressController@refresh', 'as' => 'press.refresh_page_cache']);
@@ -36,6 +38,7 @@ $router->group(['__middleware' => 'auth'], function($router){
 |
 */
 
-$router->controller('auth', 'AuthController');
-
-$router->controller('password', 'PasswordController');
+$router->group(['namespace' => 'App\Http\Controllers',], function($router){
+	$router->controller('auth', 'AuthController');
+	$router->controller('password', 'PasswordController');
+});

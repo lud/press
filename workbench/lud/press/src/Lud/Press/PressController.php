@@ -1,13 +1,17 @@
-<?php namespace App\Http\Controllers;
+<?php namespace Lud\Press;
 
 use Config;
 use Cookie;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Routing\Controller as BaseController;
 use Press;
 use Redirect;
 
-class PressController extends Controller {
+class PressController extends BaseController {
+
+	// use ValidatesRequests;
 
 	/**
 	 * Display the specified resource.

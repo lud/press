@@ -41,6 +41,10 @@ class PressFile {
 	}
 
 	public function parseMeta() {
+
+		//@todo refactor : set an array of defaults, then build the meta object
+		// from the defaults and then override
+
 		$this->readFileIfNotRead();
 		$parser = new YamlParser();
 
@@ -56,9 +60,13 @@ class PressFile {
 
 		// Default meta :
 		if (!isset($headerMeta['title'])) $headerMeta['title'] = ''; // just to be present
-		if (!isset($headerMeta['tags'])) $headerMeta['tags'] = []; // hope most people want tags
 		// if only one tag is set, or a comma list, we make it an array
+		if (!isset($headerMeta['tags'])) $headerMeta['tags'] = []; // hope most people want tags
 		if (!is_array($headerMeta['tags'])) $headerMeta['tags'] = array_map('trim',explode(',',$headerMeta['tags']));
+
+
+		if (!isset($headerMeta['theme'])) $headerMeta['theme'] = (string) PressFacade::getConf('theme');
+		if (!isset($headerMeta['layout'])) $headerMeta['layout'] = 'layout.not.set'; // here throw an err ?
 
 		// We figure out the ID of the file, i.e. a unique string that match
 		// only the significant parts of the file name. So we cannot have two
@@ -99,6 +107,11 @@ class PressFile {
 		$fileMeta['rel_path'] = str_replace('\\', '/', $pathDiff);
 
 		$this->meta = new MetaWrapper(array_merge($fileMeta, $headerMeta));
+
+		// set the theme/layout
+
+		$this->meta->layout = $this->meta->theme . '::' . $this->meta->layout;
+
 		return $this->meta;
 	}
 

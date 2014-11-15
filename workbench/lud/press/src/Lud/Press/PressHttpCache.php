@@ -1,9 +1,8 @@
-<?php namespace App\Http\Middleware;
+<?php namespace Lud\Press;
 
 use Cache;
 use Cookie;
 use Closure;
-use Press;
 use Illuminate\Contracts\Routing\Middleware;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
@@ -20,10 +19,10 @@ class PressHttpCache implements Middleware {
 	public function handle($request, Closure $next)
 	{
 
-		$pressCache = Press::cache();
+		$pressCache = PressFacade::cache();
 
 		if ($request->cookie('pressEditing')) {
-			Press::setEditing();
+			PressFacade::setEditing();
 			return $next($request);
 		}
 		// We check the cache before checking if the route must be cached

@@ -9,5 +9,6 @@ return [
 	'filename_schemas' => ['classic','simple'],
 	'extensions' => ['.sk','md','htm','.html'],
 	'default_page_size' => 10,
+	'theme' => 'press'
 ];
 
