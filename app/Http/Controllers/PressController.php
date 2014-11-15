@@ -4,7 +4,7 @@ use Config;
 use Cookie;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Novel;
+use Press;
 use Redirect;
 
 class PressController extends Controller {
@@ -18,16 +18,16 @@ class PressController extends Controller {
 	public function publish(Request $req, $truc)
 	{
 		// First we need to read the URL path. Then we match it with the url_map
-		// in novel conf
-		$id = \Novel::UrlToID($req->path());
+		// in press conf
+		$id = \Press::UrlToID($req->path());
 		try {
-			$document = \Novel::findFile($id);
+			$document = \Press::findFile($id);
 			$layout = $document->meta()->get('layout','default');
 			return \View::make($layout)
 				->with('meta',$document->meta())
-				->with('cacheInfo',Novel::editingCacheInfo())
+				->with('cacheInfo',Press::editingCacheInfo())
 				->with('content',$document->content());
-		} catch (\Lud\Novel\FileNotFoundException $e) {
+		} catch (\Lud\Press\FileNotFoundException $e) {
 			abort(404);
 		}
 	}
@@ -44,13 +44,13 @@ class PressController extends Controller {
 
 	public function refresh($key)
 	{
-		Novel::cache()->forget($key);
+		Press::cache()->forget($key);
 		return Redirect::back();
 	}
 
 	public function purge()
 	{
-		Novel::cache()->flush();
+		Press::cache()->flush();
 		return Redirect::back();
 	}
 
@@ -65,8 +65,8 @@ class PressController extends Controller {
 		}
 		$page = max($page,1); //set the page to minimum 1
 
-		$page_size = Novel::getConf('default_page_size');
-		$articles = Novel::all();
+		$page_size = Press::getConf('default_page_size');
+		$articles = Press::all();
 		$pageArticles = $articles->forPage($page,$page_size);
 		if (0 === $pageArticles->count() && $page !== 1) {
 			return \Redirect::route('home');
@@ -75,7 +75,7 @@ class PressController extends Controller {
 		$paginator = new LengthAwarePaginator($articles,$articles->count(),2);
 		return \View::make('home')
 			->with('articles',$pageArticles)
-			->with('cacheInfo',Novel::editingCacheInfo())
+			->with('cacheInfo',Press::editingCacheInfo())
 			->with('paginator',$paginator);
 	}
 

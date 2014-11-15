@@ -1,8 +1,8 @@
-<?php namespace Lud\Novel;
+<?php namespace Lud\Press;
 
 use Illuminate\Support\ServiceProvider;
 
-class NovelServiceProvider extends ServiceProvider {
+class PressServiceProvider extends ServiceProvider {
 
 	/**
 	 * Indicates if loading of the provider is deferred.
@@ -18,18 +18,18 @@ class NovelServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('lud/novel');
-		$this->app->bindShared('novel', function($app)
+		$this->package('lud/press');
+		$this->app->bindShared('press', function($app)
 		{
-			return new NovelService($app,\Config::get('novel::config'));
+			return new PressService($app,\Config::get('press::config'));
 		});
-		$this->app->bindShared('novel.index', function($app)
+		$this->app->bindShared('press.index', function($app)
 		{
-			return new NovelIndex();
+			return new PressIndex();
 		});
-		$this->app->bindShared('novel.cache', function($app)
+		$this->app->bindShared('press.cache', function($app)
 		{
-			return new NovelCache($app->request);
+			return new PressCache($app->request);
 		});
 	}
 

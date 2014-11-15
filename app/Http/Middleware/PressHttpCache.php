@@ -3,7 +3,7 @@
 use Cache;
 use Cookie;
 use Closure;
-use Novel;
+use Press;
 use Illuminate\Contracts\Routing\Middleware;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
@@ -20,10 +20,10 @@ class PressHttpCache implements Middleware {
 	public function handle($request, Closure $next)
 	{
 
-		$novelCache = Novel::cache();
+		$pressCache = Press::cache();
 
 		if ($request->cookie('pressEditing')) {
-			Novel::setEditing();
+			Press::setEditing();
 			return $next($request);
 		}
 		// We check the cache before checking if the route must be cached
@@ -31,8 +31,8 @@ class PressHttpCache implements Middleware {
 		// stack. So, if caching is unset on a route, the cache must be
 		// "manually" deleted
 
-		if ($novelCache->hasCurrentRequest()) {
-			return $this->makeFakeResponse($novelCache->getCurrentRequest());
+		if ($pressCache->hasCurrentRequest()) {
+			return $this->makeFakeResponse($pressCache->getCurrentRequest());
 		}
 		// proceed with the stack if the response is not cached.
 		$response = $next($request);
@@ -44,7 +44,7 @@ class PressHttpCache implements Middleware {
 		{
 			return $response;
 		}
-		$cache = $novelCache->setCurrentRequestCacheContent($response->getContent());
+		$cache = $pressCache->setCurrentRequestCacheContent($response->getContent());
 		return $this->makeFakeResponse($cache);
 	}
 

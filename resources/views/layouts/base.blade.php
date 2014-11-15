@@ -62,7 +62,7 @@
 
 
 	<div class="container">
-		@if(Novel::isEditing())
+		@if(Press::isEditing())
 			<div class="btn-group-sm" style="float:right">
 				@include('pressParts.edit_actions')
 			</div>
@@ -70,7 +70,7 @@
 		@yield('content')
 	</div>
 	<div class="container">
-		@if(Novel::isEditing())
+		@if(Press::isEditing())
 			@include('pressParts.edit_infos')
 		@else
 			@include('pressParts.user_infos')
@@ -79,7 +79,7 @@
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	@if(Novel::isEditing())
+	@if(Press::isEditing())
 		<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment-with-locales.min.js"></script>
 		<script>
 			moment.locale('{{ App::getLocale() }}');

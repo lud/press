@@ -1,9 +1,9 @@
-<?php namespace Lud\Novel;
+<?php namespace Lud\Press;
 
 use \Skriv\Markup\Renderer as SkrivRenderer;
 use Symfony\Component\Yaml\Parser as YamlParser;
 
-class NovelFile {
+class PressFile {
 
 	protected $filename;
 	protected $readOK = false;
@@ -75,8 +75,8 @@ class NovelFile {
 
 		// then we try to figure out a schema. We try all the defined schemas in
 		// the config
-		foreach(\Config::get('novel::config.filename_schemas') as $schema) {
-			if (($fnInfo = NovelFacade::pathInfo($this->filename,$schema)) !== false) {
+		foreach(\Config::get('press::config.filename_schemas') as $schema) {
+			if (($fnInfo = PressFacade::pathInfo($this->filename,$schema)) !== false) {
 				// Here we got some infos such as date from filename
 				$fileMeta = array_merge($fileMeta,$fnInfo);
 				break; // stop on first match. The list in config must be ordered by path complexion
@@ -86,7 +86,7 @@ class NovelFile {
 		// is empty. if the file is in a subdirectory (or more), we store this
 		// path as a string
 		$realDir = realpath(dirname($this->filename));
-		$baseReal = realpath(NovelFacade::getConf('base_dir'));
+		$baseReal = realpath(PressFacade::getConf('base_dir'));
 		$dirDiff = trim(substr($realDir,strlen($baseReal)), DIRECTORY_SEPARATOR);
 		$fileMeta['dirs'] =
 			empty($dirDiff)
@@ -111,7 +111,7 @@ class NovelFile {
 
 	protected function readFileIfNotRead() {
 		if ($this->readOK) return;
-		$sep = NovelFacade::getConf('meta_sep');
+		$sep = PressFacade::getConf('meta_sep');
 		$raw = file_get_contents($this->filename);
 		$rawParts = explode($sep,$raw);
 		if (count($rawParts) > 1) {
@@ -140,7 +140,7 @@ class NovelFile {
 			default: throw new \Exception("No parser defined for extension $extension");
 		}
 
-		$parserConfig = NovelFacade::getConf($name,[]);
+		$parserConfig = PressFacade::getConf($name,[]);
 
 		switch ($name) {
 			case 'skriv':

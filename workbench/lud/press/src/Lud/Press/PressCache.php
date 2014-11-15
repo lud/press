@@ -1,9 +1,9 @@
-<?php namespace Lud\Novel;
+<?php namespace Lud\Press;
 
 use Cache;
 use App;
 
-class NovelCache {
+class PressCache {
 
 	private $req;
 	private $ramCache = [];

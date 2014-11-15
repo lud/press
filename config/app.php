@@ -141,7 +141,7 @@ return [
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 
-		'Lud\Novel\NovelServiceProvider',
+		'Lud\Press\PressServiceProvider',
 	],
 
 	/*
@@ -200,7 +200,7 @@ return [
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
 
-		'Novel'     => 'Lud\Novel\NovelFacade',
+		'Press'     => 'Lud\Press\PressFacade',
 
 	],
 

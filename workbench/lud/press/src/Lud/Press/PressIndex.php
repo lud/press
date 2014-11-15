@@ -1,4 +1,4 @@
-<?php namespace Lud\Novel;
+<?php namespace Lud\Press;
 
 /**
  * Every time we instanciate the index (once per request with default Laravel
@@ -10,7 +10,7 @@
 use Symfony\Component\Finder\Finder;
 use View;
 
-class NovelIndex {
+class PressIndex {
 
 	private $indexCache = null;
 	private $maxMTime = 0;
@@ -48,7 +48,7 @@ class NovelIndex {
 			->name($extensionsRegex)
 		;
 		$metas = array_map(function($file){
-			return with(new NovelFile($file->getPathname()))
+			return with(new PressFile($file->getPathname()))
 				->parseMeta()
 				;
 		}, iterator_to_array($finder));
@@ -68,7 +68,7 @@ class NovelIndex {
 		if ($collection->has($id)) {
 			$meta = $collection->get($id);
 			$filename = $meta->filename;
-			return new NovelFile($filename,$meta);
+			return new PressFile($filename,$meta);
 		}
 		throw new FileNotFoundException("Cannot find file id=$id");
 	}
@@ -78,7 +78,7 @@ class NovelIndex {
 	}
 
 	protected function getConf($key=null,$default=null) {
-		return NovelFacade::getConf($key,$default);
+		return PressFacade::getConf($key,$default);
 	}
 
 	static function extensionsToRegex(array $extensions) {
@@ -110,7 +110,7 @@ class NovelIndex {
 					return $collection->count();
 				};
 			default:
-				throw new \Exception("Unknown NovelIndex reduce $name");
+				throw new \Exception("Unknown PressIndex reduce $name");
 		}
 	}
 

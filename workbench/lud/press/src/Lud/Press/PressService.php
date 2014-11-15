@@ -1,9 +1,9 @@
-<?php namespace Lud\Novel;
+<?php namespace Lud\Press;
 
 use View;
 use Symfony\Component\Finder\Finder;
 
-class NovelService {
+class PressService {
 
 	const FILE_PATH_TYPE = 1;
 	const URL_PATH_TYPE = 2;
@@ -134,11 +134,11 @@ class NovelService {
 	}
 
 	public function cache() {
-		return $this->app['novel.cache'];
+		return $this->app['press.cache'];
 	}
 
 	public function index() {
-		return $this->app['novel.index'];
+		return $this->app['press.index'];
 	}
 
 	public function query($query) {

@@ -1,10 +1,10 @@
 <?php
 return [
-	'base_dir' => $_ENV['NOVEL_STORAGE_PATH'],
+	'base_dir' => $_ENV['PRESS_STORAGE_PATH'],
 	'skriv' => [
 		'urlProcessFunction' => function($url, $label, $targetBlank, $nofollow){
-			if (starts_with($url,"novel:")) {
-				$url = Novel::findFile(substr($url, strlen('novel:')))->url();
+			if (starts_with($url,"press:")) {
+				$url = Press::findFile(substr($url, strlen('press:')))->url();
 			}
 			return [$url,$label,$targetBlank,$nofollow];
 		},

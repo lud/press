@@ -1,5 +1,5 @@
 {
-    "name": "lud/novel",
+    "name": "lud/press",
     "description": "A simple publishing library",
     "authors": [
         {
@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Lud\\Novel": "src/"
+            "Lud\\Press": "src/"
         }
     },
     "minimum-stability": "dev"

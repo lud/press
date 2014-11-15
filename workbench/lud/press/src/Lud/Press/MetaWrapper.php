@@ -1,4 +1,4 @@
-<?php namespace Lud\Novel;
+<?php namespace Lud\Press;
 
 use Illuminate\Support\Fluent;
 
@@ -6,7 +6,7 @@ class MetaWrapper extends Fluent implements \ArrayAccess {
 
 
 	public function url() {
-		return NovelFacade::filenameToUrl($this);
+		return PressFacade::filenameToUrl($this);
 	}
 
 	public function all() { return $this->getAttributes(); }

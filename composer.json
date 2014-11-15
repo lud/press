@@ -27,7 +27,7 @@
 			"App\\": "app/"
 		},
 		"psr-0": {
-			"Lud\\Novel": "workbench/lud/novel/src/"
+			"Lud\\Press": "workbench/lud/press/src/"
 		}
 	},
 	"scripts": {

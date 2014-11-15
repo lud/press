@@ -1,4 +1,4 @@
-<?php namespace Lud\Novel;
+<?php namespace Lud\Press;
 
 class Collection extends \Illuminate\Support\Collection {
 
