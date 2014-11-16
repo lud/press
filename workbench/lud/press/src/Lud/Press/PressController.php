@@ -77,7 +77,7 @@ class PressController extends BaseController {
 		}
 		// dd(with(new \Paginator)->resolveFacadeInstance());
 		$paginator = new LengthAwarePaginator($articles,$articles->count(),2);
-		return \View::make('home')
+		return \View::make(Config::get('press::theme').'::home')
 			->with('articles',$pageArticles)
 			->with('cacheInfo',Press::editingCacheInfo())
 			->with('paginator',$paginator);

@@ -31,6 +31,9 @@ class PressServiceProvider extends ServiceProvider {
 		{
 			return new PressCache($app->request);
 		});
+		foreach (\Config::get('press::themes_dirs',[]) as $name => $dir) {
+			\View::addNamespace($name, $dir);
+		}
 	}
 
 	/**

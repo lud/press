@@ -1,5 +1,5 @@
 
-@extends(Config::get('press::theme').'::layouts.base')
+@extends('press::layouts.base')
 
 @section('content')
 	@foreach ($articles as $article)
