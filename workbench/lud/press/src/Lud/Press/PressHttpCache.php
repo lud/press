@@ -18,7 +18,6 @@ class PressHttpCache implements Middleware {
 	 */
 	public function handle($request, Closure $next)
 	{
-
 		$pressCache = PressFacade::cache();
 
 		if ($request->cookie('pressEditing')) {

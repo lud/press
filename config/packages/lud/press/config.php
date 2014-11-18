@@ -1,15 +1,12 @@
 <?php
 return [
 	'base_dir' => $_ENV['PRESS_STORAGE_PATH'],
+	'default_page_size' => 2,
 	'skriv' => [
 		'urlProcessFunction' => function($url, $label, $targetBlank, $nofollow){
-			if (starts_with($url,"press:")) {
-				$url = Press::findFile(substr($url, strlen('press:')))->url();
-			}
+			$url = \Lud\Press\PressHTMLTransformer::maybeTransformHref($url);
 			return [$url,$label,$targetBlank,$nofollow];
 		},
 		'softLinebreaks' => true,
-		// 'softLinebreaks' => false,
 	],
-	'default_page_size' => 2,
 ];

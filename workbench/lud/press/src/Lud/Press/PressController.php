@@ -32,7 +32,8 @@ class PressController extends BaseController {
 				->with('cacheInfo',Press::editingCacheInfo())
 				->with('content',$document->content());
 		} catch (\Lud\Press\FileNotFoundException $e) {
-			abort(404);
+			echo $e->getMessage(), "<br/>", PHP_EOL;
+			dd("abort 404 " . __FILE__ . ':' . __LINE__);
 		}
 	}
 

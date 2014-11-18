@@ -18,8 +18,11 @@ class PressService {
 		$this->app = $app;
 	}
 
+	// findFile accepts fileID or filename. We check if the filename ends with
+	// a known extension. If so, we remove it.
 	public function findFile($filename) {
-		return $this->index()->getFile($filename);
+		$fileID = $this->filenameToId($filename);
+		return $this->index()->getFile($fileID);
 	}
 
 	public function configure($values) {
@@ -38,12 +41,29 @@ class PressService {
 		return implode(DIRECTORY_SEPARATOR,$parts);
 	}
 
+	public function filenameToId($fn) {
+		$fn = pathinfo($fn,PATHINFO_BASENAME);
+		$fnLen = strlen($fn);
+		foreach ($this->getExtensions() as $ext) {
+			$dotted = ".$ext";
+			$extLen = strlen($dotted);
+			if ($dotted === substr($fn, -$extLen)) {
+				return substr($fn, 0, $fnLen - $extLen);
+			}
+		}
+		return $fn;
+	}
+
+	public function getExtensions() {
+		return array_map(function($ext){ return ltrim($ext,'.'); }, $this->getConf('extensions'));
+	}
+
 	public function pathInfo($fn,$schema,$type=self::FILE_PATH_TYPE) {
 		// pre($fn,"path to match");
 		if (self::FILE_PATH_TYPE === $type) {
 			// Work only on the basename
 			$fn = pathinfo($fn,PATHINFO_BASENAME);
-			$extensions = array_map(function($ext){ return ltrim($ext,'.'); }, $this->getConf('extensions'));
+			$extensions = $this->getExtensions();
 			$extensionsRe = '\\.(' . implode('|',$extensions) . ')';
 		}
 		elseif (self::URL_PATH_TYPE === $type) {

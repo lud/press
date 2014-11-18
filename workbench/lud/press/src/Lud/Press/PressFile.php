@@ -166,7 +166,10 @@ class PressFile {
 				};
 			case 'html':
 				return function($str) use ($parserConfig) {
-					return ['html' => $str, 'footnotes_html' => ''];
+					$trsf = new PressHTMLTransformer;
+					$trsf->load($str);
+					$trsf->applyTransforms();
+					return ['html' => $trsf->toHTML(), 'footnotes_html' => ''];
 				};
 			default: throw new \Exception("Unknown parser $name");
 		}

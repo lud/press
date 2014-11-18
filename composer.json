@@ -13,7 +13,9 @@
 	"require": {
 		"laravel/framework": "~5.0",
 		"symfony/yaml": "~2.5",
-        "amaury/skrivmarkup": "dev-classic-linebreaks"
+        "amaury/skrivmarkup": "dev-classic-linebreaks",
+		"shark/simple_html_dom": "dev-master",
+		"leeoniya/dump-r": "dev-master"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0"
