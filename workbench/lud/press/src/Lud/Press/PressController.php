@@ -4,7 +4,6 @@ use Config;
 use Cookie;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Routing\Controller as BaseController;
 use Press;
 use Redirect;
@@ -21,17 +20,18 @@ class PressController extends BaseController {
 	 */
 	public function publish(Request $req, $truc)
 	{
-		// First we need to read the URL path. Then we match it with the url_map
-		// in press conf
-		$id = \Press::UrlToID($req->path());
 		try {
-			$document = \Press::findFile($id);
+			// First we need to read the URL path. Then we match it with the url_map
+			// in press conf
+			$id = PressFacade::UrlToID($req->path());
+			$document = PressFacade::findFile($id);
 			$layout = $document->meta()->get('layout','default');
 			return \View::make($layout)
 				->with('meta',$document->meta())
-				->with('cacheInfo',Press::editingCacheInfo())
+				->with('cacheInfo',PressFacade::editingCacheInfo())
+				->with('themeAssets',PressFacade::getThemeAssets($document->meta()->theme))
 				->with('content',$document->content());
-		} catch (\Lud\Press\FileNotFoundException $e) {
+		} catch (BaseException $e) {
 			echo $e->getMessage(), "<br/>", PHP_EOL;
 			dd("abort 404 " . __FILE__ . ':' . __LINE__);
 		}
@@ -49,40 +49,37 @@ class PressController extends BaseController {
 
 	public function refresh($key)
 	{
-		Press::cache()->forget($key);
+		PressFacade::cache()->forget($key);
 		return Redirect::back();
 	}
 
 	public function purge()
 	{
-		Press::cache()->flush();
+		PressFacade::cache()->flush();
 		return Redirect::back();
 	}
 
-	public function index()
+	public function home($page = 1)
 	{
-		$this->middleware('pressHttpCache');
-
-		$page = \Input::get('page');
-		if (null !== $page && $page < 2) {
-			// if page IS set to 1 or 0 or inferior, redirect to the home
-			return \Redirect::route('home',[],301);
-		}
 		$page = max($page,1); //set the page to minimum 1
-
-		$page_size = Press::getConf('default_page_size');
-		$articles = Press::all();
-		$pageArticles = $articles->forPage($page,$page_size);
-		if (0 === $pageArticles->count() && $page !== 1) {
-			return \Redirect::route('home');
-		}
-		// dd(with(new \Paginator)->resolveFacadeInstance());
-		$paginator = new LengthAwarePaginator($articles,$articles->count(),2);
-		return \View::make(Config::get('press::theme').'::home')
-			->with('articles',$pageArticles)
-			->with('cacheInfo',Press::editingCacheInfo())
-			->with('paginator',$paginator);
+		$view = Config::get('press::theme').'::home';
+		return $this->displayCollection(PressFacade::all(),$page,$view);
 	}
 
+	protected function displayCollection($articles, $page, $view, $tplData=[]) {
+		$page_size = PressFacade::getConf('default_page_size');
+		$pageArticles = $articles->forPage($page,$page_size);
+		// if we have no articles for this page and page is not the first page,
+		// let's go to the home. Should go 404 ?
+		if (0 === $pageArticles->count() && $page !== 1) {
+			return abort(404);
+		}
+		$paginator = $articles->getPaginator($page_size);
+		return \View::make($view, $tplData)
+			->with('articles',$pageArticles)
+			->with('cacheInfo',PressFacade::editingCacheInfo())
+			->with('themeAssets',PressFacade::getDefaultThemeAssets())
+			->with('paginator',$paginator);
+	}
 
 }

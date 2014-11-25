@@ -104,7 +104,7 @@ class PressService {
 				return static::replaceStrParts(static::expandFilePathSchema($urlSchema),$props);
 			}
 		}
-		throw new \Exception("Cannot transform URL '$urlPath'");
+		throw new UnknownURLSchemaException("Cannot transform URL '$urlPath'");
 	}
 
 	static function replaceStrParts($schema,$values) {
@@ -183,11 +183,39 @@ class PressService {
 		if (!$this->isEditing()) return null;
 		$info = $this->cache()->current();
 		unset($info->content);
-		$info->indexMTime = $this->index()->getModTime();
-		$info->isCacheStale = $info->indexMTime > $info->cacheTime;
+		$info->indexMaxMTime = $this->index()->getModTime();
+		$info->isCacheStale = $info->indexMaxMTime > $info->cacheTime;
 		return $info;
 	}
 
+	// Themes management ----------------------------------------------------
+
+
+	public function getDefaultThemeAssets() {
+		return $this->getThemeAssets($this->getConf('theme','press'));
+	}
+
+	public function getThemeAssets($theme) {
+		$cacheKey = "press::themefile->$theme";
+		return \Cache::rememberForever($cacheKey,function()use($theme){
+			if ($theme === 'press')
+				$dir = self::themefilePath();
+			else
+				$dir = $this->getConf('themes_dirs')[$this->getConf('theme','press')];
+			$infos = require "$dir/themefile.php";
+			$empty = [
+				'styles'=>[],
+				'scripts'=>[],
+				'includeBefore'=>[],
+				'includeAfter'=>[],
+			];
+			return array_merge($empty,$infos);
+		});
+	}
+
+	public static function themefilePath() {
+		return realpath(dirname(__FILE__) . '/../../');
+	}
 
 }
 

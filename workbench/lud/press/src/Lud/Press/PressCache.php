@@ -56,11 +56,13 @@ class PressCache {
 	}
 
 	public function currentKey() {
-		$path = $this->req->getPathInfo();
-		// the query string is normalized, so changing the order of the params
-		// still hits the same cache
-		$qs = $this->req->getQueryString();
-		$key = md5("$path?$qs");
+		$keysource = $this->req->getPathInfo();
+		// if we would cache with different query_string parameters, we should
+		// add the following line. (the parameters are alphabetically ordered
+		// but still anyone could fill the cache by send resquests with random
+		// param names and values)
+		// $keysource .= '?'.$this->req->getQueryString();
+		$key = md5("$keysource");
 		return $key;
 	}
 

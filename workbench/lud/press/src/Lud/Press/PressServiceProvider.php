@@ -1,5 +1,6 @@
 <?php namespace Lud\Press;
 
+use \Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class PressServiceProvider extends ServiceProvider {
@@ -19,21 +20,29 @@ class PressServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('lud/press');
+
 		$this->app->bindShared('press', function($app)
 		{
 			return new PressService($app,\Config::get('press::config'));
 		});
+
 		$this->app->bindShared('press.index', function($app)
 		{
 			return new PressIndex();
 		});
+
 		$this->app->bindShared('press.cache', function($app)
 		{
 			return new PressCache($app->request);
 		});
+
 		foreach (\Config::get('press::themes_dirs',[]) as $name => $dir) {
 			\View::addNamespace($name, $dir);
 		}
+
+		Paginator::currentPageResolver(function() {
+			return $page = $this->app['request']->route()->parameter('page');
+		});
 	}
 
 	/**

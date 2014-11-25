@@ -14,8 +14,15 @@
 
 
 $router->group(['pressCache' => true, 'namespace' => 'Lud\Press'], function($router){
-	$router->get('/', ['uses' => 'PressController@index', 'as' => 'home']);
-	$router->get('article/{year}/{month}/{day}/{slug}', 'PressController@publish');
+	$router->get('/', ['uses' => 'PressController@home', 'as' => 'press::home']);
+	// canonical for first page of all articles (home list)
+	$router->get('/p/1', function(){return Redirect::route('press::home');});
+	$router->get('/p/{page}', ['uses' => 'PressController@home'])
+		->where('page', '[0-9]+')
+		;
+	$router->get('article/{year}/{month}/{day}/{slug}', 'PressController@publish')
+		// ->where(['year' => '[0-9]{4}','month' => '[0-9]{2}','day' => '[0-9]{2}'])
+		;
 	$router->get('page/{slug}', 'PressController@publish');
 });
 

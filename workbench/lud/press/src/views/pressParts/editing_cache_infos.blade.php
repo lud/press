@@ -1,8 +1,8 @@
 <p>
 	<span class="label label-info">
 		Fichiers :
-		<span class="dynamic-date" data-date="{{ date('Y-m-d H:i:s',$cacheInfo->indexMTime) }}">
-			{{ date('d/m/Y \à H:i:s',$cacheInfo->indexMTime) }}
+		<span class="dynamic-date" data-date="{{ date('Y-m-d H:i:s',$cacheInfo->indexMaxMTime) }}">
+			{{ date('d/m/Y \à H:i:s',$cacheInfo->indexMaxMTime) }}
 		</span>
 	</span>
 </p>
@@ -18,3 +18,5 @@
 		</span>
 	</span>
 </p>
+
+

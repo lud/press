@@ -19,8 +19,8 @@ class Collection extends \Illuminate\Support\Collection {
 		});
 	}
 
-	public function drop($amount) {
-		return $this->slice($amount, $length=null, $preserveKeys=true);
+	public function getPaginator($currentPage) {
+		return new PressPaginator($this, $this->count(), $currentPage);
 	}
 
 }
