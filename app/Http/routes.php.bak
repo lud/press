@@ -46,8 +46,10 @@ $router->group(['__middleware' => 'auth', 'namespace' => 'Lud\Press'], function(
 */
 
 $router->group(['namespace' => 'App\Http\Controllers',], function($router){
-    $router->controllers([
-        'auth' => 'Auth\AuthController',
-        'password' => 'Auth\PasswordController',
+
+$router->controllers([
+    'auth' => 'Auth\AuthController',
+    'password' => 'Auth\PasswordController',
     ]);
+
 });

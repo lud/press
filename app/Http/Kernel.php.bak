@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 class Kernel extends HttpKernel {
 
 	/**
-	 * The application's global HTTP middleware stack.
+	 * The application's HTTP middleware stack.
 	 *
 	 * @var array
 	 */
@@ -21,14 +21,23 @@ class Kernel extends HttpKernel {
 	];
 
 	/**
-	 * The application's route middleware.
+	 * Handle an incoming HTTP request.
 	 *
-	 * @var array
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
 	 */
-	protected $routeMiddleware = [
-		'auth' => 'App\Http\Middleware\Authenticate',
-		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
-		'guest' => 'App\Http\Middleware\RedirectIfAuthenticated',
-	];
+	public function handle($request)
+	{
+		try
+		{
+			return parent::handle($request);
+		}
+		catch (Exception $e)
+		{
+			$this->reportException($e);
+
+			return $this->renderException($request, $e);
+		}
+	}
 
 }
