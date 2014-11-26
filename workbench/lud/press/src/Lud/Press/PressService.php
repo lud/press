@@ -16,6 +16,7 @@ class PressService {
 	public function __construct($app,$conf=[]) {
 		$this->configure($conf);
 		$this->app = $app;
+		$this->registerTheme('press',self::themefilePath());
 	}
 
 	// findFile accepts fileID or filename. We check if the filename ends with
@@ -190,6 +191,17 @@ class PressService {
 
 	// Themes management ----------------------------------------------------
 
+
+	public function registerTheme($name, $dir) {
+		\View::addNamespace($name, $dir);
+		$this->registeredThemes[$name] = ['dir' => $dir];
+	}
+
+	public function ensureThemeExists($name) {
+		if (!isset($this->registeredThemes[$name])) throw new \Exception(
+			"Press theme '$name' does not exist."
+		);
+	}
 
 	public function getDefaultThemeAssets() {
 		return $this->getThemeAssets($this->getConf('theme','press'));

@@ -9,8 +9,4 @@ return [
 		},
 		'softLinebreaks' => true,
 	],
-	'__theme' => 'lpdp-theme',
-	'themes_dirs' => [
-		'lpdp-theme' => base_path('resources/lpdp-theme'),
-	],
 ];

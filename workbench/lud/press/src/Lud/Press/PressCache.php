@@ -71,7 +71,7 @@ class PressCache {
 	}
 
 	public function currentRefreshURL() {
-		 return \Url::route('press.refresh_page_cache',[$this->currentKey()]);
+		 return \URL::route('press.refresh_page_cache',[$this->currentKey()]);
 	}
 
 	private function forever($key,$content) {

@@ -66,6 +66,7 @@ class PressFile {
 
 
 		if (!isset($headerMeta['theme'])) $headerMeta['theme'] = (string) PressFacade::getConf('theme');
+		PressFacade::ensureThemeExists($headerMeta['theme']);
 		if (!isset($headerMeta['layout'])) $headerMeta['layout'] = 'layout.not.set'; // here throw an err ?
 
 		// We figure out the ID of the file, i.e. a unique string that match

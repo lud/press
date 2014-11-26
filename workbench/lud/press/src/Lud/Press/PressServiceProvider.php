@@ -23,7 +23,11 @@ class PressServiceProvider extends ServiceProvider {
 
 		$this->app->bindShared('press', function($app)
 		{
-			return new PressService($app,\Config::get('press::config'));
+			$service = new PressService($app,\Config::get('press::config'));
+			foreach (\Config::get('press::themes_dirs',[]) as $name => $dir) {
+				$service->registerTheme($name,$dir);
+			}
+			return $service;
 		});
 
 		$this->app->bindShared('press.index', function($app)
@@ -35,10 +39,6 @@ class PressServiceProvider extends ServiceProvider {
 		{
 			return new PressCache($app->request);
 		});
-
-		foreach (\Config::get('press::themes_dirs',[]) as $name => $dir) {
-			\View::addNamespace($name, $dir);
-		}
 
 		Paginator::currentPageResolver(function() {
 			return $page = $this->app['request']->route()->parameter('page');
