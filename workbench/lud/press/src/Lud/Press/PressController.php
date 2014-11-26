@@ -32,8 +32,7 @@ class PressController extends BaseController {
 				->with('themeAssets',PressFacade::getThemeAssets($document->meta()->theme))
 				->with('content',$document->content());
 		} catch (BaseException $e) {
-			echo $e->getMessage(), "<br/>", PHP_EOL;
-			dd("abort 404 " . __FILE__ . ':' . __LINE__);
+			abort(404);
 		}
 	}
 
