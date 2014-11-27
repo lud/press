@@ -5,3 +5,5 @@
 Thumbs.db
 storage/cache
 storage/laravel.log
+node_modules/
+*.bak
