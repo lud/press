@@ -8,5 +8,8 @@ return [
 			return [$url,$label,$targetBlank,$nofollow];
 		},
 		'softLinebreaks' => true,
+		'targetBlank' => false,
+		'nofollow' => false,
+		'softLinebreaks' => true,
 	],
 ];
