@@ -24,6 +24,7 @@ $router->group(['pressCache' => true, 'namespace' => 'Lud\Press'], function($rou
 		// ->where(['year' => '[0-9]{4}','month' => '[0-9]{2}','day' => '[0-9]{2}'])
 		;
 	$router->get('page/{slug}', 'PressController@publish');
+	$router->get('tag/{tag}', ['uses' => 'PressController@tag', 'as' => 'press::tag']);
 });
 
 $router->group(['__middleware' => 'auth', 'namespace' => 'Lud\Press'], function($router){
