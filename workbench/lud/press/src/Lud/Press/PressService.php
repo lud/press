@@ -209,6 +209,8 @@ class PressService {
 
 	public function getThemeAssets($theme) {
 		$cacheKey = "press::themefile->$theme";
+		// @todo why cache since we cache the full page ?
+		// are they pages rendered with theme that we do not cache ?
 		return \Cache::rememberForever($cacheKey,function()use($theme){
 			if ($theme === 'press')
 				$dir = self::themefilePath();
@@ -218,8 +220,8 @@ class PressService {
 			$empty = [
 				'styles'=>[],
 				'scripts'=>[],
-				'includeBefore'=>[],
-				'includeAfter'=>[],
+				'hookBeforeContent'=>[],
+				'hookAfterContent'=>[],
 			];
 			return array_merge($empty,$infos);
 		});

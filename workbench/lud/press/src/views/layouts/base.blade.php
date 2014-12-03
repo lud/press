@@ -18,7 +18,7 @@
 @endforeach
 @show
 
-@foreach ($themeAssets['includeBefore'] as $tplName)
+@foreach ($themeAssets['hookBeforeContent'] as $tplName)
 	@include($tplName)
 @endforeach
 
@@ -30,7 +30,7 @@
 	</div>
 @show
 
-@foreach ($themeAssets['includeAfter'] as $tplName)
+@foreach ($themeAssets['hookAfterContent'] as $tplName)
 	@include($tplName)
 @endforeach
 

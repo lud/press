@@ -8,7 +8,7 @@ return [
 		'//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js',
 		asset('packages/lud/press/lib/js/bootstrap.min.js'),
 	],
-	'includeBefore' => [
+	'hookBeforeContent' => [
 		'press::pressParts.navbar',
 	],
 ];
