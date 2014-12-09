@@ -1,54 +1,23 @@
 {
-	"name": "laravel/laravel",
-	"description": "The Laravel Framework.",
-	"keywords": ["framework", "laravel"],
-	"license": "MIT",
-	"type": "project",
-    "repositories": [
+    "name": "lud/press",
+    "description": "A simple publishing library",
+    "authors": [
         {
-            "type": "vcs",
-            "url": "https://github.com/lud/SkrivMarkup"
+            "name": "lud",
+            "email": "ludovic@demblans.com"
         }
     ],
-	"require": {
-		"laravel/framework": "~5.0",
-		"symfony/yaml": "~2.5",
-        "amaury/skrivmarkup": "dev-classic-linebreaks",
-		"shark/simple_html_dom": "dev-master",
-		"leeoniya/dump-r": "dev-master"
-	},
-	"require-dev": {
-		"phpunit/phpunit": "~4.0"
-	},
-	"autoload": {
-		"classmap": [
-			"database",
-			"tests/TestCase.php"
-		],
-		"psr-4": {
-			"App\\": "app/"
-		},
-		"psr-0": {
-			"Lud\\Press": "workbench/lud/press/src/"
-		}
-	},
-	"scripts": {
-		"post-install-cmd": [
-			"php artisan clear-compiled",
-			"php artisan route:scan",
-			"php artisan event:scan",
-			"php artisan optimize"
-		],
-		"post-update-cmd": [
-			"php artisan clear-compiled",
-			"php artisan optimize"
-		],
-		"post-create-project-cmd": [
-			"php artisan key:generate"
-		]
-	},
-	"config": {
-		"preferred-install": "dist"
-	},
-	"minimum-stability": "dev"
+    "require": {
+        "php": ">=5.4.0",
+        "symfony/finder": "2.6.*@dev"
+    },
+    "require-post-5.0-release": {
+        "illuminate/support": "5.0.*@dev"
+    },
+    "autoload": {
+        "psr-0": {
+            "Lud\\Press": "src/"
+        }
+    },
+    "minimum-stability": "dev"
 }
