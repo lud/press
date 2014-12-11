@@ -1,6 +1,6 @@
 <?php
 return [
-	'base_dir' => '/tmp',
+	'base_dir' => getenv('PRESS_STORAGE_PATH') ?: '/tmp',
 	'meta_sep' => '****',
 	'url_map' => [
 		'classic' => "article/:year/:month/:day/:slug",

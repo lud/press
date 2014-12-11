@@ -1,6 +1,6 @@
 <?php namespace Lud\Press;
 
-use \Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class PressServiceProvider extends ServiceProvider {
@@ -19,11 +19,13 @@ class PressServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('lud/press');
 
 		$this->app->bindShared('press', function($app)
 		{
-			$service = new PressService($app,\Config::get('press::config'));
+			$confPath = realpath(__DIR__ . '/../../config/config.php');
+			$conf = require $confPath;
+			dump_r($conf);
+			$service = new PressService($app,$conf);
 			foreach (\Config::get('press::themes_dirs',[]) as $name => $dir) {
 				$service->registerTheme($name,$dir);
 			}
