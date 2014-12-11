@@ -212,11 +212,10 @@ class PressService {
 		// @todo why cache since we cache the full page ?
 		// are they pages rendered with theme that we do not cache ?
 		return \Cache::rememberForever($cacheKey,function()use($theme){
-			if ($theme === 'press')
-				$dir = self::themefilePath();
-			else
-				$dir = $this->getConf('themes_dirs')[$this->getConf('theme','press')];
-			$infos = require "$dir/themefile.php";
+			if (! isset($this->registeredThemes[$theme]))
+				throw new \Exception("Unknown theme $theme");
+			$dir = $this->registeredThemes[$theme]['dir'];
+			$infos = require "$dir/_themefile.php";
 			$empty = [
 				'styles'=>[],
 				'scripts'=>[],
@@ -228,7 +227,7 @@ class PressService {
 	}
 
 	public static function themefilePath() {
-		return realpath(dirname(__FILE__) . '/../../');
+		return realpath(dirname(__FILE__) . '/../../views');
 	}
 
 }

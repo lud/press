@@ -61,7 +61,7 @@ class PressController extends BaseController {
 	public function home($page = 1)
 	{
 		$page = max($page,1); //set the page to minimum 1
-		$view = Config::get('press::theme').'::home';
+		$view = PressFacade::getConf('theme').'::home';
 		return $this->displayCollection(PressFacade::all(),$page,$view);
 	}
 

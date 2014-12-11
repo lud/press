@@ -84,7 +84,7 @@ class PressFile {
 
 		// then we try to figure out a schema. We try all the defined schemas in
 		// the config
-		foreach(\Config::get('press::config.filename_schemas') as $schema) {
+		foreach(PressFacade::getConf('filename_schemas') as $schema) {
 			if (($fnInfo = PressFacade::pathInfo($this->filename,$schema)) !== false) {
 				// Here we got some infos such as date from filename
 				$fileMeta = array_merge($fileMeta,$fnInfo);

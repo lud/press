@@ -24,9 +24,8 @@ class PressServiceProvider extends ServiceProvider {
 		{
 			$confPath = realpath(__DIR__ . '/../../config/config.php');
 			$conf = require $confPath;
-			dump_r($conf);
 			$service = new PressService($app,$conf);
-			foreach (\Config::get('press::themes_dirs',[]) as $name => $dir) {
+			foreach ($service->getConf('themes_dirs', []) as $name => $dir) {
 				$service->registerTheme($name,$dir);
 			}
 			return $service;
