@@ -9,6 +9,13 @@ return [
 	'filename_schemas' => ['classic','simple'],
 	'extensions' => ['.sk','md','htm','.html'],
 	'default_page_size' => 10,
-	'theme' => 'press'
+	'theme' => 'press',
+	'skriv' => [
+		'urlProcessFunction' => function($url, $label, $targetBlank, $nofollow){
+			$url = \Lud\Press\PressHTMLTransformer::maybeTransformHref($url);
+			return [$url,$label,$targetBlank,$nofollow];
+		},
+		'softLinebreaks' => true,
+	],
 ];
 
