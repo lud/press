@@ -11,6 +11,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/lud/SkrivMarkup"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/lud/utils-php"
         }
     ],
     "require": {
