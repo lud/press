@@ -9,7 +9,12 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "symfony/finder": "2.6.*@dev"
+        "symfony/finder": "2.6.*@dev",
+		"symfony/yaml": "~2.5",
+        "amaury/skrivmarkup": "dev-classic-linebreaks",
+		"shark/simple_html_dom": "dev-master",
+		"leeoniya/dump-r": "dev-master",
+		"lud/utils": "dev-master"
     },
     "require-post-5.0-release": {
         "illuminate/support": "5.0.*@dev"
