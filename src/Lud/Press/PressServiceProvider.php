@@ -19,12 +19,22 @@ class PressServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
+		\Event::fire('press.mount', []);
+	}
 
+	/**
+	 * Register the service provider.
+	 *
+	 * @return void
+	 */
+	public function register()
+	{
 		$this->app->bindShared('press', function($app)
 		{
 			$confPath = realpath(__DIR__ . '/../../config/config.php');
 			$conf = require $confPath;
 			$service = new PressService($app,$conf);
+			// the 'press' base theme is registered by the service itself
 			foreach ($service->getConf('themes_dirs', []) as $name => $dir) {
 				$service->registerTheme($name,$dir);
 			}
@@ -42,18 +52,9 @@ class PressServiceProvider extends ServiceProvider {
 		});
 
 		Paginator::currentPageResolver(function() {
-			return $page = $this->app['request']->route()->parameter('page');
+			return $this->app['request']->route()->parameter('page')
+				?: $this->app['request']->input('page');
 		});
-	}
-
-	/**
-	 * Register the service provider.
-	 *
-	 * @return void
-	 */
-	public function register()
-	{
-		//
 	}
 
 	/**

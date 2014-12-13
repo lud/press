@@ -9,7 +9,7 @@ return [
 	'filename_schemas' => ['classic','simple'],
 	'extensions' => ['.sk','md','htm','.html'],
 	'default_page_size' => 10,
-	'theme' => 'press',
+	'theme' => getenv('PRESS_THEME') ?: 'press',
 	'skriv' => [
 		'urlProcessFunction' => function($url, $label, $targetBlank, $nofollow){
 			$url = \Lud\Press\PressHTMLTransformer::maybeTransformHref($url);
