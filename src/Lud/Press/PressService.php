@@ -12,6 +12,7 @@ class PressService {
 	protected $app;
 	protected $editing = false;
 	protected $currentEditingCacheInfo;
+	protected $mustCacheCurrentRequest = true;
 
 	public function __construct($app,$conf=[]) {
 		$this->configure($conf);
@@ -86,6 +87,8 @@ class PressService {
 		return false;
 	}
 
+	// URLs -----------------------------------------------------------------
+
 	public function filenameToUrl($meta) {
 		$schemas = $this->getConf('url_map');
 		foreach ($schemas as $pathSchema => $urlSchema) {
@@ -107,6 +110,13 @@ class PressService {
 		}
 		throw new UnknownURLSchemaException("Cannot transform URL '$urlPath'");
 	}
+
+	public function setRoutes($_SET_HOME_ROUTE=true) {
+		$_SET_HOME_ROUTE = 'aaa';
+		require realpath(__DIR__ . '/../../routes.php');
+	}
+
+	// URLs -----------------------------------------------------------------
 
 	static function replaceStrParts($schema,$values) {
 		// @todo this is ugly, need to find the corresponding library or at
@@ -172,12 +182,26 @@ class PressService {
 
 	// Cache & Editing ------------------------------------------------------
 
+	public function skipCache() {
+		$this->mustCacheCurrentRequest = false;
+	}
+
+	public function isCacheableRequest($request,$response) {
+		$routeOpts = $request->route()->getAction();
+		return
+			$this->mustCacheCurrentRequest
+			&& isset($routeOpts['pressCache'])
+			&& $routeOpts['pressCache'] == true
+			&& 200 === $response->getStatusCode();
+	}
+
 	public function isEditing() {
 		return $this->editing;
 	}
 
 	public function setEditing() {
 		$this->editing = true;
+		$this->skipCache();
 	}
 
 	public function editingCacheInfo() {
@@ -227,7 +251,7 @@ class PressService {
 	}
 
 	public static function themefilePath() {
-		return realpath(dirname(__FILE__) . '/../../views');
+		return realpath(__DIR__ . '/../../views');
 	}
 
 }

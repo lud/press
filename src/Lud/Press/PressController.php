@@ -65,6 +65,19 @@ class PressController extends BaseController {
 		return $this->displayCollection(PressFacade::all(),$page,$view);
 	}
 
+	public function tag($tag, $page=1)
+	{
+		$page = max($page,1); //set the page to minimum 1
+		$view = PressFacade::getConf('theme').'::tag';
+		$found = PressFacade::query("tags:$tag");
+		// If no posts were found, we do not cache the query. Without this,
+		// anyone could fill the cache with requests to /tag/a, tag/aa, tag/aaa,
+		// etc..
+		if (! $found->count())
+			PressFacade::skipCache();
+		return $this->displayCollection($found,$page,$view);
+	}
+
 	protected function displayCollection($articles, $page, $view, $tplData=[]) {
 		$page_size = PressFacade::getConf('default_page_size');
 		$pageArticles = $articles->forPage($page,$page_size);

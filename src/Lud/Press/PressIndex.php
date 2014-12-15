@@ -16,7 +16,7 @@ class PressIndex {
 	private $maxMTime = 0;
 
 	public function all() {
-		return new Collection($this->build()->all());
+		return $this->build();
 	}
 
 	public function count() {
@@ -24,7 +24,7 @@ class PressIndex {
 	}
 
 	public function query($key) {
-		$collection = $this->all(); // here use build to use a fresh version, but takes more time
+		$collection = $this->all();
 		$steps = $this->parseQuery($key);
 		foreach ($steps as $f) {
 			$collection = $f($collection);
@@ -90,7 +90,7 @@ class PressIndex {
 
 	static function parseQuery($query) {
 		$filters = [];
-		foreach (explode(',',$query) as $part) {
+		foreach (explode('|',$query) as $part) {
 			$args = explode(':',$part);
 			$fun = array_shift($args);
 			$filters[] = self::makeReduce($fun,$args);
