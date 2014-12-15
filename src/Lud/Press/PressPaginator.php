@@ -21,5 +21,10 @@ class PressPaginator extends LengthAwarePaginator {
 		return $url;
 	}
 
+	public function setBasePath($x) {
+		//@todo check when "setBaseUrl" is back in laravel 5.0
+		$this->path = $x != '/' ? rtrim($x, '/').'/' : $x;
+	}
+
 }
 

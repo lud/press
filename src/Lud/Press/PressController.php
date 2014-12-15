@@ -73,12 +73,12 @@ class PressController extends BaseController {
 		// If no posts were found, we do not cache the query. Without this,
 		// anyone could fill the cache with requests to /tag/a, tag/aa, tag/aaa,
 		// etc..
-		if (! $found->count())
-			PressFacade::skipCache();
-		return $this->displayCollection($found,$page,$view);
+		if (! $found->count()) PressFacade::skipCache();
+		$pathBase = \URL::route('press.tag',[$tag]);
+		return $this->displayCollection($found,$page,$view,$pathBase);
 	}
 
-	protected function displayCollection($articles, $page, $view, $tplData=[]) {
+	protected function displayCollection($articles, $page, $view, $baseUrl=null) {
 		$page_size = PressFacade::getConf('default_page_size');
 		$pageArticles = $articles->forPage($page,$page_size);
 		// if we have no articles for this page and page is not the first page,
@@ -87,7 +87,8 @@ class PressController extends BaseController {
 			return abort(404);
 		}
 		$paginator = $articles->getPaginator($page_size);
-		return \View::make($view, $tplData)
+		if (null !== $baseUrl) $paginator->setBasePath($baseUrl);
+		return \View::make($view)
 			->with('articles',$pageArticles)
 			->with('cacheInfo',PressFacade::editingCacheInfo())
 			->with('themeAssets',PressFacade::getDefaultThemeAssets())
