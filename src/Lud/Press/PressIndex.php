@@ -9,10 +9,14 @@
 
 use Symfony\Component\Finder\Finder;
 use View;
+use Cache;
 
 class PressIndex {
 
-	private $indexCache = null;
+	const CACHE_KEY_BUILD = 'PressIndexBuild';
+	const CACHE_KEY_MAXMTIME = 'PressIndexMaxMTime';
+
+	private $ramCache = null;
 	private $maxMTime = 0;
 
 	public function all() {
@@ -33,8 +37,8 @@ class PressIndex {
 	}
 
 	protected function build() {
-		if (null !== $this->indexCache) {
-			return $this->indexCache;
+		if (null !== $this->ramCache) {
+			return $this->ramCache;
 		}
 		$maxMTime = 0;
 		$finder = new Finder();
@@ -47,6 +51,27 @@ class PressIndex {
 			->sort($sorWithoutPath)
 			->name($extensionsRegex)
 		;
+		// We look for the maximum mtime of the files
+		$filesArray = iterator_to_array($finder);
+		foreach ($filesArray as $file) {
+			$maxMTime = max($maxMTime, $file->getMTime());
+		}
+		// now we get the cache for the last maxMTime calculated, with
+		// 0 as a default
+		$lastMaxMTime = Cache::get(self::CACHE_KEY_MAXMTIME,0);
+		// Now, if the new maxMtime is higher than the cached one,
+		// files were modified since the last build. So we need to
+		// build. But if the cached is the same (or superior, why ?),
+		// we return from the cache
+		if ($lastMaxMTime >= $maxMTime) {
+			return Cache::get(self::CACHE_KEY_BUILD);
+		}
+		//---------------------------------------------------
+
+		// Here we put the new cache time
+
+		Cache::forever(self::CACHE_KEY_MAXMTIME, $maxMTime);
+
 		$metas = array_map(function($file){
 			return with(new PressFile($file->getPathname()))
 				->parseMeta()
@@ -56,11 +81,12 @@ class PressIndex {
 		$result = [];
 		foreach ($metas as $key => $fileMeta) {
 			$result[$fileMeta->id] = $fileMeta;
-			$maxMTime = max($maxMTime, $fileMeta->mtime);
+
 		}
-		$this->indexCache = new Collection($result);
+		$this->ramCache = new Collection($result);
 		$this->maxMTime = $maxMTime;
-		return $this->indexCache;
+		Cache::forever(self::CACHE_KEY_BUILD, $this->ramCache);
+		return $this->ramCache;
 	}
 
 	public function getFile($id) {
