@@ -56,6 +56,7 @@ class PressIndex {
 		foreach ($filesArray as $file) {
 			$maxMTime = max($maxMTime, $file->getMTime());
 		}
+		$this->maxMTime = $maxMTime;
 		// now we get the cache for the last maxMTime calculated, with
 		// 0 as a default
 		$lastMaxMTime = Cache::get(self::CACHE_KEY_MAXMTIME,0);
@@ -84,7 +85,6 @@ class PressIndex {
 
 		}
 		$this->ramCache = new Collection($result);
-		$this->maxMTime = $maxMTime;
 		Cache::forever(self::CACHE_KEY_BUILD, $this->ramCache);
 		return $this->ramCache;
 	}
