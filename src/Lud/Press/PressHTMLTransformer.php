@@ -29,7 +29,11 @@ class PressHTMLTransformer {
 	static function maybeTransformHref($href) {
 		if (starts_with($href,'press://')) {
 			$filename = substr($href, strlen('press://'));
-			$href = PressFacade::findFile($filename)->url();
+			try {
+				$href = PressFacade::findFile($filename)->url();
+			} catch (FileNotFoundException $e) {
+				throw new LinkedFileNotFoundException("A file for the link $href could not be found.");
+			}
 		}
 		return $href;
 	}

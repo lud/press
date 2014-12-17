@@ -31,7 +31,7 @@ class PressController extends BaseController {
 				->with('cacheInfo',PressFacade::editingCacheInfo())
 				->with('themeAssets',PressFacade::getThemeAssets($document->meta()->theme))
 				->with('content',$document->content());
-		} catch (BaseException $e) {
+		} catch (FileNotFoundException $e) {
 			abort(404);
 		}
 	}
