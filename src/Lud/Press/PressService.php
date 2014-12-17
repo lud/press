@@ -233,21 +233,15 @@ class PressService {
 
 	public function getThemeAssets($theme) {
 		$cacheKey = "press::themefile->$theme";
-		// @todo why cache since we cache the full page ?
-		// are they pages rendered with theme that we do not cache ?
-		return \Cache::rememberForever($cacheKey,function()use($theme){
-			if (! isset($this->registeredThemes[$theme]))
-				throw new \Exception("Unknown theme $theme");
-			$dir = $this->registeredThemes[$theme]['dir'];
-			$infos = require "$dir/_themefile.php";
-			$empty = [
-				'styles'=>[],
-				'scripts'=>[],
-				'hookBeforeContent'=>[],
-				'hookAfterContent'=>[],
-			];
-			return array_merge($empty,$infos);
-		});
+		if (! isset($this->registeredThemes[$theme]))
+			throw new \Exception("Unknown theme $theme");
+		$dir = $this->registeredThemes[$theme]['dir'];
+		$infos = require "$dir/_themefile.php";
+		$empty = [
+			'styles'=>[],
+			'scripts'=>[],
+		];
+		return array_merge($empty,$infos);
 	}
 
 	public static function themefilePath() {

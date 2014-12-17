@@ -18,9 +18,9 @@
 @endforeach
 @show
 
-@foreach ($themeAssets['hookBeforeContent'] as $tplName)
-	@include($tplName)
-@endforeach
+@section('top')
+	@include('press::pressParts.navbar')
+@show
 
 @section('full_content')
 	<div class="container">
@@ -29,10 +29,6 @@
 		@include('press::pressParts.cache_infos')
 	</div>
 @show
-
-@foreach ($themeAssets['hookAfterContent'] as $tplName)
-	@include($tplName)
-@endforeach
 
 @section('assets_scripts')
 	@foreach ($themeAssets['scripts'] as $scriptSrc)
