@@ -54,7 +54,7 @@ class PressIndex {
 		// We look for the maximum mtime of the files
 		$filesArray = iterator_to_array($finder);
 		foreach ($filesArray as $file) {
-			$maxMTime = max($maxMTime, $file->getMTime());
+			$maxMTime = max($maxMTime, max($file->getMTime(),$file->getCTime()));
 		}
 		$this->maxMTime = $maxMTime;
 		// now we get the cache for the last maxMTime calculated, with
