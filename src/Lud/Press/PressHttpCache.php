@@ -1,11 +1,12 @@
 <?php namespace Lud\Press;
 
 use Cache;
-use Cookie;
 use Closure;
+use Cookie;
 use Illuminate\Contracts\Routing\Middleware;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use WyriHaximus\HtmlCompress\Factory as HtmlCompressFactory;
 
 class PressHttpCache implements Middleware {
 
@@ -18,37 +19,46 @@ class PressHttpCache implements Middleware {
 	 */
 	public function handle($request, Closure $next)
 	{
-		$pressCache = PressFacade::cache();
-
+		// @todo check if not authentified instead of editing
 		if ($request->cookie('pressEditing')) {
 			PressFacade::setEditing();
 			return $next($request);
 		}
 
-		// We check the cache before checking if the route must be cached
-		// because to access route infos, the request must proceed through the
-		// stack. So, if caching is unset on a route, the cache must be
-		// "manually" deleted
+		// The cache is automatically served by the webserver. So if
+		// we hit this code, the only thing to do is to save the
+		// response in an .html file
 
-		if ($pressCache->hasCurrentRequest()) {
-			return $this->makeFakeResponse($pressCache->getCurrentRequest());
-		}
+		// the generated output MUST NOT have user-based content. It
+		// must be the same content for everybody
 
-		// proceed with the stack if the response is not cached.
+		// PressFacade::skipCache() can be used to not cache the
+		// current request
 
 		$response = $next($request);
 		if (!PressFacade::isCacheableRequest($request,$response))
 			return $response;
-		$cache = $pressCache->setCurrentRequestCacheContent($response->getContent());
-		return $this->makeFakeResponse($cache);
+		$contentHTML = $response->getContent();
+		$minifier = HtmlCompressFactory::construct();
+		$miniContent = $minifier->compress($contentHTML);
+		$this->writeFile($request,$miniContent);
+		return $this->makeFakeResponse($miniContent);
 	}
 
-	private function makeFakeResponse($cache) {
+	private function makeFakeResponse($content) {
 		$response = new Response();
-		$response->setContent($cache->content);
+		$response->setContent($content);
 		return $response;
 	}
 
+	private function writeFile($request,$content) {
+		$reqPath = $request->getPathInfo() . ".html";
+		$path = PressFacade::getConf('storage_path') . $reqPath;
+		//@todo use flysystem
+		$dir = dirname($path);
+		if (!is_dir($dir)) mkdir($dir,0777,true);
+		file_put_contents($path,$content);
+	}
 
 
 }

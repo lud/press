@@ -164,10 +164,6 @@ class PressService {
 		}
 	}
 
-	public function cache() {
-		return $this->app['press.cache'];
-	}
-
 	public function index() {
 		return $this->app['press.index'];
 	}

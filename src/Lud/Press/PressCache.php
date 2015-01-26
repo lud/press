@@ -1,12 +1,13 @@
 <?php namespace Lud\Press;
 
+throw new \Exception('File Deprecated');
+
 use Cache;
 use App;
 
 class PressCache {
 
 	private $req;
-	private $ramCache = [];
 
 	public function __construct($request) {
 		$this->req = $request;
@@ -42,9 +43,7 @@ class PressCache {
 	}
 
 	public function get($key) {
-		return isset($this->ramCache[$key])
-			? $this->ramCache[$key]
-			: Cache::get($key);
+		throw new \Exception("not imp");
 	}
 
 	public function getFakeCache($key) {
@@ -74,15 +73,8 @@ class PressCache {
 		 return \URL::route('press.refresh_page_cache',[$this->currentKey()]);
 	}
 
-	private function forever($key,$content) {
-		$cache = (object) [
-			'content' => $content,
-			'cacheTime' => time(),
-			'key' => $key,
-		];
-		$this->ramCache[$key] = $cache;
-		Cache::forever($key,$cache);
-		return $cache;
+	private function forever($key,$contentHTML) {
+		dump_r("storing $key");
 	}
 
 }

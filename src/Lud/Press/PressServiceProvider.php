@@ -31,6 +31,7 @@ class PressServiceProvider extends ServiceProvider {
 	{
 		$this->app->bindShared('press', function($app)
 		{
+			//@todo use back laravel config loader
 			$confPath = realpath(__DIR__ . '/../../config/config.php');
 			$conf = require $confPath;
 			$service = new PressService($app,$conf);
@@ -46,10 +47,6 @@ class PressServiceProvider extends ServiceProvider {
 			return new PressIndex();
 		});
 
-		$this->app->bindShared('press.cache', function($app)
-		{
-			return new PressCache($app->request);
-		});
 
 		Paginator::currentPageResolver(function() {
 			return $this->app['request']->route()->parameter('page')
