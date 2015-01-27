@@ -48,27 +48,6 @@ class PressFile {
 		$this->readFileIfNotRead();
 		$parser = new YamlParser();
 
-		// Meta present in the file
-
-		$headerMeta = $parser->parse($this->rawMeta);
-		if (is_null($headerMeta)) $headerMeta = [];
-		if (isset($headerMeta['date'])) {
-			$headerMeta['year'] = date('Y',$headerMeta['date']);
-			$headerMeta['month'] = date('m',$headerMeta['date']);
-			$headerMeta['day'] = date('d',$headerMeta['date']);
-		}
-
-		// Default meta :
-		if (!isset($headerMeta['title'])) $headerMeta['title'] = ''; // just to be present
-		// if only one tag is set, or a comma list, we make it an array
-		if (!isset($headerMeta['tags'])) $headerMeta['tags'] = []; // hope most people want tags
-		if (!is_array($headerMeta['tags'])) $headerMeta['tags'] = array_map('trim',explode(',',$headerMeta['tags']));
-
-
-		if (!isset($headerMeta['theme'])) $headerMeta['theme'] = (string) PressFacade::getConf('theme');
-		PressFacade::ensureThemeExists($headerMeta['theme']);
-		if (!isset($headerMeta['layout'])) $headerMeta['layout'] = 'layout.not.set'; // here throw an err ?
-
 		// We figure out the ID of the file, i.e. a unique string that match
 		// only the significant parts of the file name. So we cannot have two
 		// files called aaa-bbb-ccc.MD & aaa-bbb-ccc.sk, event in different
@@ -82,6 +61,23 @@ class PressFile {
 			'mtime' => filemtime($this->filename),
 		];
 
+		// Meta present in the file
+
+		$headerMeta = $parser->parse($this->rawMeta);
+		if (is_null($headerMeta)) $headerMeta = [];
+
+		// Default meta :
+		if (!isset($headerMeta['title'])) $headerMeta['title'] = ''; // just to be present
+		// if only one tag is set, or a comma list, we make it an array
+		if (!isset($headerMeta['tags'])) $headerMeta['tags'] = []; // hope most people want tags
+		if (!is_array($headerMeta['tags'])) $headerMeta['tags'] = array_map('trim',explode(',',$headerMeta['tags']));
+
+
+		if (!isset($headerMeta['theme'])) $headerMeta['theme'] = (string) PressFacade::getConf('theme');
+		PressFacade::ensureThemeExists($headerMeta['theme']);
+		if (!isset($headerMeta['layout'])) $headerMeta['layout'] = 'layout.not.set'; // here throw an err ?
+
+
 		// then we try to figure out a schema. We try all the defined schemas in
 		// the config
 		foreach(PressFacade::getConf('filename_schemas') as $schema) {
@@ -90,7 +86,12 @@ class PressFile {
 				$fileMeta = array_merge($fileMeta,$fnInfo);
 				break; // stop on first match. The list in config must be ordered by path complexion
 			}
+			// if no path has matched, we set the dates from the filemtime
+
+			list($fileMeta['year'],$fileMeta['month'],$fileMeta['day'])
+			 	= explode('-',date('Y-m-d',$fileMeta['mtime']));
 		}
+
 		// if the directory of the file is the base directory, the relpath meta
 		// is empty. if the file is in a subdirectory (or more), we store this
 		// path as a string
@@ -106,7 +107,6 @@ class PressFile {
 		$pathDiff = trim(substr($realPath,strlen($baseReal) + 1)); // +1 to trim the starting slash (this is a relative path)
 		// force slashes
 		$fileMeta['rel_path'] = str_replace('\\', '/', $pathDiff);
-
 		$this->meta = new MetaWrapper(array_merge($fileMeta, $headerMeta));
 
 		// set the theme/layout

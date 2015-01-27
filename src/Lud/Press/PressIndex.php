@@ -65,7 +65,8 @@ class PressIndex {
 		// build. But if the cached is the same (or superior, why ?),
 		// we return from the cache
 		if ($lastMaxMTime >= $maxMTime) {
-			return Cache::get(self::CACHE_KEY_BUILD);
+			$cached = Cache::get(self::CACHE_KEY_BUILD);
+			if ($cached instanceof COllection) return $cached;
 		}
 		//---------------------------------------------------
 
@@ -82,7 +83,6 @@ class PressIndex {
 		$result = [];
 		foreach ($metas as $key => $fileMeta) {
 			$result[$fileMeta->id] = $fileMeta;
-
 		}
 		$this->ramCache = new Collection($result);
 		Cache::forever(self::CACHE_KEY_BUILD, $this->ramCache);

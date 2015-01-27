@@ -66,7 +66,8 @@ class PressController extends BaseController {
 	{
 		$page = max($page,1); //set the page to minimum 1
 		$view = PressFacade::getConf('theme').'::home';
-		return $this->displayCollection(PressFacade::all(),$page,$view);
+		$all = PressFacade::all()->sort(Collection::byDateDesc());
+		return $this->displayCollection($all,$page,$view);
 	}
 
 	public function tag($tag, $page=1)
@@ -83,6 +84,7 @@ class PressController extends BaseController {
 	}
 
 	protected function displayCollection($articles, $page, $view, $baseUrl=null) {
+		$articles->sort(Collection::byDateDesc());
 		$page_size = PressFacade::getConf('default_page_size');
 		$pageArticles = $articles->forPage($page,$page_size);
 		// if we have no articles for this page and page is not the first page,

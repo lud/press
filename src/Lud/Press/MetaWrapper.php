@@ -11,6 +11,10 @@ class MetaWrapper extends Fluent implements \ArrayAccess {
 
 	public function all() { return $this->getAttributes(); }
 
+	public function formatDate($format='Y-m-d') {
+		$ISO = implode('-',[$this->year,$this->month,$this->day]);
+		return with(new \DateTime($ISO))->format($format);
+	}
 
 	// getter override : we check the meta for thrueness instead of checking
 	// only if the key exists
@@ -27,5 +31,7 @@ class MetaWrapper extends Fluent implements \ArrayAccess {
 	public function offsetUnset($offset) {
 		throw new \Exception(get_class()." is immutable, tried to unset '$offset'");
 	}
+
+
 
 }

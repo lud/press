@@ -20,4 +20,9 @@ class Collection extends \Illuminate\Support\Collection {
 		return new PressPaginator($this, $this->count(), $currentPage);
 	}
 
+	static function byDateDesc() {
+		return function(MetaWrapper $fileA, MetaWrapper $fileB) {
+			return $fileA->formatDate() < $fileB->formatDate();
+		};
+	}
 }
