@@ -1,81 +1,73 @@
 <?php namespace Lud\Press;
 
-throw new \Exception('File Deprecated');
-
-use Cache;
 use App;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
+
 
 class PressCache {
 
 	private $req;
 
-	public function __construct($request) {
-		$this->req = $request;
+	const ext = '.html';
+
+	public function __construct(Request $req) {
+		$this->req = $req;
 	}
 
-	public function hasCurrentRequest() {
-		return $this->has($this->currentKey());
+	public function writeFile($content) {
+		$uri = $this->requestPath();
+		if ("/" === $uri) {
+			// if it's the root page
+			$uri = '/_root';
+		}
+		$path = $this->storagePath($uri);
+		//@todo use flysystem
+		$dir = dirname($path);
+		if (!is_dir($dir)) mkdir($dir,0744,true);
+		file_put_contents($path,$content);
 	}
 
-	public function has($key) {
-		return Cache::has($key);
-	}
-
-	public function forget($key) {
-		return Cache::forget($key);
+	public function cacheInfo() {
+		$path = $this->fullStoragePath();
+		if (is_file($path))
+			return (object) [
+				'cacheTime' => max(filemtime($path),filectime($path)),
+			];
+		else
+			return (object) [
+				'cacheTime' => time(),
+			];
 	}
 
 	public function flush() {
-		return Cache::flush();
+		// delete the directory. trashy
+		$this->remove($this->storagePath());
 	}
 
-	public function getCurrentRequest() {
-		return $this->get($this->currentKey());
+	public function forget($path) {
+		$this->remove($this->storagePath($path));
 	}
 
-	// this is the default getter, returns the current request cache or a fake
-	// cache if the request has no cache
-	public function current() {
-		$cache = $this->getCurrentRequest();
-		if (null === $cache)
-			$cache = $this->getFakeCache($this->currentKey());
-		return $cache;
+	public function URLToRefreshCurrent() {
+		return \URL::route('press.refresh_page_cache',[$this->requestPath()]);
 	}
 
-	public function get($key) {
-		throw new \Exception("not imp");
+	private function requestPath() {
+		return $this->req->getPathInfo();
 	}
 
-	public function getFakeCache($key) {
-		return (object) [
-			'content' => null,
-			'cacheTime' => time(),
-			'key' => $key,
-		];
+	private function storagePath($x='') {
+		return $path = PressFacade::getConf('storage_path') . $x . self::ext;
 	}
 
-	public function currentKey() {
-		$keysource = $this->req->getPathInfo();
-		// if we would cache with different query_string parameters, we should
-		// add the following line. (the parameters are alphabetically ordered
-		// but still anyone could fill the cache by send resquests with random
-		// param names and values)
-		// $keysource .= '?'.$this->req->getQueryString();
-		$key = md5("$keysource");
-		return $key;
+	private function fullStoragePath() {
+		return $this->storagePath($this->requestPath());
 	}
 
-	public function setCurrentRequestCacheContent($contentHTML) {
-		return $this->forever($this->currentKey(),$contentHTML);
+	private function remove($dirOrFile) {
+		$fs = new Filesystem();
+		return $fs->remove($dirOrFile);
 	}
-
-	public function currentRefreshURL() {
-		 return \URL::route('press.refresh_page_cache',[$this->currentKey()]);
-	}
-
-	private function forever($key,$contentHTML) {
-		dump_r("storing $key");
-	}
-
 }
 

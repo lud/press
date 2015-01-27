@@ -20,6 +20,10 @@ class PressServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		\Event::fire('press.mount', []);
+		$this->publishes([
+			__DIR__.'/../../../public' => base_path('public/packages/lud/press'),
+		]);
+
 	}
 
 	/**
@@ -35,10 +39,7 @@ class PressServiceProvider extends ServiceProvider {
 			$confPath = realpath(__DIR__ . '/../../config/config.php');
 			$conf = require $confPath;
 			$service = new PressService($app,$conf);
-			// the 'press' base theme is registered by the service itself
-			foreach ($service->getConf('themes_dirs', []) as $name => $dir) {
-				$service->registerTheme($name,$dir);
-			}
+			$service->registerTheme('press',$service->themefilePath());
 			return $service;
 		});
 
@@ -47,6 +48,10 @@ class PressServiceProvider extends ServiceProvider {
 			return new PressIndex();
 		});
 
+		$this->app->bindShared('press.cache', function($app)
+		{
+			return new PressCache($app->request);
+		});
 
 		Paginator::currentPageResolver(function() {
 			return $this->app['request']->route()->parameter('page')

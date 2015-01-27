@@ -17,7 +17,6 @@ class PressService {
 	public function __construct($app,$conf=[]) {
 		$this->configure($conf);
 		$this->app = $app;
-		$this->registerTheme('press',self::themefilePath());
 	}
 
 	// findFile accepts fileID or filename. We check if the filename ends with
@@ -178,6 +177,10 @@ class PressService {
 
 	// Cache & Editing ------------------------------------------------------
 
+	public function cache () {
+		return $this->app->make('press.cache');
+	}
+
 	public function skipCache() {
 		$this->mustCacheCurrentRequest = false;
 	}
@@ -202,8 +205,7 @@ class PressService {
 
 	public function editingCacheInfo() {
 		if (!$this->isEditing()) return null;
-		$info = $this->cache()->current();
-		unset($info->content);
+		$info = $this->cache()->cacheInfo($this->app->request);
 		$info->indexMaxMTime = $this->index()->getModTime();
 		$info->isCacheStale = $info->indexMaxMTime > $info->cacheTime;
 		return $info;

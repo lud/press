@@ -41,7 +41,8 @@ class PressHttpCache implements Middleware {
 		$contentHTML = $response->getContent();
 		$minifier = HtmlCompressFactory::construct();
 		$miniContent = $minifier->compress($contentHTML);
-		$this->writeFile($request,$miniContent);
+		$cache = PressFacade::cache();
+		$cache->writeFile($miniContent);
 		return $this->makeFakeResponse($miniContent);
 	}
 
@@ -50,15 +51,5 @@ class PressHttpCache implements Middleware {
 		$response->setContent($content);
 		return $response;
 	}
-
-	private function writeFile($request,$content) {
-		$reqPath = $request->getPathInfo() . ".html";
-		$path = PressFacade::getConf('storage_path') . $reqPath;
-		//@todo use flysystem
-		$dir = dirname($path);
-		if (!is_dir($dir)) mkdir($dir,0777,true);
-		file_put_contents($path,$content);
-	}
-
 
 }

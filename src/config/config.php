@@ -6,7 +6,7 @@ return [
 		'classic' => "article/:year/:month/:day/:slug",
 		'simple'  => "page/:slug",
 	],
-	'storage_path' => storage_path().'/app/press-cache',
+	'storage_path' => base_path('public/.press-cache'),
 	'filename_schemas' => ['classic','simple'],
 	'extensions' => ['.sk','md','htm','.html'],
 	'default_page_size' => 10,

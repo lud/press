@@ -43,10 +43,10 @@ class PressController extends BaseController {
 
 	public function stopEditing()
 	{
-		return Redirect::back()->withCookie(Cookie::forever('pressEditing',false));
+		return Redirect::back()->withCookie(Cookie::forget('pressEditing'));
 	}
 
-	public function refresh($key)
+	public function refresh($key='')
 	{
 		PressFacade::cache()->forget($key);
 		return Redirect::back();
