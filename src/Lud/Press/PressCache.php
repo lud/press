@@ -16,12 +16,8 @@ class PressCache {
 	}
 
 	public function writeFile($content) {
-		$uri = $this->requestPath();
-		if ("/" === $uri) {
-			// if it's the root page
-			$uri = '/_root';
-		}
-		$path = $this->storagePath($uri);
+		$key = $this->currentKey();
+		$path = $this->storagePath($key);
 		//@todo use flysystem
 		$dir = dirname($path);
 		if (!is_dir($dir)) mkdir($dir,0744,true);
@@ -45,16 +41,17 @@ class PressCache {
 		$this->remove(PressFacade::getConf('storage_path'));
 	}
 
-	public function forget($path) {
-		$this->remove($this->storagePath($path));
+	public function forget($key) {
+		$this->remove($this->storagePath($key));
 	}
 
-	public function URLToRefreshCurrent() {
-		return \URL::route('press.refresh_page_cache',[$this->requestPath()]);
-	}
-
-	private function requestPath() {
-		return $this->req->getPathInfo();
+	public function currentKey() {
+		$key = $this->req->getPathInfo();
+		if ("/" === $key) {
+			// if it's the root page
+			$key = '/_root';
+		}
+		return $key;
 	}
 
 	private function storagePath($x) {
@@ -62,12 +59,13 @@ class PressCache {
 	}
 
 	private function fullStoragePath() {
-		return $this->storagePath($this->requestPath());
+		return $this->storagePath($this->currentKey());
 	}
 
 	private function remove($dirOrFile) {
 		$fs = new Filesystem();
-		return $fs->remove($dirOrFile);
+		if ($fs->exists($dirOrFile))
+			$fs->remove($dirOrFile);
 	}
 }
 

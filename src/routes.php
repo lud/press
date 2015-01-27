@@ -24,8 +24,7 @@ Route::group(['pressCache' => true, 'namespace' => 'Lud\Press'], function($route
 Route::group(['__middleware' => 'auth', 'namespace' => 'Lud\Press'], function($router){
 	Route::get('editing', ['uses' => 'PressController@startEditing', 'as' => 'press.editing']);
 	Route::get('stop-editing', ['uses' => 'PressController@stopEditing', 'as' => 'press.stop_editing']);
-	Route::get('refresh/{key}', ['uses' => 'PressController@refresh', 'as' => 'press.refresh_page_cache'])
-	->where('key', '.*');
+	Route::get('refresh', ['uses' => 'PressController@refresh', 'as' => 'press.refresh_page_cache']);
 	Route::get('purge', ['uses' => 'PressController@purge', 'as' => 'press.purge_cache']);
 });
 

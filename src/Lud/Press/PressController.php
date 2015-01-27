@@ -5,8 +5,10 @@ use Cookie;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Press;
+use Input;
 use Redirect;
+use URL;
+use View;
 
 class PressController extends BaseController {
 
@@ -42,24 +44,29 @@ class PressController extends BaseController {
 
 	public function startEditing()
 	{
-		return Redirect::back()->withCookie(Cookie::forever('pressEditing',true));
+		return $this->redirectBack()->withCookie(Cookie::forever('pressEditing',true));
 	}
 
 	public function stopEditing()
 	{
-		return Redirect::back()->withCookie(Cookie::forget('pressEditing'));
+		return $this->redirectBack()->withCookie(Cookie::forget('pressEditing'));
 	}
 
-	public function refresh($key='')
+	public function refresh()
 	{
-		PressFacade::cache()->forget($key);
-		return Redirect::back();
+		$path = Input::get('key');
+		$fileID = PressFacade::UrlToID($path);
+		PressFacade::cache()->forget($path);
+		// now redirect to the file corresponding to the key
+		$document = PressFacade::findFile($fileID);
+		$url = $document->url() . '?' . microtime(1);
+		return Redirect::to($url,302);
 	}
 
 	public function purge()
 	{
 		PressFacade::cache()->flush();
-		return Redirect::back();
+		return $this->redirectBack();
 	}
 
 	public function home($page = 1)
@@ -79,7 +86,7 @@ class PressController extends BaseController {
 		// anyone could fill the cache with requests to /tag/a, tag/aa, tag/aaa,
 		// etc..
 		if (! $found->count()) PressFacade::skipCache();
-		$pathBase = \URL::route('press.tag',[$tag]);
+		$pathBase = URL::route('press.tag',[$tag]);
 		return $this->displayCollection($found,$page,$view,$pathBase);
 	}
 
@@ -94,11 +101,17 @@ class PressController extends BaseController {
 		}
 		$paginator = $articles->getPaginator($page_size);
 		if (null !== $baseUrl) $paginator->setBasePath($baseUrl);
-		return \View::make($view)
+		return View::make($view)
 			->with('articles',$pageArticles)
 			->with('cacheInfo',PressFacade::editingCacheInfo())
 			->with('themeAssets',PressFacade::getDefaultThemeAssets())
 			->with('paginator',$paginator);
+	}
+
+	private function redirectBack() {
+		// we add a fake parameter to force reload
+		$back = URL::to(Input::get('redir','/').'?'.microtime(1));
+		return Redirect::to($back);
 	}
 
 }
