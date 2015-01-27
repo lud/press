@@ -9,7 +9,7 @@ class PressCache {
 
 	private $req;
 
-	const ext = '.html';
+	const ext = '.cache.html';
 
 	public function __construct(Request $req) {
 		$this->req = $req;
@@ -42,7 +42,7 @@ class PressCache {
 
 	public function flush() {
 		// delete the directory. trashy
-		$this->remove($this->storagePath());
+		$this->remove(PressFacade::getConf('storage_path'));
 	}
 
 	public function forget($path) {
@@ -57,7 +57,7 @@ class PressCache {
 		return $this->req->getPathInfo();
 	}
 
-	private function storagePath($x='') {
+	private function storagePath($x) {
 		return $path = PressFacade::getConf('storage_path') . $x . self::ext;
 	}
 

@@ -25,6 +25,10 @@ class PressController extends BaseController {
 			// in press conf
 			$id = PressFacade::UrlToID($req->path());
 			$document = PressFacade::findFile($id);
+			// if we are not at the exact document URL, we redirect
+			if (\URL::to($req->path()) !== $document->url()) {
+				return Redirect::to($document->url(),301);
+			}
 			$layout = $document->meta()->get('layout','default');
 			return \View::make($layout)
 				->with('meta',$document->meta())
