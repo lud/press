@@ -78,10 +78,9 @@ class PressService {
 			// we filter out the numeric keys of matches
 			$keys = array_keys($matches);
 			$numeric_keys = array_filter($keys,'is_numeric');
-			// pre("$pattern match $fn");
 			return array_except($matches, $numeric_keys);
 		// } else {
-		//	pre("$pattern NO match $fn");
+			// dump_r("$pattern NO match $fn");
 		}
 		return false;
 	}

@@ -55,7 +55,7 @@ class PressFile {
 		// the directory is.
 
 		$fileID = pathinfo($this->filename,PATHINFO_FILENAME);
-		$fileMeta = [
+		$baseMeta = [
 			'filename' => $this->filename,
 			'id' => $fileID,
 			'mtime' => filemtime($this->filename),
@@ -77,19 +77,33 @@ class PressFile {
 		PressFacade::ensureThemeExists($headerMeta['theme']);
 		if (!isset($headerMeta['layout'])) $headerMeta['layout'] = 'layout.not.set'; // here throw an err ?
 
+		// merge header
+		$baseMeta = array_merge($baseMeta,$headerMeta);
 
-		// then we try to figure out a schema. We try all the defined schemas in
-		// the config
+		// We read some meta from the filename (y-m-d, slug, ...)
+		$filenameMeta = [];
 		foreach(PressFacade::getConf('filename_schemas') as $schema) {
 			if (($fnInfo = PressFacade::pathInfo($this->filename,$schema)) !== false) {
-				// Here we got some infos such as date from filename
-				$fileMeta = array_merge($fileMeta,$fnInfo);
+				$filenameMeta = $fnInfo;
 				break; // stop on first match. The list in config must be ordered by path complexion
 			}
-			// if no path has matched, we set the dates from the filemtime
+		}
 
-			list($fileMeta['year'],$fileMeta['month'],$fileMeta['day'])
-			 	= explode('-',date('Y-m-d',$fileMeta['mtime']));
+		// figure out the date. date set on the header has higher priority.
+		// we need year, month & day to create a date from the filename
+		// we default on filemtime
+		if (!isset($baseMeta['date'])) {
+			if (isset($filenameMeta['year'])
+			&& isset($filenameMeta['month'])
+			&& isset($filenameMeta['day'])) {
+				$baseMeta['date'] = implode('-',[
+					$filenameMeta['year'],
+					$filenameMeta['month'],
+					$filenameMeta['day']
+				]);
+			} else {
+				$baseMeta['date'] = date('Y-m-d',$baseMeta['mtime']);
+			}
 		}
 
 		// if the directory of the file is the base directory, the relpath meta
@@ -98,7 +112,7 @@ class PressFile {
 		$realDir = realpath(dirname($this->filename));
 		$baseReal = realpath(PressFacade::getConf('base_dir'));
 		$dirDiff = trim(substr($realDir,strlen($baseReal)), DIRECTORY_SEPARATOR);
-		$fileMeta['dirs'] =
+		$baseMeta['dirs'] =
 			empty($dirDiff)
 				? []
 				: explode(DIRECTORY_SEPARATOR, $dirDiff);
@@ -106,8 +120,8 @@ class PressFile {
 		$realPath = realpath($this->filename);
 		$pathDiff = trim(substr($realPath,strlen($baseReal) + 1)); // +1 to trim the starting slash (this is a relative path)
 		// force slashes
-		$fileMeta['rel_path'] = str_replace('\\', '/', $pathDiff);
-		$this->meta = new MetaWrapper(array_merge($fileMeta, $headerMeta));
+		$baseMeta['rel_path'] = str_replace('\\', '/', $pathDiff);
+		$this->meta = new MetaWrapper($baseMeta);
 
 		// set the theme/layout
 

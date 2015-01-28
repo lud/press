@@ -12,6 +12,11 @@ use View;
 
 class PressController extends BaseController {
 
+	public function __construct() {
+		setlocale(LC_ALL, 'fr_FR.UTF-8');
+		\App::setLocale('fr'); // used for Lang::get(...)
+	}
+
 	// use ValidatesRequests;
 
 	/**
@@ -31,7 +36,7 @@ class PressController extends BaseController {
 			if (\URL::to($req->path()) !== $document->url()) {
 				return Redirect::to($document->url(),301);
 			}
-			$layout = $document->meta()->get('layout','default');
+			$layout = $document->meta()->get('layout');
 			return \View::make($layout)
 				->with('meta',$document->meta())
 				->with('cacheInfo',PressFacade::editingCacheInfo())

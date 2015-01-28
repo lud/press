@@ -36,8 +36,12 @@ class PressIndex {
 		return $collection;
 	}
 
-	protected function build() {
-		if (null !== $this->ramCache) {
+	public function reBuild() {
+		return $this->build(true);
+	}
+
+	protected function build($forceRebuild=false) {
+		if (null !== $this->ramCache && !$forceRebuild) {
 			return $this->ramCache;
 		}
 		$maxMTime = 0;
@@ -64,7 +68,7 @@ class PressIndex {
 		// files were modified since the last build. So we need to
 		// build. But if the cached is the same (or superior, why ?),
 		// we return from the cache
-		if ($lastMaxMTime >= $maxMTime) {
+		if ($lastMaxMTime >= $maxMTime && !$forceRebuild) {
 			$cached = Cache::get(self::CACHE_KEY_BUILD);
 			if ($cached instanceof COllection) return $cached;
 		}

@@ -12,8 +12,11 @@ class MetaWrapper extends Fluent implements \ArrayAccess {
 	public function all() { return $this->getAttributes(); }
 
 	public function formatDate($format='Y-m-d') {
-		$ISO = implode('-',[$this->year,$this->month,$this->day]);
-		return with(new \DateTime($ISO))->format($format);
+		return $this->dateTime()->format($format);
+	}
+
+	public function dateTime() {
+		return new \DateTime($this->date);
 	}
 
 	// getter override : we check the meta for thrueness instead of checking

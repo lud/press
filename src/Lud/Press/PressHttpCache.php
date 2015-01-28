@@ -6,7 +6,7 @@ use Cookie;
 use Illuminate\Contracts\Routing\Middleware;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
-use WyriHaximus\HtmlCompress\Factory as HtmlCompressFactory;
+use zz\Html\HTMLMinify;
 
 class PressHttpCache implements Middleware {
 
@@ -39,8 +39,9 @@ class PressHttpCache implements Middleware {
 		if (!PressFacade::isCacheableRequest($request,$response))
 			return $response;
 		$contentHTML = $response->getContent();
-		$minifier = HtmlCompressFactory::construct();
-		$miniContent = $minifier->compress($contentHTML);
+		$miniContent = HTMLMinify::minify($contentHTML,[
+			'doctype' => HTMLMinify::DOCTYPE_HTML5,
+			]);
 		$cache = PressFacade::cache();
 		$cache->writeFile($miniContent);
 		return $this->makeFakeResponse($miniContent);

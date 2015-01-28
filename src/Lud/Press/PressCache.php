@@ -39,6 +39,9 @@ class PressCache {
 	public function flush() {
 		// delete the directory. trashy
 		$this->remove(PressFacade::getConf('storage_path'));
+		// force the rebuild of the index. This is a convenience call, we assume
+		// the user wants to flush ALL the cache, including the cached index
+		PressFacade::index()->rebuild();
 	}
 
 	public function forget($key) {
