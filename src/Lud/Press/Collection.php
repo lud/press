@@ -2,7 +2,7 @@
 
 class Collection extends \Illuminate\Support\Collection {
 
-	public function where($key, $value) {
+	public function where($key, $value, $_strict = true) {
 		$values = (array) $value;
 		return $this->filter(function($meta) use ($key, $values) {
 			if (!isset($meta[$key])) return false;
