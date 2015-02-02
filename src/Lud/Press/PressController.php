@@ -12,11 +12,6 @@ use View;
 
 class PressController extends BaseController {
 
-	public function __construct() {
-		setlocale(LC_ALL, 'fr_FR.UTF-8');
-		\App::setLocale('fr'); // used for Lang::get(...)
-	}
-
 	// use ValidatesRequests;
 
 	/**
