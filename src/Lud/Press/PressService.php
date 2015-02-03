@@ -218,6 +218,11 @@ class PressService {
 		$this->registeredThemes[$name] = ['dir' => $dir];
 	}
 
+	public function getThemeDir($name) {
+		$this->ensureThemeExists($name);
+		return $this->registeredThemes[$name]['dir'];
+	}
+
 	public function ensureThemeExists($name) {
 		if (!isset($this->registeredThemes[$name])) throw new \Exception(
 			"Press theme '$name' does not exist."
