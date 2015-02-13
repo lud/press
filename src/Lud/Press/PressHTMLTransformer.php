@@ -16,6 +16,7 @@ class PressHTMLTransformer {
 
 	public function applyTransforms() {
 		$this->setPressLinksURLs();
+		$this->setBootstrapClasses();
 	}
 
 	public function setPressLinksURLs() {
@@ -36,6 +37,13 @@ class PressHTMLTransformer {
 			}
 		}
 		return $href;
+	}
+
+	public function setBootstrapClasses() {
+		$tables = $this->dom->find('table');
+		foreach ($tables as $node) $node->class .= ' table';
+		$imgs = $this->dom->find('img');
+		foreach ($imgs as $node) $node->class .= ' img-responsive';
 	}
 
 }

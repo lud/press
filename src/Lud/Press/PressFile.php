@@ -1,6 +1,8 @@
 <?php namespace Lud\Press;
 
-use \Skriv\Markup\Renderer as SkrivRenderer;
+use Skriv\Markup\Renderer as SkrivRenderer;
+use Michelf\Markdown;
+use Michelf\MarkdownExtra;
 use Symfony\Component\Yaml\Parser as YamlParser;
 
 class PressFile {
@@ -160,17 +162,31 @@ class PressFile {
 		$extension = pathinfo($filename,PATHINFO_EXTENSION);
 
 		switch ($extension) {
+			case 'md':
+				$name = 'markdown';
+				break;
 			case 'sk':
-				$name='skriv';break;
+				$name = 'skriv';
+				break;
 			case 'html':
 			case 'htm':
-				$name='html';break;
+				$name = 'html';
+				break;
 			default: throw new \Exception("No parser defined for extension $extension");
 		}
 
 		$parserConfig = PressFacade::getConf($name,[]);
 
 		switch ($name) {
+			case 'markdown':
+				return function($str) use ($parserConfig) {
+					$html = MarkdownExtra::defaultTransform($str);
+					//@todo refactor parsers functions
+					$trsf = new PressHTMLTransformer;
+					$trsf->load($html);
+					$trsf->applyTransforms();
+					return ['html' => $trsf->toHTML(), 'footnotes_html' => ''];
+				};
 			case 'skriv':
 				return function($str) use ($parserConfig) {
 					$renderer = SkrivRenderer::factory('html',$parserConfig);
