@@ -7,7 +7,7 @@ class PressHTMLTransformer {
 	private $dom;
 
 	public function load($str) {
-		$this->dom = str_get_html($str);
+		$this->dom = str_get_html($str, null, null, null, false);
 	}
 
 	public function toHTML() {
