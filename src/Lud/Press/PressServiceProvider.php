@@ -20,10 +20,23 @@ class PressServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		\Event::fire('press.mount', []);
-		$this->publishes([
-			__DIR__.'/../../../public' => base_path('public/packages/lud/press'),
-		]);
+		if(\App::runningInConsole()) {
+			$this->consoleSetup();
+		}
+	}
 
+	public static function confPath() {
+		return realpath(__DIR__ . '/../../config/config.php');
+	}
+
+	private function consoleSetup() {
+		$base = [
+			__DIR__.'/../../../public' => base_path('public/packages/lud/press'),
+			static::confPath() => config_path('press.php'),
+		];
+		// $themes = PressFacade::themesPublishes();
+		$themes = [];
+		$this->publishes(array_merge($base,$themes));
 	}
 
 	/**
@@ -33,11 +46,12 @@ class PressServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$this->mergeConfigFrom(static::confPath(), 'press');
+
 		$this->app->bindShared('press', function($app)
 		{
 			//@todo use back laravel config loader
-			$confPath = realpath(__DIR__ . '/../../config/config.php');
-			$conf = require $confPath;
+			$conf = config('press');
 			$service = new PressService($app,$conf);
 			$service->registerTheme('press',$service->themefilePath());
 			return $service;

@@ -11,7 +11,7 @@ Route::group(['pressCache' => true, 'namespace' => 'Lud\Press'], function($route
 			;
 	}
 	Route::get('article/{year}/{month}/{day}/{slug}', 'PressController@publish')
-		// ->where(['year' => '[0-9]{4}','month' => '[0-9]{2}','day' => '[0-9]{2}'])
+		->where(['year' => '[0-9]{4}','month' => '[0-9]{2}','day' => '[0-9]{2}'])
 		;
 	Route::get('page/{slug}', 'PressController@publish');
 	Route::get('tag/{tag}', ['uses' => 'PressController@tag', 'as' => 'press.tag']);
@@ -21,9 +21,12 @@ Route::group(['pressCache' => true, 'namespace' => 'Lud\Press'], function($route
 		;
 });
 
-Route::group(['__middleware' => 'auth', 'namespace' => 'Lud\Press'], function($router){
-	Route::get('editing', ['uses' => 'PressController@startEditing', 'as' => 'press.editing']);
+Route::group(['namespace' => 'Lud\Press'], function($router){
 	Route::get('stop-editing', ['uses' => 'PressController@stopEditing', 'as' => 'press.stop_editing']);
+});
+
+Route::group(['middleware' => 'auth', 'namespace' => 'Lud\Press'], function($router){
+	Route::get('editing', ['uses' => 'PressController@startEditing', 'as' => 'press.editing']);
 	Route::get('refresh', ['uses' => 'PressController@refresh', 'as' => 'press.refresh_page_cache']);
 	Route::get('purge', ['uses' => 'PressController@purge', 'as' => 'press.purge_cache']);
 });

@@ -2,6 +2,7 @@
 return [
 	'base_dir' => env('PRESS_STORAGE_PATH','/tmp'),
 	'meta_sep' => '****',
+	'brand' => '(conf :: press.brand)',
 	'url_map' => [
 		'classic' => "article/:year/:month/:day/:slug",
 		'simple'  => "page/:slug",

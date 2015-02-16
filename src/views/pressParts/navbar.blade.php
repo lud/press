@@ -8,7 +8,7 @@
 				<span class="icon-bar"></span>
 			</button>
 			<a class="navbar-brand" href="{{ URL::route('press.home') }}">
-				{{ Config::get("app.project_name","app.project_name") }}
+				{{ Config::get("press.brand") }}
 			</a>
 		</div>
 		<div class="collapse navbar-collapse">

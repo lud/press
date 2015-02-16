@@ -55,12 +55,17 @@ class PressController extends BaseController {
 	public function refresh()
 	{
 		$path = Input::get('key');
-		$fileID = PressFacade::UrlToID($path);
 		PressFacade::cache()->forget($path);
-		// now redirect to the file corresponding to the key
-		$document = PressFacade::findFile($fileID);
-		$url = $document->url() . '?' . microtime(1);
-		return Redirect::to($url,302);
+		try {
+			$fileID = PressFacade::UrlToID($path);
+			// now redirect to the file corresponding to the key
+			$document = PressFacade::findFile($fileID);
+			$url = $document->url() . '?' . microtime(1);
+			return Redirect::to($url,302);
+		} catch (\Exception $e) {
+			// it's just not a file but a collection page
+			return $this->redirectBack();
+		}
 	}
 
 	public function purge()
