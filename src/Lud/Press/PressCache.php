@@ -20,7 +20,7 @@ class PressCache {
 		$path = $this->storagePath($key);
 		//@todo use flysystem
 		$dir = dirname($path);
-		if (!is_dir($dir)) mkdir($dir,0744,true);
+		if (!is_dir($dir)) mkdir($dir,0775,true);
 		file_put_contents($path,$content);
 	}
 
