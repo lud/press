@@ -22,7 +22,7 @@ class Collection extends \Illuminate\Support\Collection {
 
 	static function byDateDesc() {
 		return function(MetaWrapper $fileA, MetaWrapper $fileB) {
-			return $fileA->formatDate() < $fileB->formatDate();
+			return $fileA->dateTime() < $fileB->dateTime();
 		};
 	}
 }

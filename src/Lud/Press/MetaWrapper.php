@@ -16,13 +16,14 @@ class MetaWrapper extends Fluent implements \ArrayAccess {
 	}
 
 	public function dateTime() {
-		return new \DateTime($this->date);
+		return new \DateTime($this->attributes['date']);
 	}
 
-	// getter override : we check the meta for thrueness instead of checking
+	// getter override : we check the meta for thruthyness instead of checking
 	// only if the key exists
 
 	public function get($key,$default=null) {
+		if ($key === 'date') return $this->dateTime();
 		return @$this->attributes[$key] ?: value($default);
 	}
 

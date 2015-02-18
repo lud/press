@@ -27,11 +27,17 @@ class PressIndex {
 		return $this->build()->count();
 	}
 
-	public function query($key) {
+/**
+ * Find articles on the index
+ * @param  string $query  a key/value list like "key:v1|key2:v2"
+ * @param  array  $params an array to pick values from where values in $query are '_'
+ * @return any A Press Collection of articles or the result of a reduce query
+ */
+	public function query($query, array $params=array()) {
 		$collection = $this->all();
-		$steps = $this->parseQuery($key);
-		foreach ($steps as $f) {
-			$collection = $f($collection);
+		$steps = $this->parseQuery($query, $this->mergeDefaults($params));
+		foreach ($steps as $fun) {
+			$collection = $fun($collection);
 		}
 		return $collection;
 	}
@@ -46,7 +52,7 @@ class PressIndex {
 		}
 		$maxMTime = 0;
 		$finder = new Finder();
-		$extensionsRegex = static::extensionsToRegex($this->getConf('extensions'));
+		$extensionsRegex = $this->extensionsToRegex($this->getConf('extensions'));
 		$sorWithoutPath = function(\SplFileInfo $a, \SplFileInfo $b) {
 			return strcmp(pathinfo($a->getFilename(),PATHINFO_FILENAME), pathinfo($b->getFilename(),PATHINFO_FILENAME));
 		};
@@ -111,37 +117,81 @@ class PressIndex {
 		return PressFacade::getConf($key,$default);
 	}
 
-	static function extensionsToRegex(array $extensions) {
+	private function extensionsToRegex(array $extensions) {
 		// we accept extensions with or without a dot before
 		$dotPrefix = function($string) { return '\\.' . ltrim($string,'.'); };
 		$prefixed = array_map($dotPrefix, $extensions);
 		return '/(' . implode('|',$prefixed) . ')$/';
 	}
 
-	static function parseQuery($query) {
+	private function parseQuery($query, array $defaults) {
 		$filters = [];
 		foreach (explode('|',$query) as $part) {
-			$args = explode(':',$part);
-			$fun = array_shift($args);
-			$filters[] = self::makeReduce($fun,$args);
+			// the value is not parsed
+			$parsed = explode(':',$part);
+			$fun = $parsed[0];
+			$default = isset($defaults[$fun]) ? $defaults[$fun] : null;
+			$value = isset($parsed[1]) ? $parsed[1] : $default;
+			$filters[] = self::makeReduce($fun, $value);
 		}
 		return $filters;
 	}
 
-	static function makeReduce($name,$args) {
+	private function makeReduce($name,$value) {
 		switch ($name) {
-			case 'tags':
 			case 'tag':
-				return function($collection) use ($args) { return $collection->where('tags', explode(',',$args[0])); };
+			case 'tags':
+				// we accept multiple tags separated by commas
+				return function(Collection $collection) use ($value) {
+					return $collection->where('tags', explode(',',$value));
+				};
 			case 'lang':
-				return function($collection) use ($args) { return $collection->where('lang', explode(',',$args[0])); };
+				// we accept multiple langs separated by commas
+				return function(Collection $collection) use ($value) {
+					return $collection->where('lang', explode(',',$value));
+				};
+			case 'sort':
+				return function(Collection $collection) use ($value) {
+					// add "desc" as a default which will be bound in $direction
+					// if no direction is specified
+					list($field,$direction) = explode(',',"$value,desc");
+					$sortBy = $this->getSortFun($field,$direction==='desc');
+					return $collection->sort($sortBy);
+				};
+			case 'page':
 			case 'count':
-				return function($collection) {
+				return function(Collection $collection) {
 					return $collection->count();
 				};
 			default:
 				throw new \Exception("Unknown PressIndex reduce $name");
 		}
+	}
+
+	private function mergeDefaults($params) {
+		static $defaults = [
+			'sort' => 'date,desc'
+		];
+		return array_merge($defaults,$params);
+	}
+
+	/**
+	 * gives a fun to sort metawrappers on a field
+	 * @param  string $fieldName meta entry name
+	 * @param  bool $desc        if we sort descending
+	 * @return integer           -1 | 0 | 1
+	 */
+	private function getSortFun($fieldName,$desc) {
+
+		$m = $desc ? -1 : 1; // sort modifier
+
+		return function(MetaWrapper $fileA, MetaWrapper $fileB)
+			use ($fieldName,$m) {
+				$vA = $fileA->get($fieldName);
+				$vB = $fileB->get($fieldName);
+				if ($vA == $vB) return 0;
+				else return $vA < $vB ? -1*$m : 1*$m ;
+			};
 	}
 
 }

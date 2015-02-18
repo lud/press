@@ -1,16 +1,10 @@
 <?php namespace Lud\Press;
 
-use Config;
-use Cookie;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Routing\Controller as BaseController;
-use Input;
-use Redirect;
-use URL;
-use View;
 
-class PressController extends BaseController {
+
+class PressPubController extends BaseController {
 
 	// use ValidatesRequests;
 
@@ -42,44 +36,12 @@ class PressController extends BaseController {
 		}
 	}
 
-	public function startEditing()
-	{
-		return $this->redirectBack()->withCookie(Cookie::forever('pressEditing',true));
-	}
-
-	public function stopEditing()
-	{
-		return $this->redirectBack()->withCookie(Cookie::forget('pressEditing'));
-	}
-
-	public function refresh()
-	{
-		$path = Input::get('key');
-		PressFacade::cache()->forget($path);
-		try {
-			$fileID = PressFacade::UrlToID($path);
-			// now redirect to the file corresponding to the key
-			$document = PressFacade::findFile($fileID);
-			$url = $document->url() . '?' . microtime(1);
-			return Redirect::to($url,302);
-		} catch (\Exception $e) {
-			// it's just not a file but a collection page
-			return $this->redirectBack();
-		}
-	}
-
-	public function purge()
-	{
-		PressFacade::cache()->flush();
-		return $this->redirectBack();
-	}
-
 	public function home($page = 1)
 	{
 		$page = max($page,1); //set the page to minimum 1
 		$view = PressFacade::getConf('theme').'::home';
 		$all = PressFacade::all()->sort(Collection::byDateDesc());
-		return $this->displayCollection($all,$page,$view);
+		return $this->loop($all,$page,$view);
 	}
 
 	public function tag($tag, $page=1)
@@ -92,11 +54,22 @@ class PressController extends BaseController {
 		// etc..
 		if (! $found->count()) PressFacade::skipCache();
 		$pathBase = URL::route('press.tag',[$tag]);
-		return $this->displayCollection($found,$page,$view,$pathBase);
+		return $this->loop($found,$page,$view,$pathBase);
 	}
 
-	protected function displayCollection($articles, $page, $view, $baseUrl=null) {
-		$articles->sort(Collection::byDateDesc());
+	public function loop(Route $route) {
+
+		$params = $route->parameters();
+		$routeParams = $route->getAction();
+		if (!isset($routeParams['query'])) {
+			throw new UndefinedQueryException("parameter 'query' missing in route definition");
+		}
+		$query = $routeParams['query'];
+		$articles = PressFacade::query($query,$params);
+		exit('hahaha');
+
+		$view = PressFacade::getConf('theme')."::$view";
+
 		$page_size = PressFacade::getConf('default_page_size');
 		$pageArticles = $articles->forPage($page,$page_size);
 		// if we have no articles for this page and page is not the first page,
@@ -113,10 +86,5 @@ class PressController extends BaseController {
 			->with('paginator',$paginator);
 	}
 
-	private function redirectBack() {
-		// we add a fake parameter to force reload
-		$back = URL::to(Input::get('redir','/').'?'.microtime(1));
-		return Redirect::to($back);
-	}
 
 }

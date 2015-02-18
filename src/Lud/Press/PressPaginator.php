@@ -8,7 +8,8 @@ class PressPaginator extends LengthAwarePaginator {
 
 	protected $pageName = self::PAGE_NAME;
 
-
+	// We do not want page number in query string since page cache ignores query
+	// string, so we override the url function
 	public function url($page) {
 		if ($page <= 0) $page = 1;
 		$url = $this->path.$this->pageName.'/'.$page;

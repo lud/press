@@ -110,7 +110,6 @@ class PressService {
 	}
 
 	public function setRoutes($_SET_HOME_ROUTE=true) {
-		$_SET_HOME_ROUTE = 'aaa';
 		require realpath(__DIR__ . '/../../routes.php');
 	}
 
@@ -166,8 +165,8 @@ class PressService {
 		return $this->app['press.index'];
 	}
 
-	public function query($query) {
-		return $this->index()->query($query);
+	public function query($query, array $params=array()) {
+		return $this->index()->query($query, $params);
 	}
 
 	public function all() {
