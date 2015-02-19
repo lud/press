@@ -76,7 +76,7 @@ class PressService {
 			// this is an URL, evaluate the full path
 			$extensionsRe = '';
 		}
-		$pattern = static::filePathSchemaToRegex($schema,$extensionsRe);
+		$pattern = static::filenameSchemaToRegex($schema,$extensionsRe);
 
 		$matches = [];
 		if (preg_match($pattern,$fn,$matches)) {
@@ -94,8 +94,8 @@ class PressService {
 
 	public function filenameToUrl($meta) {
 		$schemas = $this->getConf('url_map');
-		foreach ($schemas as $pathSchema => $urlSchema) {
-			if ($props = $this->pathInfo($meta->filename,$pathSchema,self::FILE_PATH_TYPE)) {
+		foreach ($schemas as $filenameSchema => $urlSchema) {
+			if ($props = $this->pathInfo($meta->filename,$filenameSchema,self::FILE_PATH_TYPE)) {
 				return URL::to(static::replaceStrParts($urlSchema,array_merge($props,$meta->all())));
 			}
 		}
@@ -105,10 +105,10 @@ class PressService {
 	// the schemas must return an ID, i.e. a file's name without the directory
 	// and without an extension
 	public function UrlToID($urlPath) {
-		$schemas = array_flip($this->getConf('url_map'));
-		foreach ($schemas as $pathSchema => $urlSchema) {
-			if ($props = $this->pathInfo($urlPath,$pathSchema,self::URL_PATH_TYPE)) {
-				return static::replaceStrParts(static::expandFilePathSchema($urlSchema),$props);
+		$schemas = $this->getConf('url_map');
+		foreach ($schemas as $filenameSchema => $urlSchema) {
+			if ($props = $this->pathInfo($urlPath,$urlSchema,self::URL_PATH_TYPE)) {
+				return static::replaceStrParts(static::expandFileNameSchema($filenameSchema),$props);
 			}
 		}
 		throw new UnknownURLSchemaException("Cannot transform URL '$urlPath'");
@@ -141,7 +141,7 @@ class PressService {
 		return $schema;
 	}
 
-	static function filePathSchemaToRegex($schema,$append) {
+	static function filenameSchemaToRegex($schema,$append) {
 		switch($schema) {
 			case 'classic':
 				$pattern = "@(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-(?P<day>[0-9]{2})-(?P<slug>.+)$append$@";
@@ -163,7 +163,7 @@ class PressService {
 		return $pattern;
 	}
 
-	static function expandFilePathSchema($schema) {
+	static function expandFileNameSchema($schema) {
 		switch ($schema) {
 			case 'classic': return ':year-:month-:day-:slug';
 			case 'simple': return ':slug';
