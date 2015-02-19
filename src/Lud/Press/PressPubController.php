@@ -1,7 +1,9 @@
 <?php namespace Lud\Press;
 
 use Illuminate\Routing\Route;
+use Illuminate\Routing\Router;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\View;
 
 
 class PressPubController extends BaseController {
@@ -41,7 +43,7 @@ class PressPubController extends BaseController {
 		$page = max($page,1); //set the page to minimum 1
 		$view = PressFacade::getConf('theme').'::home';
 		$all = PressFacade::all()->sort(Collection::byDateDesc());
-		return $this->loop($all,$page,$view);
+		return $this->showCollection($all,$page,$view);
 	}
 
 	public function tag($tag, $page=1)
@@ -54,37 +56,56 @@ class PressPubController extends BaseController {
 		// etc..
 		if (! $found->count()) PressFacade::skipCache();
 		$pathBase = URL::route('press.tag',[$tag]);
-		return $this->loop($found,$page,$view,$pathBase);
+		return $this->showCollection($found,$page,$view,$pathBase);
 	}
 
-	public function loop(Route $route) {
+	// @todo split the method in smaller
+	public function showCollection(Route $route, Router $router) {
 
-		$params = $route->parameters();
+		// We extract the params not set in the query from the URL
+		$queryParams = $route->parameters();
+		// Figure out the page from the route URL parameters
+		$page = max(1,$route->getParameter('page'));
+
 		$routeParams = $route->getAction();
-		if (!isset($routeParams['query'])) {
-			throw new UndefinedQueryException("parameter 'query' missing in route definition");
-		}
 		$query = $routeParams['query'];
-		$articles = PressFacade::query($query,$params);
-		exit('hahaha');
 
-		$view = PressFacade::getConf('theme')."::$view";
+		$articles = PressFacade::query($query,$queryParams);
 
-		$page_size = PressFacade::getConf('default_page_size');
-		$pageArticles = $articles->forPage($page,$page_size);
-		// if we have no articles for this page and page is not the first page,
-		// let's go to the home. Should go 404 ?
-		if (0 === $pageArticles->count() && $page !== 1) {
+		// create a paginator if required
+		if ($routeParams['paginate']) {
+			$page_size = PressFacade::getConf('default_page_size');
+			$paginator = $articles->getPaginator($page_size);
+			$articles = $articles->forPage($page,$page_size);
+		} else {
+			$paginator = $articles->getPaginator(999999);
+		}
+
+		$view = PressFacade::getConf('theme')."::home";
+
+		if (0 === $articles->count() && $page !== 1) {
 			return abort(404);
 		}
-		$paginator = $articles->getPaginator($page_size);
-		if (null !== $baseUrl) $paginator->setBasePath($baseUrl);
+
+		// paginator base path
+		$baseUrlParamNames = $this->getRouteParamNames($routeParams['base_route'], $router);
+		$baseUrlParams = array_only($queryParams, $baseUrlParamNames);
+		$basePath = \URL::route($routeParams['base_route'],$baseUrlParams);
+		$paginator->setBasePath($basePath);
+
 		return View::make($view)
-			->with('articles',$pageArticles)
+			->with('articles', $articles)
 			->with('cacheInfo',PressFacade::editingCacheInfo())
 			->with('themeAssets',PressFacade::getDefaultThemeAssets())
 			->with('paginator',$paginator);
 	}
 
+	private function getRouteParamNames($routeName, $router) {
+		return $router
+			->getRoutes()
+			->getByName($routeName)
+			->getCompiled()
+			->getPathVariables();
+	}
 
 }

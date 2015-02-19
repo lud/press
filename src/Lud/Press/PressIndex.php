@@ -139,6 +139,10 @@ class PressIndex {
 
 	private function makeReduce($name,$value) {
 		switch ($name) {
+			case 'all':
+				return function(Collection $collection) {
+					return $collection;
+				};
 			case 'tag':
 			case 'tags':
 				// we accept multiple tags separated by commas

@@ -1,6 +1,9 @@
 <?php namespace Lud\Press;
 
-use View;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
+use Lud\Utils\GroupChaining;
 use Symfony\Component\Finder\Finder;
 
 class PressService {
@@ -91,7 +94,7 @@ class PressService {
 		$schemas = $this->getConf('url_map');
 		foreach ($schemas as $pathSchema => $urlSchema) {
 			if ($props = $this->pathInfo($meta->filename,$pathSchema,self::FILE_PATH_TYPE)) {
-				return \URL::to(static::replaceStrParts($urlSchema,array_merge($props,$meta->all())));
+				return URL::to(static::replaceStrParts($urlSchema,array_merge($props,$meta->all())));
 			}
 		}
 		throw new \Exception('Cannot transform filename "'.$meta->filename.'"');
@@ -107,10 +110,6 @@ class PressService {
 			}
 		}
 		throw new UnknownURLSchemaException("Cannot transform URL '$urlPath'");
-	}
-
-	public function setRoutes($_SET_HOME_ROUTE=true) {
-		require realpath(__DIR__ . '/../../routes.php');
 	}
 
 	// URLs -----------------------------------------------------------------
@@ -247,6 +246,58 @@ class PressService {
 
 	public static function themefilePath() {
 		return realpath(__DIR__ . '/../../views');
+	}
+
+	// Routing --------------------------------------------------------------
+
+	/**
+	 * Maps a route to a query of articles
+	 * @param  string $path    A route path like in Route::get(...)
+	 * @param  string $query   A press query
+	 * @param  array $_options An array of options
+	 * @return \Illuminate\Routing\Route A laravel route set
+	 * @todo split method in smaller parts
+	 * @todo allow post|delete|etc ?
+	 */
+	public function listRoute($path, $query, array $_options=array()) {
+		$as = 'press.'.crc32($query); // fast hash but more collision risks
+		$options = array_merge(
+			$this->listRouteOptsWithDefaults(),
+			compact('query','as'),
+			$_options
+		);
+		// now that the options are set, the user could have overriden the route
+		// 'as' (the route name)
+		$as = $options['as'];
+		$options['base_route'] = $as; // we share the base route name with the paginated routes
+		$routes = [Route::get($path, array_merge($options,['as' => $as]))]; // base route
+		// we cannot have optional non-parameters parts in the url, so we must
+		// define other routes
+		if ($options['paginate']) {
+			unset($options['as']);
+			$p = PressPaginator::PAGE_NAME;
+			// redirect page 1 to base path
+			$routes[] = Route::get("$path/$p/1", function(\Illuminate\Routing\Route $route) use ($as) {
+				$url = URL::route($as, $route->parameters(), $abs = false);
+				return redirect($url,301);
+			});
+			// other pages
+			$routes[] = Route::get("$path/$p/{page}", $options)->where('page','[0-9]+');
+		}
+		return new GroupChaining($routes);
+	}
+
+	private function listRouteOptsWithDefaults() {
+		static $base = [
+			'paginate' => true,
+			'pressCache' => true,
+			'uses' => 'Lud\Press\PressPubController@showCollection',
+		];
+		return $base;
+	}
+
+	public function setRoutes($_SET_HOME_ROUTE=true) {
+		require realpath(__DIR__ . '/../../routes.php');
 	}
 
 }
