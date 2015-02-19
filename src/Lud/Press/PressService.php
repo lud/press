@@ -252,17 +252,35 @@ class PressService {
 		$cacheKey = "press::themefile->$theme";
 		if (! isset($this->registeredThemes[$theme]))
 			throw new \Exception("Unknown theme $theme");
+		return $this->readTheme($theme);
+	}
+
+	public static function themefilePath() {
+		return realpath(__DIR__ . '/../../views');
+	}
+
+	private function readTheme($theme) {
+		if (isset($this->registeredThemes[$theme]['_themefile'])) {
+			return $this->registeredThemes[$theme]['_themefile'];
+		}
 		$dir = $this->registeredThemes[$theme]['dir'];
 		$infos = require "$dir/_themefile.php";
 		$empty = [
 			'styles'=>[],
 			'scripts'=>[],
+			'publishes'=>[],
 		];
-		return array_merge($empty,$infos);
+		$infos = array_merge($empty,$infos);
+		$this->registeredThemes[$theme]['_themefile'] = $infos;
+		return $infos;
 	}
 
-	public static function themefilePath() {
-		return realpath(__DIR__ . '/../../views');
+	public function themesPublishes() {
+		$publishes = [];
+		foreach ($this->registeredThemes as $theme => $_) {
+			$publishes[] = $this->readTheme($theme)['publishes'];
+		}
+		return call_user_func_array('array_merge', $publishes);
 	}
 
 	// Routing --------------------------------------------------------------

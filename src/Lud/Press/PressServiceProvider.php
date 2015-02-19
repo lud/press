@@ -34,8 +34,7 @@ class PressServiceProvider extends ServiceProvider {
 			__DIR__.'/../../../public' => base_path('public/packages/lud/press'),
 			static::confPath() => config_path('press.php'),
 		];
-		// $themes = PressFacade::themesPublishes();
-		$themes = [];
+		$themes = PressFacade::themesPublishes();
 		$this->publishes(array_merge($base,$themes));
 	}
 
