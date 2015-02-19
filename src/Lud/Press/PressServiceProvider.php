@@ -53,7 +53,7 @@ class PressServiceProvider extends ServiceProvider {
 			//@todo use back laravel config loader
 			$conf = config('press');
 			$service = new PressService($app,$conf);
-			$service->registerTheme('press',$service->themefilePath());
+			$service->registerThemes();
 			return $service;
 		});
 

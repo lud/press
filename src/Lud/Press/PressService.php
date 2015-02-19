@@ -221,6 +221,12 @@ class PressService {
 
 	// Themes management ----------------------------------------------------
 
+	public function registerThemes() {
+		$this->registerTheme('press', $this->themefilePath());
+		foreach($this->getConf('load_themes') as $name => $dir) {
+			$this->registerTheme($name, $dir);
+		}
+	}
 
 	public function registerTheme($name, $dir) {
 		\View::addNamespace($name, $dir);

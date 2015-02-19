@@ -12,6 +12,7 @@ return [
 	'extensions' => ['.sk','md','htm','.html'],
 	'default_page_size' => 10,
 	'theme' => env('PRESS_THEME','press'),
+	'load_themes' => [],
 	'skriv' => [
 		'urlProcessFunction' => function($url, $label, $targetBlank, $nofollow){
 			$url = \Lud\Press\PressHTMLTransformer::maybeTransformHref($url);

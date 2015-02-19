@@ -52,6 +52,10 @@ class PressPubController extends BaseController {
 
 		$articles = PressFacade::query($query,$queryParams);
 
+		if (0 === $articles->count() && $page !== 1) {
+			return abort(404);
+		}
+
 		// create a paginator if required
 		if ($routeParams['paginate']) {
 			$page_size = PressFacade::getConf('default_page_size');
@@ -61,11 +65,20 @@ class PressPubController extends BaseController {
 			$paginator = $articles->getPaginator(999999);
 		}
 
-		$view = PressFacade::getConf('theme')."::home";
+		// decide the view. If it is provided with the query options, just use
+		// it. if it is provided with a theme wildcard, use the default theme
+		// else try to find a 'collection' view in the default theme, else use
+		// press::collection
 
-		if (0 === $articles->count() && $page !== 1) {
-			return abort(404);
+		$theme = array_get($routeParams,'theme',PressFacade::getConf('theme'));
+
+		if (isset($routeParams['view'])) {
+			$viewName = str_replace('_::', "$theme::", $routeParams['view']);
+			$view = View::make($viewName);
+		} else {
+			$view = View::make("$theme::collection");
 		}
+
 
 		// paginator base path
 		$baseUrlParamNames = $this->getRouteParamNames($routeParams['base_route'], $router);
@@ -73,10 +86,10 @@ class PressPubController extends BaseController {
 		$basePath = \URL::route($routeParams['base_route'],$baseUrlParams);
 		$paginator->setBasePath($basePath);
 
-		return View::make($view)
+		return $view
 			->with('articles', $articles)
-			->with('cacheInfo',PressFacade::editingCacheInfo())
-			->with('themeAssets',PressFacade::getDefaultThemeAssets())
+			->with('cacheInfo', PressFacade::editingCacheInfo())
+			->with('themeAssets', PressFacade::getThemeAssets($theme))
 			->with('paginator',$paginator);
 	}
 
