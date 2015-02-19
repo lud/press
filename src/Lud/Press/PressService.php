@@ -1,5 +1,7 @@
 <?php namespace Lud\Press;
 
+// @todo split object responsibilities
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -114,16 +116,25 @@ class PressService {
 
 	// URLs -----------------------------------------------------------------
 
+	/**
+	 * Replaces :symbols in URLs with actual values
+	 * @param  string $schema  the url schema with :symbols
+	 * @param  Closure|array $values values provider. The closure must return null if the key is not defined
+	 * @return string an URL with values set
+	 */
 	static function replaceStrParts($schema,$values) {
-		// @todo this is ugly, need to find the corresponding library or at
-		// least use regexes
+		if (is_callable($values)) $getVal = $values;
+		else $getVal = function($key) use ($values) {
+			return isset($values[$key]) ? $values[$key] : null;
+		};
 		$keysFound = [];
 		$matches = [];
 		if (preg_match_all('/:[a-zA-Z0-9_]+/', $schema, $matches)) {
 			foreach($matches[0] as $matchKey) {
 				$key = substr($matchKey,1); // drop the colon
-				if (isset($values[$key])) {
-					$schema = str_replace($matchKey, $values[$key], $schema);
+				$val = $getVal($key);
+				if ($val !== null) {
+					$schema = str_replace($matchKey, $val, $schema);
 				}
 			}
 		}

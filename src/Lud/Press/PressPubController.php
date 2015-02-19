@@ -1,8 +1,9 @@
 <?php namespace Lud\Press;
 
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\View;
 
 
@@ -36,27 +37,6 @@ class PressPubController extends BaseController {
 		} catch (FileNotFoundException $e) {
 			abort(404);
 		}
-	}
-
-	public function home($page = 1)
-	{
-		$page = max($page,1); //set the page to minimum 1
-		$view = PressFacade::getConf('theme').'::home';
-		$all = PressFacade::all()->sort(Collection::byDateDesc());
-		return $this->showCollection($all,$page,$view);
-	}
-
-	public function tag($tag, $page=1)
-	{
-		$page = max($page,1); //set the page to minimum 1
-		$view = PressFacade::getConf('theme').'::tag';
-		$found = PressFacade::query("tags:$tag");
-		// If no posts were found, we do not cache the query. Without this,
-		// anyone could fill the cache with requests to /tag/a, tag/aa, tag/aaa,
-		// etc..
-		if (! $found->count()) PressFacade::skipCache();
-		$pathBase = URL::route('press.tag',[$tag]);
-		return $this->showCollection($found,$page,$view,$pathBase);
 	}
 
 	// @todo split the method in smaller
