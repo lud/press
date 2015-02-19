@@ -67,8 +67,8 @@ class PressPubController extends BaseController {
 
 		// decide the view. If it is provided with the query options, just use
 		// it. if it is provided with a theme wildcard, use the default theme
-		// else try to find a 'collection' view in the default theme, else use
-		// press::collection
+		// else try to find a 'collection' view in the default theme.
+		// Also, the user can set a theme to load the assets from.
 
 		$theme = array_get($routeParams,'theme',PressFacade::getConf('theme'));
 
