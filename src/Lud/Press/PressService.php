@@ -206,9 +206,9 @@ class PressService {
 		return $this->editing;
 	}
 
-	public function setEditing() {
-		$this->editing = true;
-		$this->skipCache();
+	public function setEditing($editing=true) {
+		$this->editing = $editing;
+		if ($this->editing) $this->skipCache();
 	}
 
 	public function editingCacheInfo() {
@@ -281,6 +281,28 @@ class PressService {
 			$publishes[] = $this->readTheme($theme)['publishes'];
 		}
 		return call_user_func_array('array_merge', $publishes);
+	}
+
+	public function hasHttpExceptionView($statusCode) {
+		return View::exists($this->httpExceptionViewName($statusCode));
+	}
+
+	public function renderHttpException($statusCode) {
+		$viewData = [
+			'themeAssets' => $this->getDefaultThemeAssets()
+		];
+		$this->setEditing(false);
+		return response()
+			->view($this->httpExceptionViewName($statusCode), $viewData, $statusCode);
+	}
+
+	protected function httpExceptionViewName($statusCode) {
+		return $this->namespaceView("errors.$statusCode");
+	}
+
+	protected function namespaceView($name) {
+		$delim = \Illuminate\View\ViewFinderInterface::HINT_PATH_DELIMITER;
+		return $this->getConf('theme') . $delim . $name;
 	}
 
 	// Routing --------------------------------------------------------------
