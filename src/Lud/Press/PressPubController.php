@@ -5,6 +5,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\View;
+use Lud\Press\SeoFacade as SEO;
 
 
 class PressPubController extends BaseController {
@@ -49,7 +50,6 @@ class PressPubController extends BaseController {
 
 		$routeParams = $route->getAction();
 		$query = $routeParams['query'];
-
 		$articles = PressFacade::query($query,$queryParams);
 
 		if (0 === $articles->count() && $page !== 1) {
@@ -79,14 +79,17 @@ class PressPubController extends BaseController {
 			$view = View::make("$theme::collection");
 		}
 
-
 		// paginator base path
 		$baseUrlParamNames = $this->getRouteParamNames($routeParams['base_route'], $router);
 		$baseUrlParams = array_only($queryParams, $baseUrlParamNames);
 		$basePath = \URL::route($routeParams['base_route'],$baseUrlParams);
 		$paginator->setBasePath($basePath);
 
+		// metadata from the page can be defined trough the route
+		$meta = (object) array_get($routeParams, 'meta', []);
+
 		return $view
+			->with('meta', SEO::getMeta())
 			->with('articles', $articles)
 			->with('cacheInfo', PressFacade::editingCacheInfo())
 			->with('themeAssets', PressFacade::getThemeAssets($theme))

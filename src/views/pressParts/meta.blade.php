@@ -1,11 +1,11 @@
 @if (isset($meta))
-	@if($meta->title)
+	@if(isset($meta->title))
 		<title>{{ $meta->title }}</title>
 	@endif
-	@if($meta->description)
+	@if(isset($meta->description))
 		<meta name="description" content="{{ $meta->description }}" />
 	@endif
-	@if($meta->keywords)
+	@if(isset($meta->keywords))
 		<meta name="keywords" content="{{ $meta->keywords }}" />
 	@endif
 @endif

@@ -7,6 +7,7 @@ return [
 		'classic' => "article/:year/:month/:day/:slug",
 		'simple'  => "page/:slug",
 	],
+	'seo_generator' => 'Lud\Press\SeoGenerator',
 	'storage_path' => base_path('public/.press-cache'),
 	'filename_schemas' => ['classic','simple'],
 	'extensions' => ['.sk','md','htm','.html'],

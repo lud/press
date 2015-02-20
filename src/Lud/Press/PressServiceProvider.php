@@ -66,6 +66,11 @@ class PressServiceProvider extends ServiceProvider {
 			return new PressCache($app->request);
 		});
 
+		$this->app->bind(
+			'press.seo',
+			config('press.seo_generator')
+		);
+
 		Paginator::currentPageResolver(function() {
 			return $this->app['request']->route()->parameter('page')
 				?: $this->app['request']->input('page');
