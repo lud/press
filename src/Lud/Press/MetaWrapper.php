@@ -27,6 +27,21 @@ class MetaWrapper extends Fluent implements \ArrayAccess {
 		return @$this->attributes[$key] ?: value($default);
 	}
 
+	// magic call get/set override
+
+	/**
+	 * Handle dynamic calls to the container to set attributes.
+	 *
+	 * @param  string  $method
+	 * @param  array   $parameters
+	 * @return $this
+	 */
+	public function __call($method, $parameters)
+	{
+		throw new \Exception("Undefined MetaWrapper method $method");
+
+	}
+
 	// ArrayAccess overrides
 
 	public function offsetSet($offset, $value) {

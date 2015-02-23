@@ -5,7 +5,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
-use Lud\Utils\GroupChaining;
+use Lud\Utils\ChainableGroup;
 use Symfony\Component\Finder\Finder;
 
 class PressService {
@@ -341,7 +341,7 @@ class PressService {
 			// other pages
 			$routes[] = Route::get("$path/$p/{page}", $options)->where('page','[0-9]+');
 		}
-		return new GroupChaining($routes);
+		return new ChainableGroup($routes);
 	}
 
 	private function listRouteOptsWithDefaults() {

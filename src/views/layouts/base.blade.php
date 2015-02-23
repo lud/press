@@ -19,7 +19,7 @@
 @show
 
 @section('full_content')
-	<div class="container">
+	<div class="container press-container">
 		@include('press::pressParts.edit_actions')
 		@yield('content')
 		@include('press::pressParts.cache_infos')
@@ -30,6 +30,7 @@
 	@foreach ($themeAssets['scripts'] as $scriptSrc)
 		<script src="{{ $scriptSrc }}" type="text/javascript"></script>
 	@endforeach
+
 @show
 
 @include('press::pressParts.admin_js_lib')

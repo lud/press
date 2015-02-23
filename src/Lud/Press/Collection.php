@@ -1,5 +1,7 @@
 <?php namespace Lud\Press;
 
+use Lud\Utils\ChainableGroup;
+
 class Collection extends \Illuminate\Support\Collection {
 
 	public function where($key, $value, $_strict = true) {
@@ -20,9 +22,26 @@ class Collection extends \Illuminate\Support\Collection {
 		return new PressPaginator($this, $this->count(), $currentPage);
 	}
 
+	public function getArchive() {
+		// Here we return all the files grouped by year > month
+		$byYear = [];
+		foreach ($this->items as $item) {
+			$year = $item->date->format('Y');
+			$month = $item->date->format('m');
+			$byYear[$year][$month][] = $item;
+		}
+		$cyears = [];
+		foreach ($byYear as $year => $byMonth) {
+			$colByMonth[$year] = new static($byMonth);
+		}
+		return new static($colByMonth);
+	}
+
 	static function byDateDesc() {
 		return function(MetaWrapper $fileA, MetaWrapper $fileB) {
 			return $fileA->dateTime() < $fileB->dateTime();
 		};
 	}
+
+
 }
