@@ -162,7 +162,12 @@ class PressIndex {
 					$sortBy = $this->getSortFun($field,$direction==='desc');
 					return $collection->sort($sortBy);
 				};
-			case 'page':
+			case 'dir':
+				return function(Collection $collection) use ($value) {
+					return $collection->filter(function($meta) use ($value) {
+						return starts_with($meta->rel_path, $value);
+					});
+				};
 			case 'count':
 				return function(Collection $collection) {
 					return $collection->count();

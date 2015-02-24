@@ -20,7 +20,6 @@
 
 @section('full_content')
 	<div class="container press-container">
-		@include('press::pressParts.edit_actions')
 		@yield('content')
 		@include('press::pressParts.cache_infos')
 	</div>

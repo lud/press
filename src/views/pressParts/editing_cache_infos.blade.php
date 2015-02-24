@@ -5,8 +5,7 @@
 			{{ date('d/m/Y \à H:i:s',$cacheInfo->indexMaxMTime) }}
 		</span>
 	</span>
-</p>
-<p>
+&nbsp;
 	@if ($cacheInfo->isCacheStale)
 		<span class="label label-warning">
 	@else
