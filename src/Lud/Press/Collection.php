@@ -30,11 +30,11 @@ class Collection extends \Illuminate\Support\Collection {
 			$month = $item->date->format('m');
 			$byYear[$year][$month][] = $item;
 		}
-		$cyears = [];
+		$byYearCollection = [];
 		foreach ($byYear as $year => $byMonth) {
-			$colByMonth[$year] = new static($byMonth);
+			$byYearCollection[$year] = new static($byMonth);
 		}
-		return new static($colByMonth);
+		return new static($byYearCollection);
 	}
 
 	static function byDateDesc() {
