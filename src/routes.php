@@ -19,6 +19,6 @@ foreach (PressFacade::getConf('url_map') as $urlSchema) {
 	$routeURL = PressService::replaceStrParts($urlSchema,function($key){
 		return '{'.$key.'}';
 	});
-	Route::get($routeURL, 'Lud\Press\PressPubController@publish');
+	Route::get($routeURL, ['pressCache' => true, 'uses' => 'Lud\Press\PressPubController@publish']);
 }
 // exit;
