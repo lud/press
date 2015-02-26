@@ -1,8 +1,5 @@
 <?php namespace Lud\Press;
 
-use Skriv\Markup\Renderer as SkrivRenderer;
-use Michelf\Markdown;
-use Michelf\MarkdownExtra;
 use Symfony\Component\Yaml\Parser as YamlParser;
 
 class PressFile {
@@ -37,7 +34,7 @@ class PressFile {
 		$this->readFileIfNotRead();
 		list($this->meta,$this->content) = [
 			$this->parseMeta(),
-			$this->parseContent()
+			$this->renderContent()
 		];
 		return  [$this->meta,$this->content];
 	}
@@ -132,11 +129,39 @@ class PressFile {
 		return $this->meta;
 	}
 
-	public function parseContent() {
+	// returns HTML
+	public function renderContent(MetaWrapper $parentMeta = null) {
 		$this->readFileIfNotRead();
-		$parser = $this->getParser($this->filename);
-		$this->content = $parser($this->rawContent);
+		$preRendered = $this->preRender($parentMeta);
+		// header('Content-Type: text/plain');
+		// echo $preRendered;
+		// exit;
+
+		$parser = new PressRenderer();
+
+		$extension = pathinfo($this->filename,PATHINFO_EXTENSION);
+		switch ($extension) {
+			case 'md':
+				$content = $parser->transform('markdown', $preRendered);
+				break;
+			case 'sk':
+			case 'skriv':
+				$content = $parser->transform('skriv', $preRendered);
+				break;
+			case 'html':
+			case 'htm':
+				$content = $parser->transform('html', $preRendered);
+				break;
+			default: throw new \Exception("No parser defined for extension $extension");
+		}
+		$this->content = $content;
 		return $this->content;
+	}
+
+	public function preRender(MetaWrapper $parentMeta = null) {
+		$this->readFileIfNotRead();
+		$parser = new PressRenderer();
+		return $parser->preRender($this->rawContent, $this->meta(), $parentMeta);
 	}
 
 	protected function readFileIfNotRead() {
@@ -155,55 +180,6 @@ class PressFile {
 
 	public function url() {
 		return $this->meta()->url();
-	}
-
-	protected function getParser ($filename) {
-
-		$extension = pathinfo($filename,PATHINFO_EXTENSION);
-
-		switch ($extension) {
-			case 'md':
-				$name = 'markdown';
-				break;
-			case 'sk':
-				$name = 'skriv';
-				break;
-			case 'html':
-			case 'htm':
-				$name = 'html';
-				break;
-			default: throw new \Exception("No parser defined for extension $extension");
-		}
-
-		$parserConfig = PressFacade::getConf($name,[]);
-
-		switch ($name) {
-			case 'markdown':
-				return function($str) use ($parserConfig) {
-					$html = MarkdownExtra::defaultTransform($str);
-					//@todo refactor parsers functions
-					$trsf = new PressHTMLTransformer;
-					$trsf->load($html);
-					$trsf->applyTransforms();
-					return ['html' => $trsf->toHTML(), 'footnotes_html' => ''];
-				};
-			case 'skriv':
-				return function($str) use ($parserConfig) {
-					$renderer = SkrivRenderer::factory('html',$parserConfig);
-					$html = $renderer->render($str);
-					$footnotes_html = $renderer->getFootnotes();
-					$footnotes = $renderer->getFootnotes(true);
-					return ['html' => $html, 'footnotes_html' => $footnotes_html];
-				};
-			case 'html':
-				return function($str) use ($parserConfig) {
-					$trsf = new PressHTMLTransformer;
-					$trsf->load($str);
-					$trsf->applyTransforms();
-					return ['html' => $trsf->toHTML(), 'footnotes_html' => ''];
-				};
-			default: throw new \Exception("Unknown parser $name");
-		}
 	}
 
 

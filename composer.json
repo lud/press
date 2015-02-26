@@ -25,7 +25,8 @@
 		"shark/simple_html_dom": "dev-master",
 		"leeoniya/dump-r": "dev-master",
         "zaininnari/html-minifier": "*",
-		"michelf/php-markdown": "~1.4.1"
+		"michelf/php-markdown": "~1.4.1",
+        "twig/twig": "~1.0"
     },
     "require-post-5.0-release": {
         "illuminate/support": "5.0.*@dev"

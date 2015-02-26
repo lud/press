@@ -19,12 +19,10 @@ class MetaWrapper extends Fluent implements \ArrayAccess {
 		return new \DateTime($this->attributes['date']);
 	}
 
-	// getter override : we check the meta for thruthyness instead of checking
-	// only if the key exists
-
-	public function get($key,$default=null) {
+	// getter override : we treat get('date') specifically
+	public function get($key, $default=null) {
 		if ($key === 'date') return $this->dateTime();
-		return @$this->attributes[$key] ?: value($default);
+		return parent::get($key, $default);
 	}
 
 	// magic call get/set override
@@ -50,7 +48,5 @@ class MetaWrapper extends Fluent implements \ArrayAccess {
 	public function offsetUnset($offset) {
 		throw new \Exception(get_class()." is immutable, tried to unset '$offset'");
 	}
-
-
 
 }
