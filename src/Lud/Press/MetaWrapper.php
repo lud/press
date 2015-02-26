@@ -2,51 +2,62 @@
 
 use Illuminate\Support\Fluent;
 
-class MetaWrapper extends Fluent implements \ArrayAccess {
+class MetaWrapper extends Fluent implements \ArrayAccess
+{
 
 
-	public function url() {
-		return PressFacade::filenameToUrl($this);
-	}
+    public function url()
+    {
+        return PressFacade::filenameToUrl($this);
+    }
 
-	public function all() { return $this->getAttributes(); }
+    public function all()
+    {
+        return $this->getAttributes();
+    }
 
-	public function formatDate($format='Y-m-d') {
-		return $this->dateTime()->format($format);
-	}
+    public function formatDate($format = 'Y-m-d')
+    {
+        return $this->dateTime()->format($format);
+    }
 
-	public function dateTime() {
-		return new \DateTime($this->attributes['date']);
-	}
+    public function dateTime()
+    {
+        return new \DateTime($this->attributes['date']);
+    }
 
-	// getter override : we treat get('date') specifically
-	public function get($key, $default=null) {
-		if ($key === 'date') return $this->dateTime();
-		return parent::get($key, $default);
-	}
+    // getter override : we treat get('date') specifically
+    public function get($key, $default = null)
+    {
+        if ($key === 'date') {
+            return $this->dateTime();
+        }
+        return parent::get($key, $default);
+    }
 
-	// magic call get/set override
+    // magic call get/set override
 
-	/**
-	 * Handle dynamic calls to the container to set attributes.
-	 *
-	 * @param  string  $method
-	 * @param  array   $parameters
-	 * @return $this
-	 */
-	public function __call($method, $parameters)
-	{
-		throw new \Exception("Undefined MetaWrapper method $method");
+    /**
+     * Handle dynamic calls to the container to set attributes.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return $this
+     */
+    public function __call($method, $parameters)
+    {
+        throw new \Exception("Undefined MetaWrapper method $method");
 
-	}
+    }
 
-	// ArrayAccess overrides
+    // ArrayAccess overrides
 
-	public function offsetSet($offset, $value) {
-		throw new \Exception(get_class()." is immutable, tried to set '$offset'");
-	}
-	public function offsetUnset($offset) {
-		throw new \Exception(get_class()." is immutable, tried to unset '$offset'");
-	}
-
+    public function offsetSet($offset, $value)
+    {
+        throw new \Exception(get_class()." is immutable, tried to set '$offset'");
+    }
+    public function offsetUnset($offset)
+    {
+        throw new \Exception(get_class()." is immutable, tried to unset '$offset'");
+    }
 }

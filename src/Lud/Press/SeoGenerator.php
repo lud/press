@@ -9,35 +9,39 @@ use Illuminate\Routing\Route;
 use Illuminate\Container\Container;
 use Illuminate\Routing\RouteDependencyResolverTrait;
 
-class SeoGenerator {
+class SeoGenerator
+{
 
-	use RouteDependencyResolverTrait;
+    use RouteDependencyResolverTrait;
 
-	private $container, $method;
+    private $container, $method;
 
-	const ROUTE_ACTION_KEY = 'seo';
+    const ROUTE_ACTION_KEY = 'seo';
 
-	public function __construct(Container $container, Route $route) {
-		$this->container = $container;
-		$opts = $route->getAction();
-		$method = array_get($opts, self::ROUTE_ACTION_KEY, 'getDefaultMeta');
-		if (!is_callable([$this, $method])) {
-			$method = 'getDefaultMeta';
-		}
-		$this->method = $method;
-	}
+    public function __construct(Container $container, Route $route)
+    {
+        $this->container = $container;
+        $opts = $route->getAction();
+        $method = array_get($opts, self::ROUTE_ACTION_KEY, 'getDefaultMeta');
+        if (!is_callable([$this, $method])) {
+            $method = 'getDefaultMeta';
+        }
+        $this->method = $method;
+    }
 
-	public function getMeta() {
-		$meta = $this->callWithDependencies($this, $this->method);
-		return $this->wrap((array) $meta);
-	}
+    public function getMeta()
+    {
+        $meta = $this->callWithDependencies($this, $this->method);
+        return $this->wrap((array) $meta);
+    }
 
-	public function getDefaultMeta() {
-		return [];
-	}
+    public function getDefaultMeta()
+    {
+        return [];
+    }
 
-	private function wrap($data) {
-		return new MetaWrapper($data);
-	}
-
+    private function wrap($data)
+    {
+        return new MetaWrapper($data);
+    }
 }

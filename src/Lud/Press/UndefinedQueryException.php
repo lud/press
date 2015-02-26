@@ -1,3 +1,5 @@
 <?php namespace Lud\Press;
 
-class UndefinedQueryException extends BaseException {}
+class UndefinedQueryException extends BaseException
+{
+}

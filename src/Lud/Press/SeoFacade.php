@@ -2,9 +2,11 @@
 
 use Illuminate\Support\Facades\Facade;
 
-class SeoFacade extends Facade {
+class SeoFacade extends Facade
+{
 
-    protected static function getFacadeAccessor() { return 'press.seo'; }
-
+    protected static function getFacadeAccessor()
+    {
+        return 'press.seo';
+    }
 }
-

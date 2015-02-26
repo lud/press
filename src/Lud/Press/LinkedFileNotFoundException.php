@@ -1,3 +1,5 @@
 <?php namespace Lud\Press;
 
-class LinkedFileNotFoundException extends BaseException {}
+class LinkedFileNotFoundException extends BaseException
+{
+}

@@ -1,3 +1,5 @@
 <?php namespace Lud\Press;
 
-class FileNotFoundException extends BaseException {}
+class FileNotFoundException extends BaseException
+{
+}
