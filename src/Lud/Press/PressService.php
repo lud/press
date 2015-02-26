@@ -72,9 +72,8 @@ class PressService
 
     public function getExtensions()
     {
-        return array_map(function($ext){
+        return array_map(function($ext) {
             return ltrim($ext, '.');
-
         }, $this->getConf('extensions'));
     }
 
@@ -119,7 +118,7 @@ class PressService
 
     // the schemas must return an ID, i.e. a file's name without the directory
     // and without an extension
-    public function UrlToID($urlPath)
+    public function urlToID($urlPath)
     {
         $schemas = $this->getConf('url_map');
         foreach ($schemas as $filenameSchema => $urlSchema) {
@@ -138,7 +137,7 @@ class PressService
      * @param  Closure|array $values values provider. The closure must return null if the key is not defined
      * @return string an URL with values set
      */
-    static function replaceStrParts($schema, $values)
+    public static function replaceStrParts($schema, $values)
     {
         if (is_callable($values)) {
             $getVal = $values;
@@ -161,7 +160,7 @@ class PressService
         return $schema;
     }
 
-    static function filenameSchemaToRegex($schema, $append)
+    public static function filenameSchemaToRegex($schema, $append)
     {
         switch($schema) {
             case 'classic':
@@ -184,7 +183,7 @@ class PressService
         return $pattern;
     }
 
-    static function expandFileNameSchema($schema)
+    public static function expandFileNameSchema($schema)
     {
         switch ($schema) {
             case 'classic':
@@ -213,7 +212,7 @@ class PressService
 
     // Cache & Editing ------------------------------------------------------
 
-    public function cache ()
+    public function cache()
     {
         return $this->app->make('press.cache');
     }

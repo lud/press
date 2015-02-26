@@ -43,7 +43,7 @@ class Collection extends \Illuminate\Support\Collection
         return new static($byYearCollection);
     }
 
-    static function byDateDesc()
+    public static function byDateDesc()
     {
         return function(MetaWrapper $fileA, MetaWrapper $fileB) {
             return $fileA->dateTime() < $fileB->dateTime();

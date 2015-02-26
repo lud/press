@@ -9,7 +9,7 @@ class PressCache
 
     private $req;
 
-    const ext = '.cache.html';
+    const EXT = '.cache.html';
 
     public function __construct(Request $req)
     {
@@ -68,7 +68,7 @@ class PressCache
 
     private function storagePath($x)
     {
-        return $path = PressFacade::getConf('storage_path') . $x . self::ext;
+        return $path = PressFacade::getConf('storage_path') . $x . self::EXT;
     }
 
     private function fullStoragePath()

@@ -132,7 +132,8 @@ class PressFile
                 : explode(DIRECTORY_SEPARATOR, $dirDiff);
         // store the relative normalized path too
         $realPath = realpath($this->filename);
-        $pathDiff = trim(substr($realPath, strlen($baseReal) + 1)); // +1 to trim the starting slash (this is a relative path)
+        // get the relative path from the content root, removing the trailing slash
+        $pathDiff = trim(substr($realPath, strlen($baseReal) + 1));
         // force slashes
         $baseMeta['rel_path'] = str_replace('\\', '/', $pathDiff);
         $this->meta = new MetaWrapper($baseMeta);

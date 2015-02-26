@@ -50,8 +50,7 @@ class PressServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(static::confPath(), 'press');
 
-        $this->app->bindShared('press', function($app)
-        {
+        $this->app->bindShared('press', function($app) {
             //@todo use back laravel config loader
             $conf = config('press');
             $service = new PressService($app, $conf);
@@ -59,13 +58,11 @@ class PressServiceProvider extends ServiceProvider
             return $service;
         });
 
-        $this->app->bindShared('press.index', function($app)
-        {
+        $this->app->bindShared('press.index', function($app) {
             return new PressIndex();
         });
 
-        $this->app->bindShared('press.cache', function($app)
-        {
+        $this->app->bindShared('press.cache', function($app) {
             return new PressCache($app->request);
         });
 

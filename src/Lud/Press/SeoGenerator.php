@@ -14,7 +14,8 @@ class SeoGenerator
 
     use RouteDependencyResolverTrait;
 
-    private $container, $method;
+    private $container;
+    private $method;
 
     const ROUTE_ACTION_KEY = 'seo';
 

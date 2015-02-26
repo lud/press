@@ -23,7 +23,7 @@ class PressPubController extends BaseController
         try {
             // First we need to read the URL path. Then we match it with the url_map
             // in press conf
-            $id = PressFacade::UrlToID($req->path());
+            $id = PressFacade::urlToID($req->path());
             $document = PressFacade::findFile($id);
             // if we are not at the exact document URL, we redirect
             if (\URL::to($req->path()) !== $document->url()) {

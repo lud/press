@@ -32,7 +32,7 @@ class PressHTMLTransformer
         }
     }
 
-    static function maybeTransformHref($href)
+    public static function maybeTransformHref($href)
     {
         if (starts_with($href, 'press://')) {
             $filename = substr($href, strlen('press://'));

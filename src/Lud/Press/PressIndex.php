@@ -59,12 +59,14 @@ class PressIndex
         $maxMTime = 0;
         $finder = new Finder();
         $extensionsRegex = $this->extensionsToRegex($this->getConf('extensions'));
-        $sorWithoutPath = function(\SplFileInfo $a, \SplFileInfo $b) {
-            return strcmp(pathinfo($a->getFilename(), PATHINFO_FILENAME), pathinfo($b->getFilename(), PATHINFO_FILENAME));
+        $sortWithoutPath = function(\SplFileInfo $a, \SplFileInfo $b) {
+            $pathA = pathinfo($a->getFilename(), PATHINFO_FILENAME);
+            $pathB = pathinfo($b->getFilename(), PATHINFO_FILENAME);
+            return strcmp($pathA, $pathB);
         };
         $finder->files()
             ->in($this->getConf('base_dir'))
-            ->sort($sorWithoutPath)
+            ->sort($sortWithoutPath)
             ->name($extensionsRegex)
         ;
         // We look for the maximum mtime of the files
@@ -92,7 +94,7 @@ class PressIndex
 
         Cache::forever(self::CACHE_KEY_MAXMTIME, $maxMTime);
 
-        $metas = array_map(function($file){
+        $metas = array_map(function($file) {
             return with(new PressFile($file->getPathname()))
                 ->parseMeta()
                 ;
@@ -213,8 +215,7 @@ class PressIndex
 
         $m = $desc ? -1 : 1; // sort modifier
 
-        return function(MetaWrapper $fileA, MetaWrapper $fileB)
- use ($fieldName, $m) {
+        return function(MetaWrapper $fileA, MetaWrapper $fileB) use ($fieldName, $m) {
                 $vA = $fileA->get($fieldName);
                 $vB = $fileB->get($fieldName);
             if ($vA == $vB) {

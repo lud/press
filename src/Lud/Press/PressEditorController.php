@@ -28,7 +28,7 @@ class PressEditorController extends BaseController
         $path = Input::get('key');
         PressFacade::cache()->forget($path);
         try {
-            $fileID = PressFacade::UrlToID($path);
+            $fileID = PressFacade::urlToID($path);
             // now redirect to the file corresponding to the key
             $document = PressFacade::findFile($fileID);
             $url = $document->url() . '?' . microtime(1);
