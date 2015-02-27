@@ -144,8 +144,8 @@ class PressService
         } else {
             $getVal = function($key) use ($values) {
                 return isset($values[$key]) ? $values[$key] : null;
-            }
-        };
+            };
+        }
         $keysFound = [];
         $matches = [];
         if (preg_match_all('/:[a-zA-Z0-9_]+/', $schema, $matches)) {
