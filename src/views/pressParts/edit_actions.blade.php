@@ -5,5 +5,6 @@
 		@if($cacheInfo->isCacheStale)
 			<a class="btn btn-warning navbar-btn" href="{{ URL::route('press.refresh_page_cache',['key'=>Press::cache()->currentKey()]) }}">Rafraîchir le cache pour cette page</a>
 		@endif
+		<a class="btn btn-default navbar-btn" href="{{ url('/auth/logout') }}">Logout</a>
 	</div>
 @endif
