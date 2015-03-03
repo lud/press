@@ -1,4 +1,3 @@
-
 @extends('press::layouts.base')
 
 @section('content')
