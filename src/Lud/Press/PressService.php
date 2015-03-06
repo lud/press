@@ -228,7 +228,7 @@ class PressService
         return
             $this->mustCacheCurrentRequest
             && isset($routeOpts['pressCache'])
-            && $routeOpts['pressCache'] == true
+            && $routeOpts['pressCache']
             && 200 === $response->getStatusCode();
     }
 
