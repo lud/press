@@ -1,5 +1,6 @@
 {
     "name": "lud/press",
+    "license": "MIT",
     "description": "A simple publishing library",
     "authors": [
         {
