@@ -54,7 +54,7 @@ class PressServiceProvider extends ServiceProvider
             //@todo use back laravel config loader
             $conf = config('press');
             $service = new PressService($app, $conf);
-            $service->registerThemes();
+            $service->loadThemes();
             return $service;
         });
 

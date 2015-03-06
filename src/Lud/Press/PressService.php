@@ -258,16 +258,28 @@ class PressService
 
     // Themes management ----------------------------------------------------
 
-    public function registerThemes()
+    public function loadThemes()
     {
-        $this->registerTheme('press', $this->themefilePath());
-        foreach ($this->getConf('load_themes') as $name => $dir) {
-            $this->registerTheme($name, $dir);
+        $this->loadTheme($this->themefilePath());
+        foreach ($this->getConf('load_themes') as $dir) {
+            $this->loadTheme($dir);
         }
     }
 
-    public function registerTheme($name, $dir)
+    public function loadTheme($dir)
     {
+        $finder = new Finder;
+    	$finder->files()
+            ->depth('== 0')
+            ->name('_theme.*.php')
+            ->in($dir)
+        ;
+       if ($finder->count() !== 1) {
+       		throw new ThemeNotFoundException("Press theme could not be loaded from $dir");
+       }
+       $themeFileName = array_values(iterator_to_array($finder))[0]->getRelativePathName();
+       preg_match('/_theme\.(.*)\.php/', $themeFileName, $matches);
+       $name = $matches[1];
         \View::addNamespace($name, $dir);
         $this->registeredThemes[$name] = ['dir' => $dir];
     }
@@ -306,20 +318,20 @@ class PressService
         return realpath(__DIR__ . '/../../views');
     }
 
-    private function readTheme($theme)
+    private function readTheme($name)
     {
-        if (isset($this->registeredThemes[$theme]['_themefile'])) {
-            return $this->registeredThemes[$theme]['_themefile'];
+        if (isset($this->registeredThemes[$name]['info'])) {
+            return $this->registeredThemes[$name]['info'];
         }
-        $dir = $this->registeredThemes[$theme]['dir'];
-        $infos = require "$dir/_themefile.php";
+        $dir = $this->registeredThemes[$name]['dir'];
+        $infos = require "$dir/_theme.$name.php";
         $empty = [
             'styles'=>[],
             'scripts'=>[],
             'publishes'=>[],
         ];
         $infos = array_merge($empty, $infos);
-        $this->registeredThemes[$theme]['_themefile'] = $infos;
+        $this->registeredThemes[$name]['info'] = $infos;
         return $infos;
     }
 
