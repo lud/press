@@ -18,7 +18,7 @@ class PressPubController extends BaseController
      * @param  int  $id
      * @return Response
      */
-    public function publish(Request $req, $truc)
+    public function publish(Request $req)
     {
         try {
             // First we need to read the URL path. Then we match it with the url_map
