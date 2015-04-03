@@ -269,17 +269,17 @@ class PressService
     public function loadTheme($dir)
     {
         $finder = new Finder;
-    	$finder->files()
+        $finder->files()
             ->depth('== 0')
             ->name('_theme.*.php')
             ->in($dir)
         ;
-       if ($finder->count() !== 1) {
-       		throw new ThemeNotFoundException("Press theme could not be loaded from $dir");
-       }
-       $themeFileName = array_values(iterator_to_array($finder))[0]->getRelativePathName();
-       preg_match('/_theme\.(.*)\.php/', $themeFileName, $matches);
-       $name = $matches[1];
+        if ($finder->count() !== 1) {
+            throw new ThemeNotFoundException("Press theme could not be loaded from $dir");
+        }
+        $themeFileName = array_values(iterator_to_array($finder))[0]->getRelativePathName();
+        preg_match('/_theme\.(.*)\.php/', $themeFileName, $matches);
+        $name = $matches[1];
         \View::addNamespace($name, $dir);
         $this->registeredThemes[$name] = ['dir' => $dir];
     }

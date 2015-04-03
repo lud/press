@@ -5,16 +5,17 @@ use Sunra\PhpSimple\HtmlDomParser;
 class PressHTMLTransformer
 {
 
-	// the HTML tag name that can be replaced by pre-rendered content having a
-	// "press-ref" attribute provided
-	const PRESS_INSERT_TAG = 'article';
+    // the HTML tag name that can be replaced by pre-rendered content having a
+    // "press-ref" attribute provided
+    const PRESS_INSERT_TAG = 'article';
 
     private $dom;
 
     private $contentProvider;
 
-    public function __construct($contentGeneratorProvider) {
-    	$this->contentProvider = $contentGeneratorProvider;
+    public function __construct($contentGeneratorProvider)
+    {
+        $this->contentProvider = $contentGeneratorProvider;
     }
 
     public function load($str)
