@@ -5,7 +5,17 @@ use Sunra\PhpSimple\HtmlDomParser;
 class PressHTMLTransformer
 {
 
+	// the HTML tag name that can be replaced by pre-rendered content having a
+	// "press-ref" attribute provided
+	const PRESS_INSERT_TAG = 'article';
+
     private $dom;
+
+    private $contentProvider;
+
+    public function __construct($contentGeneratorProvider) {
+    	$this->contentProvider = $contentGeneratorProvider;
+    }
 
     public function load($str)
     {
@@ -21,6 +31,7 @@ class PressHTMLTransformer
     {
         $this->setPressLinksURLs();
         $this->setBootstrapClasses();
+        $this->insertGeneratedContent();
     }
 
     public function setPressLinksURLs()
@@ -54,6 +65,15 @@ class PressHTMLTransformer
         $imgs = $this->dom->find('img');
         foreach ($imgs as $node) {
             $node->class .= ' img-responsive';
+        }
+    }
+
+    public function insertGeneratedContent()
+    {
+        $placeholders = $this->dom->find(self::PRESS_INSERT_TAG.'[press-ref]');
+        foreach ($placeholders as $node) {
+            $ref = $node->__get('press-ref');
+            $node->outertext = $this->contentProvider->getGeneratedContent($ref);
         }
     }
 }
