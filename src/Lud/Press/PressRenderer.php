@@ -59,8 +59,8 @@ class PressRenderer
         $trsf = new PressHTMLTransformer($this);
         $trsf->load($html);
         $trsf->applyTransforms();
-    	// There is no way to extract footnotes from the class, so we will get
-    	// them from the HTML parser
+        // There is no way to extract footnotes from the class, so we will get
+        // them from the HTML parser
         $footnotes_html = $trsf->stripMarkdownExtraFootNotes();
         return ['html' => $trsf->toHTML(), 'footnotes_html' => $footnotes_html];
     }
@@ -71,7 +71,7 @@ class PressRenderer
         $html = $renderer->render($str);
         $footnotes_html = $renderer->getFootnotes();
         if ($footnotes_html) {
-        	$footnotes_html = PressHTMLTransformer::unwrapFootnotes($footnotes_html);
+            $footnotes_html = PressHTMLTransformer::unwrapFootnotes($footnotes_html);
         }
         return ['html' => $html, 'footnotes_html' => $footnotes_html];
     }

@@ -38,7 +38,9 @@ class PressHTMLTransformer
     public function stripMarkdownExtraFootNotes()
     {
         $containers = $this->dom->find('div.footnotes');
-        if (!isset($containers[0])) return '';
+        if (!isset($containers[0])) {
+            return '';
+        }
         $container = $containers[0];
         $container->find('hr')[0]->outertext = '';
         $html = $container->innertext;
@@ -92,7 +94,7 @@ class PressHTMLTransformer
 
     public static function unwrapFootnotes($divFootnotesHTML)
     {
-    	$parser = str_get_html($divFootnotesHTML, null, null, null, false);
+        $parser = str_get_html($divFootnotesHTML, null, null, null, false);
         $container = $parser->find('div.footnotes')[0];
         return $container->innertext;
     }
