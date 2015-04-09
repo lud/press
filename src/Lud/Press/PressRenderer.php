@@ -59,7 +59,10 @@ class PressRenderer
         $trsf = new PressHTMLTransformer($this);
         $trsf->load($html);
         $trsf->applyTransforms();
-        return ['html' => $trsf->toHTML(), 'footnotes_html' => ''];
+    	// There is no way to extract footnotes from the class, so we will get
+    	// them from the HTML parser
+        $footnotes_html = $trsf->stripMarkdownExtraFootNotes();
+        return ['html' => $trsf->toHTML(), 'footnotes_html' => $footnotes_html];
     }
 
     protected function transformSkriv($str, $config)
@@ -67,13 +70,15 @@ class PressRenderer
         $renderer = SkrivRenderer::factory('html', $config);
         $html = $renderer->render($str);
         $footnotes_html = $renderer->getFootnotes();
-        $footnotes = $renderer->getFootnotes(true);
+        if ($footnotes_html) {
+        	$footnotes_html = PressHTMLTransformer::unwrapFootnotes($footnotes_html);
+        }
         return ['html' => $html, 'footnotes_html' => $footnotes_html];
     }
 
     protected function transformHtml($str, $config)
     {
-        $trsf = new PressHTMLTransformer;
+        $trsf = new PressHTMLTransformer($this);
         $trsf->load($str);
         $trsf->applyTransforms();
         return ['html' => $trsf->toHTML(), 'footnotes_html' => ''];

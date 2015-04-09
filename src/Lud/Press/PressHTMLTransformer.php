@@ -25,7 +25,7 @@ class PressHTMLTransformer
 
     public function toHTML()
     {
-        return $this->dom . '';
+        return $this->dom->__toString();
     }
 
     public function applyTransforms()
@@ -35,12 +35,45 @@ class PressHTMLTransformer
         $this->insertGeneratedContent();
     }
 
-    public function setPressLinksURLs()
+    public function stripMarkdownExtraFootNotes()
+    {
+        $containers = $this->dom->find('div.footnotes');
+        if (!isset($containers[0])) return '';
+        $container = $containers[0];
+        $container->find('hr')[0]->outertext = '';
+        $html = $container->innertext;
+        $container->outertext = '';
+        return $html;
+    }
+
+    private function setPressLinksURLs()
     {
         $links = $this->dom->find('a');
         foreach ($links as $l) {
             $href = static::maybeTransformHref($l->href);
             $l->href = $href;
+        }
+    }
+
+
+    private function setBootstrapClasses()
+    {
+        $tables = $this->dom->find('table');
+        foreach ($tables as $node) {
+            $node->class .= ' table';
+        }
+        $imgs = $this->dom->find('img');
+        foreach ($imgs as $node) {
+            $node->class .= ' img-responsive';
+        }
+    }
+
+    private function insertGeneratedContent()
+    {
+        $placeholders = $this->dom->find(self::PRESS_INSERT_TAG.'[press-ref]');
+        foreach ($placeholders as $node) {
+            $ref = $node->__get('press-ref');
+            $node->outertext = $this->contentProvider->getGeneratedContent($ref);
         }
     }
 
@@ -57,24 +90,10 @@ class PressHTMLTransformer
         return $href;
     }
 
-    public function setBootstrapClasses()
+    public static function unwrapFootnotes($divFootnotesHTML)
     {
-        $tables = $this->dom->find('table');
-        foreach ($tables as $node) {
-            $node->class .= ' table';
-        }
-        $imgs = $this->dom->find('img');
-        foreach ($imgs as $node) {
-            $node->class .= ' img-responsive';
-        }
-    }
-
-    public function insertGeneratedContent()
-    {
-        $placeholders = $this->dom->find(self::PRESS_INSERT_TAG.'[press-ref]');
-        foreach ($placeholders as $node) {
-            $ref = $node->__get('press-ref');
-            $node->outertext = $this->contentProvider->getGeneratedContent($ref);
-        }
+    	$parser = str_get_html($divFootnotesHTML, null, null, null, false);
+        $container = $parser->find('div.footnotes')[0];
+        return $container->innertext;
     }
 }

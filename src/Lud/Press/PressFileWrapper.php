@@ -52,7 +52,7 @@ class PressFileWrapper
     public function embed()
     {
         return $this->renderer->insertPrerenderedBlock(function() {
-            return $this->file->preRender($this->parent);
+            return $this->file->render($this->parent)['html'];
         });
     }
 }
