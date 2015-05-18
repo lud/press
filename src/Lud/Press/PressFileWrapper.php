@@ -51,7 +51,7 @@ class PressFileWrapper
     // the markdown parser
     public function embed()
     {
-        return $this->renderer->insertPrerenderedBlock(function() {
+        return $this->renderer->insertRenderedBlockPlaceholder(function() {
             return $this->file->render($this->parent)['html'];
         });
     }

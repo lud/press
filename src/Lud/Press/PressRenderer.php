@@ -84,7 +84,7 @@ class PressRenderer
         return ['html' => $trsf->toHTML(), 'footnotes_html' => ''];
     }
 
-    public function insertPrerenderedBlock(Closure $contentGenerator, $format = 'md')
+    public function insertRenderedBlockPlaceholder(Closure $contentGenerator, $format = 'md')
     {
         $ref = $this->registerContentGenerator($contentGenerator);
         $tag = PressHTMLTransformer::PRESS_INSERT_TAG;
@@ -96,7 +96,7 @@ class PressRenderer
             case 'md':
                 return "<$tag markdown=\"1\" press-ref='$ref'></$tag>";
             default:
-                throw new \Exception('Unknown target format');
+                throw new \Exception("Unknown target format '$md'");
         }
     }
 
