@@ -1,6 +1,7 @@
 <?php namespace Lud\Press;
 
 use App;
+use Log;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,8 +25,10 @@ class PressCache
         $dir = dirname($path);
         if (!is_dir($dir)) {
             mkdir($dir, 0775, true);
+    		Log::debug('PressCache created directory', ['dir' => $dir]);
         }
         file_put_contents($path, $content);
+    	Log::debug('PressCache wrote cache file', ['path' => $path, 'size' => strlen($content)]);
     }
 
     public function cacheInfo()
