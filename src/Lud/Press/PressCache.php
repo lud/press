@@ -19,6 +19,12 @@ class PressCache
 
     public function writeFile($content)
     {
+        $length = strlen($content);
+        if (0 === $length) {
+            // @todo figure out why this bug !!
+            $this->logRequestInfo('PressCache refuse to write 0-length content', ['path' => $path, 'size' => $length]);
+            return;
+        }
         $key = $this->currentKey();
         $path = $this->storagePath($key);
         //@todo use flysystem
@@ -28,7 +34,7 @@ class PressCache
             $this->logRequestInfo('PressCache created directory', ['dir' => $dir]);
         }
         file_put_contents($path, $content);
-        $this->logRequestInfo('PressCache wrote cache file', ['path' => $path, 'size' => strlen($content)]);
+        $this->logRequestInfo('PressCache wrote cache file', ['path' => $path, 'size' => $length]);
     }
 
     public function cacheInfo()
