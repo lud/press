@@ -38,11 +38,21 @@ class PressFileWrapper
         return $this->meta->url();
     }
 
-    // imports the content of the file, not rendered. Must use the same
-    // rendering engine as the importer (you can only import markdown in
-    // markdown)
+    // imports the content of the file, not transformed into HTML. If the parent
+    // file is markdown formatted, you should only import markdown-compatible
+    // content
     public function import()
     {
         return $this->file->preRender($this->parent);
+    }
+
+    // imports the content of the file, already transformed into HTML. Useful to
+    // import complex HTML content into markdown documents and not to mess with
+    // the markdown parser
+    public function embed()
+    {
+        return $this->renderer->insertRenderedBlockPlaceholder(function() {
+            return $this->file->render($this->parent)['html'];
+        });
     }
 }

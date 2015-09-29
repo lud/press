@@ -21,7 +21,7 @@ class PressFile
     public function content($parserName = null)
     {
         if ($this->content === null) {
-            $this->parse(['content'=>$parserName]);
+            $this->parse();
         }
         return $this->content;
     }
@@ -34,12 +34,12 @@ class PressFile
         return $this->meta;
     }
 
-    public function parse()
+    private function parse()
     {
         $this->readFileIfNotRead();
         list($this->meta,$this->content) = [
             $this->parseMeta(),
-            $this->renderContent()
+            $this->render()
         ];
         return  [$this->meta,$this->content];
     }
@@ -146,7 +146,7 @@ class PressFile
     }
 
     // returns HTML
-    public function renderContent(MetaWrapper $parentMeta = null)
+    public function render(MetaWrapper $parentMeta = null)
     {
         $this->readFileIfNotRead();
         $preRendered = $this->preRender($parentMeta);

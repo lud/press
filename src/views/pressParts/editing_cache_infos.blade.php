@@ -1,4 +1,4 @@
-<p>
+<p class="press-cache-info">
 	<span class="label label-info">
 		Fichiers :
 		<span class="dynamic-date" data-date="{{ date('Y-m-d H:i:s',$cacheInfo->indexMaxMTime) }}">
