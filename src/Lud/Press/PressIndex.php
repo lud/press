@@ -84,7 +84,7 @@ class PressIndex
         // we return from the cache
         if ($lastMaxMTime >= $maxMTime && !$forceRebuild) {
             $cached = Cache::get(self::CACHE_KEY_BUILD);
-            if ($cached instanceof COllection) {
+            if ($cached instanceof Collection) {
                 return $cached;
             }
         }
